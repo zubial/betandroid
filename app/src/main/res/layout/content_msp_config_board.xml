@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".views.configuration.MspConfigActivityMain"
+        tools:showIn="@layout/activity_msp_config">
+
+    <TextView
+        android:id="@+id/txtConfigurationBoardIdentifier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="" />
+
+    <View style="@style/AppTheme.SpaceDivider"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="System state" />
+
+    <View style="@style/AppTheme.LineDivider"/>
+    <View style="@style/AppTheme.SpaceDivider"/>
+
+    <TextView
+        android:labelFor="@id/txtConfigurationBoardName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Board name" />
+
+    <TextView
+        android:id="@+id/txtConfigurationBoardName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+    <View style="@style/AppTheme.SpaceDivider"/>
+
+    <TextView
+        android:labelFor="@id/txtConfigurationSensors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Sensors" />
+
+    <TextView
+        android:id="@+id/txtConfigurationSensors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+    <TextView
+        android:labelFor="@id/txtConfigurationSdcard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="SdCard" />
+
+    <TextView
+        android:id="@+id/txtConfigurationSdcard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+    <View style="@style/AppTheme.SpaceDivider"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Battery configuration" />
+
+    <View style="@style/AppTheme.LineDivider"/>
+    <View style="@style/AppTheme.SpaceDivider"/>
+
+    <TextView
+        android:labelFor="@id/txtConfigurationBatteryMaxCell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Max cell voltage" />
+
+    <TextView
+        android:id="@+id/txtConfigurationBatteryMaxCell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+    <View style="@style/AppTheme.SpaceDivider"/>
+
+    <TextView
+        android:labelFor="@id/txtConfigurationBatteryWarningCell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Warning cell voltage" />
+
+    <TextView
+        android:id="@+id/txtConfigurationBatteryWarningCell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+    <View style="@style/AppTheme.SpaceDivider"/>
+
+    <TextView
+        android:labelFor="@id/txtConfigurationBatteryMinCell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Min cell voltage" />
+
+    <TextView
+        android:id="@+id/txtConfigurationBatteryMinCell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+    <View style="@style/AppTheme.SpaceDivider"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Features" />
+
+    <View style="@style/AppTheme.LineDivider"/>
+    <View style="@style/AppTheme.SpaceDivider"/>
+
+</LinearLayout>

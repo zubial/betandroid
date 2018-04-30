@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/activity_main">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtConnectedTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:text="" />
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:labelFor="@id/txtBoardIdentifier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="Board Identifier" />
+
+                <TextView
+                    android:id="@+id/txtBoardIdentifier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="" />
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:labelFor="@id/txtBoardName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="Board name" />
+
+                <TextView
+                    android:id="@+id/txtBoardName"
+                    android:text=""
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent" />
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <Switch
+                    android:id="@+id/simpleSwitch"
+                    style="@style/AppTheme.Switch"
+                    android:checked="true"
+                    android:text="Accelerometer"
+                    android:textOff="No"
+                    android:textOn="Yes" />
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <ProgressBar
+                    android:id="@+id/determinateBar"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:progress="25"/>
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="right">
+                        <Button
+                            android:id="@+id/cmdAccCalibration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Calibration"
+                            />
+                </LinearLayout>
+
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:id="@+id/txtConfigurationBoard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="Board configuration"/>
+
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+                <View style="@style/AppTheme.LineDivider"/>
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:id="@+id/txtMainReceiver"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="Receiver"/>
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+                <View style="@style/AppTheme.LineDivider"/>
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:id="@+id/txtMainFeatures"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="Features"/>
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+                <View style="@style/AppTheme.LineDivider"/>
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:id="@+id/txtMainPID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="PID"/>
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+                <View style="@style/AppTheme.LineDivider"/>
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:id="@+id/txtMainMotors"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="Motors"/>
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+                <View style="@style/AppTheme.LineDivider"/>
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:id="@+id/txtMainTelemetry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="Telemetry"/>
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+                <View style="@style/AppTheme.LineDivider"/>
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:id="@+id/txtMainOSD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="OSD"/>
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+                <View style="@style/AppTheme.LineDivider"/>
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+                <TextView
+                    android:id="@+id/txtMainLEDStrip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="LED Strip"/>
+
+                <View style="@style/AppTheme.SpaceDivider"/>
+                <View style="@style/AppTheme.LineDivider"/>
+                <View style="@style/AppTheme.SpaceDivider"/>
+
+        </LinearLayout>
+</ScrollView>

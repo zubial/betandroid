@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="10dp" >
+
+    <ImageView
+        android:id="@+id/bt_icon"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:background="?attr/colorButtonNormal"
+        android:padding="6dp"
+        android:src="?attr/actionModeSelectAllDrawable" />
+
+    <TextView android:id="@+id/deviceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/bt_icon"
+        android:layout_alignTop="@+id/bt_icon"
+        android:textStyle="bold"
+        tools:text="Pseudo" />
+
+    <TextView android:id="@+id/deviceAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_alignLeft="@+id/deviceName"
+        android:layout_below="@+id/deviceName"
+        tools:text="Texte de mon tweet" />
+
+</RelativeLayout>
+
+
+
