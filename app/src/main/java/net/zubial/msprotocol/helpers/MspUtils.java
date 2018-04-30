@@ -19,7 +19,7 @@ public final class MspUtils {
     }
 
     public static Boolean bitCheck(int mask, int index) {
-        return (((mask >> index) & 1) != 0);
+        return ((mask >> index) % 2 != 0);
     }
 
     public static byte[] concat(byte[] firstArray, byte[] secondArray) {
