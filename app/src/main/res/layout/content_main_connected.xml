@@ -56,15 +56,6 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent" />
 
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <Switch
-                    android:id="@+id/simpleSwitch"
-                    style="@style/AppTheme.Switch"
-                    android:checked="true"
-                    android:text="Accelerometer"
-                    android:textOff="No"
-                    android:textOn="Yes" />
 
                 <View style="@style/AppTheme.SpaceDivider"/>
 

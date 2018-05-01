@@ -1,6 +1,8 @@
 package net.zubial.msprotocol.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MspData implements Serializable {
 
@@ -8,6 +10,9 @@ public class MspData implements Serializable {
 
     private MspSystemData mspSystemData = new MspSystemData();
     private MspBatteryData mspBatteryData = new MspBatteryData();
+
+    // MSP_FEATURE_CONFIG
+    private List<MspFeatureData> mspFeatures;
 
     public MspData() {
         // Default Constructor
@@ -19,5 +24,26 @@ public class MspData implements Serializable {
 
     public MspBatteryData getMspBatteryData() {
         return mspBatteryData;
+    }
+
+    public List<MspFeatureData> getMspFeatures() {
+        if (mspFeatures == null) {
+            mspFeatures = new ArrayList<>();
+        }
+        return mspFeatures;
+    }
+
+    public List<MspFeatureData> getMspFeaturesSelectable() {
+        List<MspFeatureData> mspFeaturesFilter = new ArrayList<>();
+
+        if (mspFeatures != null && !mspFeatures.isEmpty()) {
+            for (MspFeatureData feature : mspFeatures) {
+                if (feature.getFeature().isSelectable()) {
+                    mspFeaturesFilter.add(feature);
+                }
+            }
+        }
+
+        return mspFeaturesFilter;
     }
 }

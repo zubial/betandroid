@@ -23,13 +23,12 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import net.zubial.betandroid.R;
+import net.zubial.betandroid.components.MspFeatureSwitchAdapter;
+import net.zubial.betandroid.components.NoScrollListView;
 import net.zubial.betandroid.helpers.MspFieldUtils;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
-import net.zubial.msprotocol.enums.MspFeatureEnum;
 import net.zubial.msprotocol.io.MspMessage;
-
-import java.util.Map;
 
 public class MspConfigBoardContent extends Fragment {
 
@@ -359,17 +358,10 @@ public class MspConfigBoardContent extends Fragment {
                 txtConfigurationBatteryMinCell.setText(MspFieldUtils.formatVoltage(mspData.getMspBatteryData().getVbatMinCellVoltage()));
             }
 
-            TextView txtConfigurationFeatures = getView().findViewById(R.id.txtConfigurationFeatures);
-            if (txtConfigurationFeatures != null) {
-                String features = "";
-                if (mspData.getMspSystemData().getFeatures() != null
-                        && !mspData.getMspSystemData().getFeatures().isEmpty()) {
-                    for (Map.Entry<MspFeatureEnum, Boolean> entry : mspData.getMspSystemData().getFeatures().entrySet()) {
-                        features += "Feature : " + entry.getKey() + " Value : " + entry.getValue() + "\n";
-                    }
-                }
-                txtConfigurationFeatures.setText(features);
-            }
+            MspFeatureSwitchAdapter adapter = new MspFeatureSwitchAdapter(getContext(), mspData.getMspFeaturesSelectable());
+
+            NoScrollListView listFeatures = getView().findViewById(R.id.listFeatures);
+            listFeatures.setAdapter(adapter);
         }
     }
 

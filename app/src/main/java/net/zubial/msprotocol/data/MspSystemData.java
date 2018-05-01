@@ -1,12 +1,9 @@
 package net.zubial.msprotocol.data;
 
-import net.zubial.msprotocol.enums.MspFeatureEnum;
 import net.zubial.msprotocol.enums.MspFlightControllerEnum;
 import net.zubial.msprotocol.enums.MspSdcardStateEnum;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MspSystemData implements Serializable {
 
@@ -57,9 +54,6 @@ public class MspSystemData implements Serializable {
     private Integer sdcardFsError;
     private Integer sdcardFreeSize;
     private Integer sdcardTotalSize;
-
-    // MSP_FEATURE_CONFIG
-    private Map<MspFeatureEnum, Boolean> features;
 
     public MspSystemData() {
         // Default Constructor
@@ -287,12 +281,5 @@ public class MspSystemData implements Serializable {
 
     public void setSdcardTotalSize(Integer sdcardTotalSize) {
         this.sdcardTotalSize = sdcardTotalSize;
-    }
-
-    public Map<MspFeatureEnum, Boolean> getFeatures() {
-        if (features == null) {
-            features = new HashMap<>();
-        }
-        return features;
     }
 }

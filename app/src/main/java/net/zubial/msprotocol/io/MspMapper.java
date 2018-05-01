@@ -5,6 +5,7 @@ import android.util.Log;
 import net.zubial.msprotocol.data.MspBatteryCurrentData;
 import net.zubial.msprotocol.data.MspBatteryVoltageData;
 import net.zubial.msprotocol.data.MspData;
+import net.zubial.msprotocol.data.MspFeatureData;
 import net.zubial.msprotocol.enums.MspFeatureEnum;
 import net.zubial.msprotocol.enums.MspFlightControllerEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
@@ -270,72 +271,72 @@ public final class MspMapper {
                 Log.d(TAG, "Feature - " + featureConfig);
                 Log.d(TAG, "Version - " + data.getMspSystemData().getBoardApiVersion());
 
-                data.getMspSystemData().getFeatures().clear();
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_PPM, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_PPM.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_SERIAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_SERIAL.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_MOTOR_STOP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_MOTOR_STOP.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SERVO_TILT, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SERVO_TILT.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SOFTSERIAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SOFTSERIAL.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_GPS, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_GPS.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SONAR, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SONAR.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_TELEMETRY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_TELEMETRY.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_3D, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_3D.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_PARALLEL_PWM, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_PARALLEL_PWM.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_MSP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_MSP.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RSSI_ADC, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RSSI_ADC.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_LED_STRIP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_LED_STRIP.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_DISPLAY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DISPLAY.getCode()));
+                data.getMspFeatures().clear();
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_PPM, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_PPM.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_SERIAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_SERIAL.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_MOTOR_STOP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_MOTOR_STOP.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SERVO_TILT, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SERVO_TILT.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SOFTSERIAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SOFTSERIAL.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_GPS, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_GPS.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SONAR, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SONAR.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_TELEMETRY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_TELEMETRY.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_3D, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_3D.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_PARALLEL_PWM, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_PARALLEL_PWM.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_MSP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_MSP.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RSSI_ADC, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RSSI_ADC.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_LED_STRIP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_LED_STRIP.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_DISPLAY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DISPLAY.getCode())));
 
                 if (!gtVersion(data, 1.33)) {
-                    data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_BLACKBOX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_BLACKBOX.getCode()));
+                    data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_BLACKBOX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_BLACKBOX.getCode())));
                 }
 
                 if (gtVersion(data, 1.12)) {
-                    data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_CHANNEL_FORWARDING, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CHANNEL_FORWARDING.getCode()));
+                    data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_CHANNEL_FORWARDING, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CHANNEL_FORWARDING.getCode())));
                 }
 
                 if (gtVersion(data, 1.15) && !gtVersion(data, 1.36)) {
-                    data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_FAILSAFE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_FAILSAFE.getCode()));
+                    data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_FAILSAFE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_FAILSAFE.getCode())));
                 }
 
                 if (gtVersion(data, 1.16)) {
-                    data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_TRANSPONDER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_TRANSPONDER.getCode()));
+                    data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_TRANSPONDER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_TRANSPONDER.getCode())));
                 }
 
                 if (data.getMspSystemData().getBoardFlightControllerVersion() != null
                         && !data.getMspSystemData().getBoardFlightControllerVersion().isEmpty()) {
                     if (gtVersion(data, 1.16)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_AIRMODE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_AIRMODE.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_AIRMODE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_AIRMODE.getCode())));
 
                         if (ltVersion(data, 1.20)) {
-                            data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SUPEREXPO_RATES, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SUPEREXPO_RATES.getCode()));
+                            data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SUPEREXPO_RATES, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SUPEREXPO_RATES.getCode())));
                         } else if (!gtVersion(data, 1.33)) {
-                            data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SDCARD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SDCARD.getCode()));
+                            data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SDCARD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SDCARD.getCode())));
                         }
                     }
 
                     if (gtVersion(data, 1.20)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_OSD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_OSD.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_OSD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_OSD.getCode())));
 
                         if (!gtVersion(data, 1.35)) {
-                            data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_VTX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VTX.getCode()));
+                            data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_VTX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VTX.getCode())));
                         }
                     }
 
                     if (gtVersion(data, 1.31)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_SPI, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_SPI.getCode()));
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_ESC_SENSOR, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ESC_SENSOR.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_SPI, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_SPI.getCode())));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_ESC_SENSOR, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ESC_SENSOR.getCode())));
                     }
 
                     if (gtVersion(data, 1.36)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_ANTI_GRAVITY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ANTI_GRAVITY.getCode()));
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_DYNAMIC_FILTER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DYNAMIC_FILTER.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_ANTI_GRAVITY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ANTI_GRAVITY.getCode())));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_DYNAMIC_FILTER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DYNAMIC_FILTER.getCode())));
                     }
 
                     if (!gtVersion(data, 1.36)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_VBAT, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VBAT.getCode()));
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_CURRENT_METER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CURRENT_METER.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_VBAT, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VBAT.getCode())));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_CURRENT_METER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CURRENT_METER.getCode())));
                     }
                 }
 

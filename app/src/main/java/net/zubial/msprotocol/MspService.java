@@ -34,10 +34,11 @@ public class MspService extends MspServiceAbstract {
         listCommand.add(MspMessageTypeEnum.MSP_FC_VERSION);
         listCommand.add(MspMessageTypeEnum.MSP_BOARD_INFO);
         listCommand.add(MspMessageTypeEnum.MSP_BUILD_INFO);
+        listCommand.add(MspMessageTypeEnum.MSP_FEATURE_CONFIG);
         listCommand.add(MspMessageTypeEnum.MSP_NAME);
         listCommand.add(MspMessageTypeEnum.MSP_STATUS_EX);
         listCommand.add(MspMessageTypeEnum.MSP_SDCARD_SUMMARY);
-        listCommand.add(MspMessageTypeEnum.MSP_FEATURE_CONFIG);
+
 
         sendMultiCommand(listCommand);
     }
