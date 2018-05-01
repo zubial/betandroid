@@ -14,7 +14,7 @@ import net.zubial.msprotocol.enums.MspConnectorStateEnum;
 import net.zubial.msprotocol.enums.MspDirectionEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 import net.zubial.msprotocol.exceptions.MspBaseException;
-import net.zubial.msprotocol.helpers.MspUtils;
+import net.zubial.msprotocol.helpers.MspProtocolUtils;
 import net.zubial.msprotocol.io.MspDecoder;
 import net.zubial.msprotocol.io.MspEncoder;
 import net.zubial.msprotocol.io.MspMapper;
@@ -97,7 +97,7 @@ public class MspServiceAbstract {
                         if (inMessage.isLoad()) {
                             MspMapper.parseMessage(mspData, inMessage);
 
-                            Log.d(TAG, "MSP response : " + MspUtils.toHexString(inMessage.getPayload()));
+                            Log.d(TAG, "MSP response : " + MspProtocolUtils.toHexString(inMessage.getPayload()));
 
                             broadcastMessageEvent(EVENT_MESSAGE_RECEIVED, inMessage, mspData);
                         }
@@ -118,7 +118,7 @@ public class MspServiceAbstract {
         try {
             byte[] message = MspEncoder.encode(MspDirectionEnum.MSP_OUTBOUND, MspMessageTypeEnum.findByValue(command.getValue()), null);
 
-            Log.d(TAG, "MSP request : " + MspUtils.toHexString(message));
+            Log.d(TAG, "MSP request : " + MspProtocolUtils.toHexString(message));
 
             if (isConnected()) {
                 bluetoothManager.write(message);
@@ -142,7 +142,7 @@ public class MspServiceAbstract {
         try {
             byte[] message = MspEncoder.encode(MspDirectionEnum.MSP_OUTBOUND, messageType, data);
 
-            Log.d(TAG, "MSP request : " + MspUtils.toHexString(message));
+            Log.d(TAG, "MSP request : " + MspProtocolUtils.toHexString(message));
 
             if (isConnected()) {
                 bluetoothManager.write(message);

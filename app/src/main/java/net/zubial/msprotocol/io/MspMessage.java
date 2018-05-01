@@ -81,9 +81,7 @@ public class MspMessage implements Serializable {
     }
 
     public int readUInt32() {
-        ByteBuffer buffer = ByteBuffer.allocate(4).put(new byte[]{payload[readIndex++], payload[readIndex++], payload[readIndex++], payload[readIndex++]});
-        buffer.position(0);
-        return buffer.getInt();
+        return readUInt16() + readUInt16() * 65536;
     }
 
     public int readInt16() {
@@ -93,9 +91,7 @@ public class MspMessage implements Serializable {
     }
 
     public int readUInt16() {
-        ByteBuffer buffer = ByteBuffer.allocate(2).put(new byte[]{payload[readIndex++], payload[readIndex++]});
-        buffer.position(0);
-        return buffer.getShort() & 0xff;
+        return readUInt8() + readUInt8() * 256;
     }
 
     public int readUInt8() {

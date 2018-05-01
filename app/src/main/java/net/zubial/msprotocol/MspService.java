@@ -31,6 +31,7 @@ public class MspService extends MspServiceAbstract {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_API_VERSION);
         listCommand.add(MspMessageTypeEnum.MSP_FC_VARIANT);
+        listCommand.add(MspMessageTypeEnum.MSP_FC_VERSION);
         listCommand.add(MspMessageTypeEnum.MSP_BOARD_INFO);
         listCommand.add(MspMessageTypeEnum.MSP_BUILD_INFO);
         listCommand.add(MspMessageTypeEnum.MSP_NAME);

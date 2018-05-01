@@ -7,7 +7,7 @@ import net.zubial.msprotocol.enums.MspErrorCodeEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 import net.zubial.msprotocol.exceptions.MspBaseException;
 import net.zubial.msprotocol.exceptions.MspProtocolExceptionMsp;
-import net.zubial.msprotocol.helpers.MspUtils;
+import net.zubial.msprotocol.helpers.MspProtocolUtils;
 
 import java.nio.ByteBuffer;
 
@@ -80,7 +80,7 @@ public final class MspDecoder {
                         payload[index++] = c;
                         checksum ^= (c & 0xFF);
                     } else {
-                        nextMessage = MspUtils.addByte(nextMessage, c);
+                        nextMessage = MspProtocolUtils.addByte(nextMessage, c);
 
                         if ((checksum & 0xFF) != (c & 0xFF)) {
                             throw new MspProtocolExceptionMsp(MspErrorCodeEnum.MSP_PROTOCOL_CRC_MISMATCH);
@@ -89,14 +89,14 @@ public final class MspDecoder {
                         inMessage.setPayload(payload);
                         inMessage.isLoad(true);
 
-                        Log.d(TAG, "Receive : " + inMessage.getMessageType().name() + " - " + MspUtils.toHexString(payload));
+                        Log.d(TAG, "Receive : " + inMessage.getMessageType().name() + " - " + MspProtocolUtils.toHexString(payload));
 
                         nextStep = STEP_END;
                     }
                     break;
 
                 case STEP_END:
-                    nextMessage = MspUtils.addByte(nextMessage, c);
+                    nextMessage = MspProtocolUtils.addByte(nextMessage, c);
                     break;
 
             }

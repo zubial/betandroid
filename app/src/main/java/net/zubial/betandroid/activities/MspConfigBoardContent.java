@@ -23,9 +23,13 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import net.zubial.betandroid.R;
+import net.zubial.betandroid.helpers.MspFieldUtils;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
+import net.zubial.msprotocol.enums.MspFeatureEnum;
 import net.zubial.msprotocol.io.MspMessage;
+
+import java.util.Map;
 
 public class MspConfigBoardContent extends Fragment {
 
@@ -303,22 +307,22 @@ public class MspConfigBoardContent extends Fragment {
             TextView txtConfigurationSensors = getView().findViewById(R.id.txtConfigurationSensors);
             if (txtConfigurationSensors != null) {
                 String configurationSensors = "";
-                if (mspData.getMspSystemData().getStatusHaveAccel()) {
+                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveAccel())) {
                     configurationSensors += " - Accelerometer \n";
                 }
-                if (mspData.getMspSystemData().getStatusHaveBaro()) {
+                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveBaro())) {
                     configurationSensors += " - Barometer \n";
                 }
-                if (mspData.getMspSystemData().getStatusHaveGps()) {
+                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveGps())) {
                     configurationSensors += " - GPS \n";
                 }
-                if (mspData.getMspSystemData().getStatusHaveGyro()) {
+                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveGyro())) {
                     configurationSensors += " - Gyrometer \n";
                 }
-                if (mspData.getMspSystemData().getStatusHaveMag()) {
+                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveMag())) {
                     configurationSensors += " - Magnetometer \n";
                 }
-                if (mspData.getMspSystemData().getStatusHaveSonar()) {
+                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveSonar())) {
                     configurationSensors += " - Sonar \n";
                 }
                 txtConfigurationSensors.setText(configurationSensors);
@@ -327,8 +331,13 @@ public class MspConfigBoardContent extends Fragment {
             TextView txtConfigurationSdcard = getView().findViewById(R.id.txtConfigurationSdcard);
             if (txtConfigurationSdcard != null) {
                 String configurationSdcard = "";
-                if (mspData.getMspSystemData().getSdcardSupported()) {
+                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getSdcardSupported())) {
                     configurationSdcard += "SdCard supported";
+
+                    if (MspFieldUtils.isGtZero(mspData.getMspSystemData().getSdcardTotalSize())) {
+                        configurationSdcard += "\nFree " + MspFieldUtils.formatByteSize(mspData.getMspSystemData().getSdcardFreeSize()) + " / " + MspFieldUtils.formatByteSize(mspData.getMspSystemData().getSdcardTotalSize());
+                    }
+
                 } else {
                     configurationSdcard += "SdCard not supported";
                 }
@@ -337,31 +346,32 @@ public class MspConfigBoardContent extends Fragment {
 
             TextView txtConfigurationBatteryMaxCell = getView().findViewById(R.id.txtConfigurationBatteryMaxCell);
             if (txtConfigurationBatteryMaxCell != null) {
-                txtConfigurationBatteryMaxCell.setText(formatVoltage(mspData.getMspBatteryData().getVbatMaxCellVoltage()) + "");
+                txtConfigurationBatteryMaxCell.setText(MspFieldUtils.formatVoltage(mspData.getMspBatteryData().getVbatMaxCellVoltage()));
             }
 
             TextView txtConfigurationBatteryWarningCell = getView().findViewById(R.id.txtConfigurationBatteryWarningCell);
             if (txtConfigurationBatteryWarningCell != null) {
-                txtConfigurationBatteryWarningCell.setText(formatVoltage(mspData.getMspBatteryData().getVbatWarningCellVoltage()) + "");
+                txtConfigurationBatteryWarningCell.setText(MspFieldUtils.formatVoltage(mspData.getMspBatteryData().getVbatWarningCellVoltage()));
             }
 
             TextView txtConfigurationBatteryMinCell = getView().findViewById(R.id.txtConfigurationBatteryMinCell);
             if (txtConfigurationBatteryMinCell != null) {
-                txtConfigurationBatteryMinCell.setText(formatVoltage(mspData.getMspBatteryData().getVbatMinCellVoltage()) + "");
+                txtConfigurationBatteryMinCell.setText(MspFieldUtils.formatVoltage(mspData.getMspBatteryData().getVbatMinCellVoltage()));
+            }
+
+            TextView txtConfigurationFeatures = getView().findViewById(R.id.txtConfigurationFeatures);
+            if (txtConfigurationFeatures != null) {
+                String features = "";
+                if (mspData.getMspSystemData().getFeatures() != null
+                        && !mspData.getMspSystemData().getFeatures().isEmpty()) {
+                    for (Map.Entry<MspFeatureEnum, Boolean> entry : mspData.getMspSystemData().getFeatures().entrySet()) {
+                        features += "Feature : " + entry.getKey() + " Value : " + entry.getValue() + "\n";
+                    }
+                }
+                txtConfigurationFeatures.setText(features);
             }
         }
     }
 
-    private String formatVoltage(Integer voltage) {
-        String result = "";
 
-        if (voltage != null) {
-            Double dVoltage = voltage.doubleValue();
-            dVoltage = dVoltage / 10;
-            result = dVoltage.toString();
-            result += "v";
-        }
-
-        return result;
-    }
 }

@@ -22,6 +22,8 @@ public enum MspFeatureEnum {
     FEATURE_FAILSAFE(8, ""),
     FEATURE_TRANSPONDER(21, ""),
     FEATURE_AIRMODE(22, ""),
+    FEATURE_SUPEREXPO_RATES(23, ""),
+    FEATURE_SDCARD(23, ""),
     FEATURE_OSD(18, ""),
     FEATURE_VTX(24, ""),
     FEATURE_RX_SPI(25, ""),

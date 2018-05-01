@@ -4,9 +4,9 @@ import net.zubial.msprotocol.enums.MspDirectionEnum;
 
 import java.nio.ByteBuffer;
 
-public final class MspUtils {
+public final class MspProtocolUtils {
 
-    private MspUtils() {
+    private MspProtocolUtils() {
         // Private const
     }
 

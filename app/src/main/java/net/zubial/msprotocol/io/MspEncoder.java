@@ -3,7 +3,7 @@ package net.zubial.msprotocol.io;
 import net.zubial.msprotocol.enums.MspDirectionEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 import net.zubial.msprotocol.exceptions.MspBaseException;
-import net.zubial.msprotocol.helpers.MspUtils;
+import net.zubial.msprotocol.helpers.MspProtocolUtils;
 
 public final class MspEncoder {
 
@@ -20,7 +20,7 @@ public final class MspEncoder {
         byte checksum = 0;
 
         // add MessageHeap
-        byte[] messageHeap = MspUtils.getMspHeap(direction);
+        byte[] messageHeap = MspProtocolUtils.getMspHeap(direction);
         int index = messageHeap.length;
         System.arraycopy(messageHeap, 0, message, 0, messageHeap.length);
 

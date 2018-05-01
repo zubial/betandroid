@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.zubial.msprotocol.enums.MspConnectorStateEnum;
-import net.zubial.msprotocol.helpers.MspUtils;
+import net.zubial.msprotocol.helpers.MspProtocolUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -208,10 +208,10 @@ public class MspBluetoothManager {
                     byte[] localBuffer = new byte[256];
                     bytesLenght = mmInStream.read(localBuffer);
 
-                    localBuffer = MspUtils.cleanByte(localBuffer, bytesLenght);
+                    localBuffer = MspProtocolUtils.cleanByte(localBuffer, bytesLenght);
 
                     handleState(MspConnectorStateEnum.STATE_RECEIVING);
-                    bytesBuffer = MspUtils.concat(bytesBuffer, localBuffer);
+                    bytesBuffer = MspProtocolUtils.concat(bytesBuffer, localBuffer);
 
                     if (mmInStream.available() < 1) {
                         serviceHandler.obtainMessage(MspConnectorStateEnum.STATE_RECEIVING.getCode(), bytesLenght, -1, ByteBuffer.wrap(bytesBuffer)).sendToTarget();

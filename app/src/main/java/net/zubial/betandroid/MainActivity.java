@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver onMspConnected = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, intent.getAction());
-
             if (MspService.EVENT_CONNECTED.equals(intent.getAction())) {
                 gotoConnected();
             }
@@ -41,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver onMspMessageReceived = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, intent.getAction());
-
             if (MspService.EVENT_MESSAGE_RECEIVED.equals(intent.getAction())) {
                 MspMessage message = (MspMessage) intent.getSerializableExtra(MspService.EXTRA_MESSAGE);
 
