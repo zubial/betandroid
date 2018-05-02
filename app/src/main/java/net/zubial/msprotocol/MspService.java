@@ -27,18 +27,29 @@ public class MspService extends MspServiceAbstract {
         return mspService;
     }
 
-    public void loadSystemData() {
+    public void loadHandshake() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_API_VERSION);
         listCommand.add(MspMessageTypeEnum.MSP_FC_VARIANT);
         listCommand.add(MspMessageTypeEnum.MSP_FC_VERSION);
         listCommand.add(MspMessageTypeEnum.MSP_BOARD_INFO);
         listCommand.add(MspMessageTypeEnum.MSP_BUILD_INFO);
-        listCommand.add(MspMessageTypeEnum.MSP_FEATURE_CONFIG);
         listCommand.add(MspMessageTypeEnum.MSP_NAME);
+
+        sendMultiCommand(listCommand);
+    }
+
+    public void loadSystemData() {
+        ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_STATUS_EX);
         listCommand.add(MspMessageTypeEnum.MSP_SDCARD_SUMMARY);
 
+        sendMultiCommand(listCommand);
+    }
+
+    public void loadFeaturesData() {
+        ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
+        listCommand.add(MspMessageTypeEnum.MSP_FEATURE_CONFIG);
 
         sendMultiCommand(listCommand);
     }

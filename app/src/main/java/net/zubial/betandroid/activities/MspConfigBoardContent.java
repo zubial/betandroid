@@ -281,6 +281,7 @@ public class MspConfigBoardContent extends Fragment {
 
     private void loadData() {
         MspService.getInstance().loadSystemData();
+        MspService.getInstance().loadFeaturesData();
         MspService.getInstance().loadBatteryData();
     }
 

@@ -36,7 +36,7 @@ public class MainActivityConnected extends Fragment {
         TextView txtConnectedTitle = view.findViewById(R.id.txtConnectedTitle);
         txtConnectedTitle.setText("Handshake...");
 
-        MspService.getInstance().loadSystemData();
+        MspService.getInstance().loadHandshake();
 
         Button cmdAccCalibration = view.findViewById(R.id.cmdAccCalibration);
         cmdAccCalibration.setOnClickListener(new View.OnClickListener() {
