@@ -3,6 +3,7 @@ package net.zubial.betandroid.components;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ public class MspFeatureSwitchAdapter extends ArrayAdapter<MspFeatureData> {
         FeaturesViewHolder viewHolder = (FeaturesViewHolder) convertView.getTag();
         if (viewHolder == null) {
             viewHolder = new FeaturesViewHolder();
-            viewHolder.switchFeature = (Switch) convertView.findViewById(R.id.switchFeature);
+            viewHolder.switchFeature = convertView.findViewById(R.id.switchFeature);
             convertView.setTag(viewHolder);
         }
 
@@ -50,7 +51,7 @@ public class MspFeatureSwitchAdapter extends ArrayAdapter<MspFeatureData> {
             viewHolder.switchFeature.setOnClickListener(new Switch.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Switch switchFeature = (Switch) v.findViewById(R.id.switchFeature);
+                    Switch switchFeature = v.findViewById(R.id.switchFeature);
 
                     if (switchFeature != null && feature.isEnable() != switchFeature.isChecked()) {
                         int featureMask = mspData.getMspFeaturesMask();
@@ -62,6 +63,9 @@ public class MspFeatureSwitchAdapter extends ArrayAdapter<MspFeatureData> {
                         }
 
                         MspService.getInstance().setFeatures(featureMask);
+
+                        Snackbar.make(v, "Update feature : " + switchFeature.getText(), Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
 
                         MspService.getInstance().loadFeaturesData();
                     }
