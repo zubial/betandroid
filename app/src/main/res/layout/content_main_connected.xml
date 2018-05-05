@@ -73,6 +73,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_gravity="right">
+
+                        <Button
+                            android:id="@+id/cmdConfiguration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Configuration" />
                         <Button
                             android:id="@+id/cmdAccCalibration"
                             android:layout_width="wrap_content"
@@ -81,96 +87,6 @@
                             />
                 </LinearLayout>
 
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtConfigurationBoard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Board configuration"/>
-
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainReceiver"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Receiver"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainFeatures"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Features"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainPID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="PID"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainMotors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Motors"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainTelemetry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Telemetry"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainOSD"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="OSD"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainLEDStrip"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="LED Strip"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
                 <View style="@style/AppTheme.SpaceDivider"/>
 
         </LinearLayout>

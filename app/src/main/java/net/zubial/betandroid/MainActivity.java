@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.zubial.betandroid.views.settings.SettingsActivity;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
@@ -134,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -144,11 +142,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-
-                return true;
-
             case R.id.action_help:
                 // Go Help
                 Intent goHelp = new Intent();

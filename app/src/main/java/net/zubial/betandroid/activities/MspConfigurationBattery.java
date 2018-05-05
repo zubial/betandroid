@@ -12,39 +12,30 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import net.zubial.betandroid.R;
-import net.zubial.betandroid.components.MspFeatureSwitchAdapter;
-import net.zubial.betandroid.components.NoScrollListView;
 import net.zubial.betandroid.helpers.UiFormatter;
-import net.zubial.betandroid.helpers.UiUtils;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.enums.MspMessageEventEnum;
 
-public class MspConfigBoardContent extends Fragment {
+public class MspConfigurationBattery extends Fragment {
 
     private static final String TAG = "MspConfigBoard";
 
     private MspData mspData;
 
     // UI Composants
-    private TextView txtConfigurationBoardName;
-    private TextView txtConfigurationBoardIdentifier;
-    private TextView txtConfigurationSensors;
-    private TextView txtConfigurationSdcard;
     private TextView txtConfigurationBatteryMaxCell;
     private TextView txtConfigurationBatteryMinCell;
     private TextView txtConfigurationBatteryWarningCell;
-    private NoScrollListView listFeatures;
+
     // Msp Event
     private BroadcastReceiver onMspMessageReceived = new BroadcastReceiver() {
         @Override
@@ -52,25 +43,23 @@ public class MspConfigBoardContent extends Fragment {
             if (MspService.EVENT_MESSAGE_RECEIVED.equals(intent.getAction())) {
 
                 MspMessageEventEnum mspEvent = (MspMessageEventEnum) intent.getSerializableExtra(MspService.EXTRA_EVENT);
-                if (MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA.isEqual(mspEvent)
-                        || MspMessageEventEnum.EVENT_MSP_BATTERY_DATA.isEqual(mspEvent)
-                        || MspMessageEventEnum.EVENT_MSP_FEATURE_DATA.isEqual(mspEvent)) {
+                if (MspMessageEventEnum.EVENT_MSP_BATTERY_DATA.isEqual(mspEvent)) {
 
                     mspData = (MspData) intent.getSerializableExtra(MspService.EXTRA_DATA);
-                    showData(mspData);
+                    showData();
                 }
             }
         }
     };
 
-    public MspConfigBoardContent() {
+    public MspConfigurationBattery() {
         // Default Ctr
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.content_msp_config_board, container, false);
+        return inflater.inflate(R.layout.content_msp_configuration_battery, container, false);
     }
 
     @Override
@@ -83,49 +72,6 @@ public class MspConfigBoardContent extends Fragment {
                 loadData();
                 Snackbar.make(view, "Reload configuration", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            }
-        });
-
-        txtConfigurationBoardIdentifier = view.findViewById(R.id.txtConfigurationBoardIdentifier);
-        txtConfigurationSensors = view.findViewById(R.id.txtConfigurationSensors);
-        txtConfigurationSdcard = view.findViewById(R.id.txtConfigurationSdcard);
-
-        txtConfigurationBoardName = view.findViewById(R.id.txtConfigurationBoardName);
-        txtConfigurationBoardName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("BoardName");
-
-                final EditText input = new EditText(getContext());
-
-                input.setText(txtConfigurationBoardName.getText());
-                input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-                input.setSingleLine(true);
-                input.setLines(1);
-                input.setMaxLines(1);
-                input.setGravity(Gravity.START | Gravity.TOP);
-                builder.setView(input);
-
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        MspService.getInstance().setBoardName(input.getText().toString());
-                        MspService.getInstance().loadHandshake();
-
-                        Snackbar.make(view, "Set Board name", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });
-
-                builder.setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
             }
         });
 
@@ -291,8 +237,6 @@ public class MspConfigBoardContent extends Fragment {
             }
         });
 
-        listFeatures = view.findViewById(R.id.listFeatures);
-
         IntentFilter onMspMessageReceivedFilter = new IntentFilter(MspService.EVENT_MESSAGE_RECEIVED);
         LocalBroadcastManager.getInstance(view.getContext()).registerReceiver(onMspMessageReceived, onMspMessageReceivedFilter);
 
@@ -300,65 +244,11 @@ public class MspConfigBoardContent extends Fragment {
     }
 
     private void loadData() {
-        MspService.getInstance().loadSystemData();
-        MspService.getInstance().loadFeaturesData();
         MspService.getInstance().loadBatteryData();
     }
 
-    private void showData(MspData mspData) {
-        if (getView() != null) {
-            if (txtConfigurationBoardIdentifier != null) {
-                String boardIdentifier = mspData.getMspSystemData().getBoardIdentifier();
-                if (mspData.getMspSystemData().getBoardFlightControllerIdentifier() != null) {
-                    boardIdentifier += " - " + mspData.getMspSystemData().getBoardFlightControllerIdentifier().name();
-                }
-                boardIdentifier += " (" + mspData.getMspSystemData().getBoardApiVersion() + ")";
-
-                txtConfigurationBoardIdentifier.setText(boardIdentifier);
-            }
-
-            if (txtConfigurationBoardName != null) {
-                txtConfigurationBoardName.setText(mspData.getMspSystemData().getBoardName());
-            }
-
-            if (txtConfigurationSensors != null) {
-                String configurationSensors = "";
-                if (UiUtils.isTrue(mspData.getMspSystemData().getStatusHaveAccel())) {
-                    configurationSensors += " - Accelerometer \n";
-                }
-                if (UiUtils.isTrue(mspData.getMspSystemData().getStatusHaveBaro())) {
-                    configurationSensors += " - Barometer \n";
-                }
-                if (UiUtils.isTrue(mspData.getMspSystemData().getStatusHaveGps())) {
-                    configurationSensors += " - GPS \n";
-                }
-                if (UiUtils.isTrue(mspData.getMspSystemData().getStatusHaveGyro())) {
-                    configurationSensors += " - Gyrometer \n";
-                }
-                if (UiUtils.isTrue(mspData.getMspSystemData().getStatusHaveMag())) {
-                    configurationSensors += " - Magnetometer \n";
-                }
-                if (UiUtils.isTrue(mspData.getMspSystemData().getStatusHaveSonar())) {
-                    configurationSensors += " - Sonar \n";
-                }
-                txtConfigurationSensors.setText(configurationSensors);
-            }
-
-            if (txtConfigurationSdcard != null) {
-                String configurationSdcard = "";
-                if (UiUtils.isTrue(mspData.getMspSystemData().getSdcardSupported())) {
-                    configurationSdcard += "SdCard supported";
-
-                    if (UiUtils.isGtZero(mspData.getMspSystemData().getSdcardTotalSize())) {
-                        configurationSdcard += "\nFree " + UiFormatter.formatByteSize(mspData.getMspSystemData().getSdcardFreeSize()) + " / " + UiFormatter.formatByteSize(mspData.getMspSystemData().getSdcardTotalSize());
-                    }
-
-                } else {
-                    configurationSdcard += "SdCard not supported";
-                }
-                txtConfigurationSdcard.setText(configurationSdcard);
-            }
-
+    private void showData() {
+        if (mspData != null) {
             if (txtConfigurationBatteryMaxCell != null) {
                 txtConfigurationBatteryMaxCell.setText(UiFormatter.formatVoltage(mspData.getMspBatteryData().getVbatMaxCellVoltage()));
             }
@@ -370,9 +260,6 @@ public class MspConfigBoardContent extends Fragment {
             if (txtConfigurationBatteryMinCell != null) {
                 txtConfigurationBatteryMinCell.setText(UiFormatter.formatVoltage(mspData.getMspBatteryData().getVbatMinCellVoltage()));
             }
-
-            MspFeatureSwitchAdapter adapter = new MspFeatureSwitchAdapter(getContext(), mspData.getMspFeaturesSelectable(), mspData);
-            listFeatures.setAdapter(adapter);
         }
     }
 }

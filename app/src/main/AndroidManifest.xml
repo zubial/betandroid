@@ -22,8 +22,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MspConfigBoardActivity"
-            android:label="Board configuration"
+            android:name=".activities.MspConfigurationActivity"
+            android:label="Configuration"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -31,5 +31,4 @@
                 android:value="net.zubial.betandroid.MainActivity" />
         </activity>
     </application>
-
 </manifest>

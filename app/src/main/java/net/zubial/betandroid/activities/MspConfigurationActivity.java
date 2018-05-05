@@ -18,12 +18,12 @@ import android.view.View;
 
 import net.zubial.betandroid.MainActivity;
 import net.zubial.betandroid.R;
-import net.zubial.betandroid.views.settings.SettingsActivity;
 import net.zubial.msprotocol.MspService;
 
-public class MspConfigBoardActivity extends AppCompatActivity {
+public class MspConfigurationActivity extends AppCompatActivity {
 
     private static final String TAG = "MspConfigBoard";
+
     private BroadcastReceiver onMspDisconnected = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -38,7 +38,7 @@ public class MspConfigBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_msp_config_board);
+        setContentView(R.layout.activity_msp_configuration);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,12 +53,12 @@ public class MspConfigBoardActivity extends AppCompatActivity {
         IntentFilter onMspDisconnectedFilter = new IntentFilter(MspService.EVENT_DISCONNECTED);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onMspDisconnected, onMspDisconnectedFilter);
 
-        gotoConfigBoard();
+        gotoConfigSystem();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_msp_config, menu);
+        getMenuInflater().inflate(R.menu.menu_msp_configuration, menu);
         return true;
     }
 
@@ -67,11 +67,6 @@ public class MspConfigBoardActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-
-                return true;
-
             case R.id.action_help:
                 // Go Help
                 Intent goHelp = new Intent();
@@ -88,12 +83,16 @@ public class MspConfigBoardActivity extends AppCompatActivity {
 
                 return true;
 
-            case R.id.action_config_board:
-                gotoConfigBoard();
+            case R.id.action_configuration_system:
+                gotoConfigSystem();
                 return true;
 
-            case R.id.action_config_battery:
+            case R.id.action_configuration_battery:
                 gotoConfigBattery();
+                return true;
+
+            case R.id.action_configuration_features:
+                gotoConfigFeatures();
                 return true;
 
             default:
@@ -101,13 +100,21 @@ public class MspConfigBoardActivity extends AppCompatActivity {
         }
     }
 
-    private void gotoConfigBoard() {
+    private void gotoConfigSystem() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content, new MspConfigBoardContent());
+        ft.replace(R.id.content, new MspConfigurationSystem());
         ft.commitAllowingStateLoss();
     }
 
     private void gotoConfigBattery() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, new MspConfigurationBattery());
+        ft.commitAllowingStateLoss();
+    }
 
+    private void gotoConfigFeatures() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, new MspConfigurationFeatures());
+        ft.commitAllowingStateLoss();
     }
 }
