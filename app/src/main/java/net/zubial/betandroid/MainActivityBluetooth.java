@@ -28,8 +28,12 @@ public class MainActivityBluetooth extends Fragment {
 
     private static String TAG = "MainActivityBluetooth";
 
-    public MainActivityBluetooth() {
+    // UI Components
+    private TextView txtBluetoothTitle;
+    private ListView listBluetoothDevice;
 
+    public MainActivityBluetooth() {
+        // Default Ctr
     }
 
     @Override
@@ -44,24 +48,24 @@ public class MainActivityBluetooth extends Fragment {
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        Button cmdBluetoothConfig = view.findViewById(R.id.cmdBluetoothConfig);
-        cmdBluetoothConfig.setEnabled(mBluetoothAdapter != null);
-
         if (mBluetoothAdapter == null) {
             Log.d(TAG, "Device does't support Bluetooth");
             Snackbar.make(view, "Device does't support Bluetooth", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.content_main, new MainActivityHome());
-            ft.commit();
-
+            if (getFragmentManager() != null) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.content_main, new MainActivityHome());
+                ft.commitAllowingStateLoss();
+            }
             return;
 
         } else {
             Log.d(TAG, "Device support Bluetooth");
         }
 
+        Button cmdBluetoothConfig = view.findViewById(R.id.cmdBluetoothConfig);
+        cmdBluetoothConfig.setEnabled(mBluetoothAdapter != null);
         cmdBluetoothConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,7 +91,7 @@ public class MainActivityBluetooth extends Fragment {
 
         mBluetoothAdapter.startDiscovery();
 
-        TextView txtBluetoothTitle = view.findViewById(R.id.txtBluetoothTitle);
+        txtBluetoothTitle = view.findViewById(R.id.txtBluetoothTitle);
 
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 
@@ -103,7 +107,7 @@ public class MainActivityBluetooth extends Fragment {
 
             BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(getContext(), deviceList);
 
-            ListView listBluetoothDevice = view.findViewById(R.id.listBluetoothDevice);
+            listBluetoothDevice = view.findViewById(R.id.listBluetoothDevice);
             listBluetoothDevice.setAdapter(adapter);
             listBluetoothDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

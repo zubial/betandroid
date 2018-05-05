@@ -38,7 +38,6 @@ public class MspConfigurationFeatures extends Fragment {
 
                 MspMessageEventEnum mspEvent = (MspMessageEventEnum) intent.getSerializableExtra(MspService.EXTRA_EVENT);
                 if (MspMessageEventEnum.EVENT_MSP_FEATURE_DATA.isEqual(mspEvent)) {
-
                     mspData = (MspData) intent.getSerializableExtra(MspService.EXTRA_DATA);
                     showData();
                 }

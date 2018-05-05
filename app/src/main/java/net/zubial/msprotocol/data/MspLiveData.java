@@ -20,17 +20,25 @@ public class MspLiveData implements Serializable {
     private Integer currentMeterSource;
 
     // MSP_RAW_IMU
-    private Double accelerometer0;
-    private Double accelerometer1;
-    private Double accelerometer2;
+    private Double accelerometerX;
+    private Double accelerometerY;
+    private Double accelerometerZ;
 
-    private Double gyroscope0;
-    private Double gyroscope1;
-    private Double gyroscope2;
+    private Double gyroscopeX;
+    private Double gyroscopeY;
+    private Double gyroscopeZ;
 
-    private Double magnetometer0;
-    private Double magnetometer1;
-    private Double magnetometer2;
+    private Double magnetometerX;
+    private Double magnetometerY;
+    private Double magnetometerZ;
+
+    // MSP_ATTITUDE
+    private Double kinematicsX;
+    private Double kinematicsY;
+    private Double kinematicsZ;
+
+    // MSP_ALTITUDE
+    private Double altitude;
 
     public MspLiveData() {
         // Default Constructor
@@ -108,75 +116,107 @@ public class MspLiveData implements Serializable {
         this.currentMeterSource = currentMeterSource;
     }
 
-    public Double getAccelerometer0() {
-        return accelerometer0;
+    public Double getAccelerometerX() {
+        return accelerometerX;
     }
 
-    public void setAccelerometer0(Double accelerometer0) {
-        this.accelerometer0 = accelerometer0;
+    public void setAccelerometerX(Double accelerometerX) {
+        this.accelerometerX = accelerometerX;
     }
 
-    public Double getAccelerometer1() {
-        return accelerometer1;
+    public Double getAccelerometerY() {
+        return accelerometerY;
     }
 
-    public void setAccelerometer1(Double accelerometer1) {
-        this.accelerometer1 = accelerometer1;
+    public void setAccelerometerY(Double accelerometerY) {
+        this.accelerometerY = accelerometerY;
     }
 
-    public Double getAccelerometer2() {
-        return accelerometer2;
+    public Double getAccelerometerZ() {
+        return accelerometerZ;
     }
 
-    public void setAccelerometer2(Double accelerometer2) {
-        this.accelerometer2 = accelerometer2;
+    public void setAccelerometerZ(Double accelerometerZ) {
+        this.accelerometerZ = accelerometerZ;
     }
 
-    public Double getGyroscope0() {
-        return gyroscope0;
+    public Double getGyroscopeX() {
+        return gyroscopeX;
     }
 
-    public void setGyroscope0(Double gyroscope0) {
-        this.gyroscope0 = gyroscope0;
+    public void setGyroscopeX(Double gyroscopeX) {
+        this.gyroscopeX = gyroscopeX;
     }
 
-    public Double getGyroscope1() {
-        return gyroscope1;
+    public Double getGyroscopeY() {
+        return gyroscopeY;
     }
 
-    public void setGyroscope1(Double gyroscope1) {
-        this.gyroscope1 = gyroscope1;
+    public void setGyroscopeY(Double gyroscopeY) {
+        this.gyroscopeY = gyroscopeY;
     }
 
-    public Double getGyroscope2() {
-        return gyroscope2;
+    public Double getGyroscopeZ() {
+        return gyroscopeZ;
     }
 
-    public void setGyroscope2(Double gyroscope2) {
-        this.gyroscope2 = gyroscope2;
+    public void setGyroscopeZ(Double gyroscopeZ) {
+        this.gyroscopeZ = gyroscopeZ;
     }
 
-    public Double getMagnetometer0() {
-        return magnetometer0;
+    public Double getMagnetometerX() {
+        return magnetometerX;
     }
 
-    public void setMagnetometer0(Double magnetometer0) {
-        this.magnetometer0 = magnetometer0;
+    public void setMagnetometerX(Double magnetometerX) {
+        this.magnetometerX = magnetometerX;
     }
 
-    public Double getMagnetometer1() {
-        return magnetometer1;
+    public Double getMagnetometerY() {
+        return magnetometerY;
     }
 
-    public void setMagnetometer1(Double magnetometer1) {
-        this.magnetometer1 = magnetometer1;
+    public void setMagnetometerY(Double magnetometerY) {
+        this.magnetometerY = magnetometerY;
     }
 
-    public Double getMagnetometer2() {
-        return magnetometer2;
+    public Double getMagnetometerZ() {
+        return magnetometerZ;
     }
 
-    public void setMagnetometer2(Double magnetometer2) {
-        this.magnetometer2 = magnetometer2;
+    public void setMagnetometerZ(Double magnetometerZ) {
+        this.magnetometerZ = magnetometerZ;
+    }
+
+    public Double getKinematicsX() {
+        return kinematicsX;
+    }
+
+    public void setKinematicsX(Double kinematicsX) {
+        this.kinematicsX = kinematicsX;
+    }
+
+    public Double getKinematicsY() {
+        return kinematicsY;
+    }
+
+    public void setKinematicsY(Double kinematicsY) {
+        this.kinematicsY = kinematicsY;
+    }
+
+    public Double getKinematicsZ() {
+        return kinematicsZ;
+    }
+
+    public void setKinematicsZ(Double kinematicsZ) {
+        this.kinematicsZ = kinematicsZ;
+    }
+
+    public Double getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(Double altitude) {
+        this.altitude = altitude;
     }
 }

@@ -11,6 +11,7 @@
     tools:showIn="@layout/activity_msp_live">
 
     <LinearLayout
+        android:id="@+id/test3d"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -60,6 +61,23 @@
 
         <TextView
             android:id="@+id/txtGyroscope"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:text="" />
+
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtGyroscope"
+            android:text="Attitude"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtKinematics"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:selectAllOnFocus="true"

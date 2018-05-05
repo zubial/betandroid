@@ -43,6 +43,7 @@ public class MspServiceAbstract {
     public static final String EVENT_CONNECTED = "net.zubial.msprotocol.event.CONNECTED";
     public static final String EVENT_DISCONNECTED = "net.zubial.msprotocol.event.DISCONNECTED";
     public static final String EVENT_UNAVAILABLE = "net.zubial.msprotocol.event.UNAVAILABLE";
+    public static final String EVENT_HANDSHAKE = "net.zubial.msprotocol.event.HANDSHAKE";
     public static final String EVENT_MESSAGE_RECEIVED = "net.zubial.msprotocol.event.MESSAGE_RECEIVED";
     public static final String EXTRA_EVENT = "net.zubial.msprotocol.extra.EVENT";
     public static final String EXTRA_DATA = "net.zubial.msprotocol.extra.DATA";
@@ -68,6 +69,21 @@ public class MspServiceAbstract {
             } else if (msg.what == MspConnectorStateEnum.STATE_CONNECTED.getCode()) {
                 broadcastConnectionEvent(EVENT_CONNECTED, "Bluetooth");
                 Toast.makeText(applicationContext, "Bluetooth connected", Toast.LENGTH_SHORT).show();
+
+                // Handshake
+                ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
+                listCommand.add(MspMessageTypeEnum.MSP_API_VERSION);
+                listCommand.add(MspMessageTypeEnum.MSP_FC_VARIANT);
+                listCommand.add(MspMessageTypeEnum.MSP_FC_VERSION);
+                listCommand.add(MspMessageTypeEnum.MSP_BOARD_INFO);
+                listCommand.add(MspMessageTypeEnum.MSP_BUILD_INFO);
+                listCommand.add(MspMessageTypeEnum.MSP_NAME);
+
+                sendMultiCommand(listCommand);
+
+            } else if (msg.what == MspConnectorStateEnum.STATE_HANDSHAKE.getCode()) {
+                broadcastConnectionEvent(EVENT_HANDSHAKE, "Bluetooth");
+                Toast.makeText(applicationContext, "Handshake done", Toast.LENGTH_SHORT).show();
 
             } else if (msg.what == MspConnectorStateEnum.STATE_DISCONNECTED.getCode()) {
                 broadcastConnectionEvent(EVENT_DISCONNECTED, "Bluetooth");
@@ -106,7 +122,10 @@ public class MspServiceAbstract {
 
                             Log.d(TAG, "MSP Response : " + inMessage.getMessageType().name() + " " + MspProtocolUtils.toHexString(inMessage.getPayload()));
 
-                            if (messageEvents != null && !messageEvents.isEmpty()) {
+                            if (MspMessageTypeEnum.MSP_API_VERSION.equals(inMessage.getMessageType())) {
+                                broadcastMessageEvent(EVENT_HANDSHAKE, MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA, inMessage, mspData);
+
+                            } else if (messageEvents != null && !messageEvents.isEmpty()) {
                                 for (MspMessageEventEnum messageEvent : messageEvents) {
                                     broadcastMessageEvent(EVENT_MESSAGE_RECEIVED, messageEvent, inMessage, mspData);
                                 }
@@ -188,6 +207,8 @@ public class MspServiceAbstract {
 
     public void disconnectBluetooth() {
         bluetoothManager.disconnect();
+        mspData = new MspData();
+        localInBuffer = null;
     }
 
     public Boolean isConnected() {

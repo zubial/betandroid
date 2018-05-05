@@ -5,11 +5,12 @@ public enum MspConnectorStateEnum {
     STATE_NONE(0, "No connection"),
     STATE_CONNECTING(1, "Connecting"),
     STATE_CONNECTED(2, "Connected"),
-    STATE_WAITING(3, "Waiting activity"),
-    STATE_DISCONNECTED(4, "Disconnected"),
-    STATE_UNAVAILABLE(5, "Connection unavailable"),
-    STATE_RECEIVING(6, "Receiving data"),
-    STATE_WRITING(7, "Writing data");
+    STATE_HANDSHAKE(3, "Handshake"),
+    STATE_WAITING(4, "Waiting activity"),
+    STATE_DISCONNECTED(5, "Disconnected"),
+    STATE_UNAVAILABLE(6, "Connection unavailable"),
+    STATE_RECEIVING(7, "Receiving data"),
+    STATE_WRITING(8, "Writing data");
 
 
     private final Integer code;

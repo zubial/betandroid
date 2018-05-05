@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 public class MainActivityHome extends Fragment {
 
     public MainActivityHome() {
-
+        // Default Ctr
     }
 
     @Override

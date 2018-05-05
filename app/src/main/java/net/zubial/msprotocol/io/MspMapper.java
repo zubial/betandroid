@@ -386,17 +386,33 @@ public final class MspMapper {
                 break;
 
             case MSP_RAW_IMU:
-                data.getMspLiveData().setAccelerometer0(message.readInt16() / 512.0);
-                data.getMspLiveData().setAccelerometer1(message.readInt16() / 512.0);
-                data.getMspLiveData().setAccelerometer2(message.readInt16() / 512.0);
+                data.getMspLiveData().setAccelerometerX(message.readInt16() / 512.0);
+                data.getMspLiveData().setAccelerometerY(message.readInt16() / 512.0);
+                data.getMspLiveData().setAccelerometerZ(message.readInt16() / 512.0);
 
-                data.getMspLiveData().setGyroscope0(message.readInt16() * (4 / 16.4));
-                data.getMspLiveData().setGyroscope1(message.readInt16() * (4 / 16.4));
-                data.getMspLiveData().setGyroscope2(message.readInt16() * (4 / 16.4));
+                data.getMspLiveData().setGyroscopeX(message.readInt16() * (4 / 16.4));
+                data.getMspLiveData().setGyroscopeY(message.readInt16() * (4 / 16.4));
+                data.getMspLiveData().setGyroscopeZ(message.readInt16() * (4 / 16.4));
 
-                data.getMspLiveData().setMagnetometer0(message.readInt16() / 1090.0);
-                data.getMspLiveData().setMagnetometer1(message.readInt16() / 1090.0);
-                data.getMspLiveData().setMagnetometer2(message.readInt16() / 1090.0);
+                data.getMspLiveData().setMagnetometerX(message.readInt16() / 1090.0);
+                data.getMspLiveData().setMagnetometerY(message.readInt16() / 1090.0);
+                data.getMspLiveData().setMagnetometerZ(message.readInt16() / 1090.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_ATTITUDE:
+                data.getMspLiveData().setKinematicsX(message.readInt16() / 10.0);
+                data.getMspLiveData().setKinematicsY(message.readInt16() / 10.0);
+                data.getMspLiveData().setKinematicsZ(message.readInt16() / 1.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_ALTITUDE:
+                data.getMspLiveData().setAltitude(message.readInt32() / 100.0);
 
                 messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
 

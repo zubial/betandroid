@@ -63,6 +63,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_gravity="right">
+
+                        <Button
+                            android:id="@+id/cmdDisconnect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Disconnect" />
                         <Button
                             android:id="@+id/cmdAccCalibration"
                             android:layout_width="wrap_content"

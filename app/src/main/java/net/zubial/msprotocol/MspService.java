@@ -27,20 +27,9 @@ public class MspService extends MspServiceAbstract {
         return mspService;
     }
 
-    public void loadHandshake() {
-        ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
-        listCommand.add(MspMessageTypeEnum.MSP_API_VERSION);
-        listCommand.add(MspMessageTypeEnum.MSP_FC_VARIANT);
-        listCommand.add(MspMessageTypeEnum.MSP_FC_VERSION);
-        listCommand.add(MspMessageTypeEnum.MSP_BOARD_INFO);
-        listCommand.add(MspMessageTypeEnum.MSP_BUILD_INFO);
-        listCommand.add(MspMessageTypeEnum.MSP_NAME);
-
-        sendMultiCommand(listCommand);
-    }
-
     public void loadSystemData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
+        listCommand.add(MspMessageTypeEnum.MSP_NAME);
         listCommand.add(MspMessageTypeEnum.MSP_STATUS_EX);
         listCommand.add(MspMessageTypeEnum.MSP_SDCARD_SUMMARY);
 
@@ -65,10 +54,10 @@ public class MspService extends MspServiceAbstract {
 
     public void loadLiveData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
-        listCommand.add(MspMessageTypeEnum.MSP_BOXNAMES);
-        listCommand.add(MspMessageTypeEnum.MSP_STATUS_EX);
         listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
         listCommand.add(MspMessageTypeEnum.MSP_RAW_IMU);
+        listCommand.add(MspMessageTypeEnum.MSP_ATTITUDE);
+        listCommand.add(MspMessageTypeEnum.MSP_ALTITUDE);
 
         sendMultiCommand(listCommand);
     }

@@ -102,7 +102,7 @@ public class MspConfigurationSystem extends Fragment {
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         MspService.getInstance().setBoardName(input.getText().toString());
-                        MspService.getInstance().loadHandshake();
+                        MspService.getInstance().loadSystemData();
 
                         Snackbar.make(view, "Set Board name", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
@@ -128,7 +128,6 @@ public class MspConfigurationSystem extends Fragment {
     }
 
     private void loadData() {
-        MspService.getInstance().loadHandshake();
         MspService.getInstance().loadSystemData();
         MspService.getInstance().loadFeaturesData();
         MspService.getInstance().loadBatteryData();

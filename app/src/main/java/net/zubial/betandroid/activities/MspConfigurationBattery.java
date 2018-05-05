@@ -41,7 +41,6 @@ public class MspConfigurationBattery extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (MspService.EVENT_MESSAGE_RECEIVED.equals(intent.getAction())) {
-
                 MspMessageEventEnum mspEvent = (MspMessageEventEnum) intent.getSerializableExtra(MspService.EXTRA_EVENT);
                 if (MspMessageEventEnum.EVENT_MSP_BATTERY_DATA.isEqual(mspEvent)) {
 
