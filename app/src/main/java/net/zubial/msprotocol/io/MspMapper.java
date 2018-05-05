@@ -8,10 +8,14 @@ import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.data.MspFeatureData;
 import net.zubial.msprotocol.enums.MspFeatureEnum;
 import net.zubial.msprotocol.enums.MspFlightControllerEnum;
+import net.zubial.msprotocol.enums.MspMessageEventEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 import net.zubial.msprotocol.enums.MspSdcardStateEnum;
 import net.zubial.msprotocol.exceptions.MspBaseException;
 import net.zubial.msprotocol.helpers.MspProtocolUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class MspMapper {
 
@@ -107,8 +111,9 @@ public final class MspMapper {
         return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) == 0);
     }
 
-    public static void parseMessage(MspData data, MspMessage message) throws MspBaseException {
+    public static List<MspMessageEventEnum> parseMessage(MspData data, MspMessage message) throws MspBaseException {
 
+        List<MspMessageEventEnum> messageEvents = new ArrayList<>();
         MspMessageTypeEnum messageType = message.getMessageType();
 
         switch (messageType.getCode()) {
@@ -116,14 +121,23 @@ public final class MspMapper {
                 data.getMspSystemData().setMspProtocolVersion(message.readUInt8());
                 String apiVersion = message.readUInt8() + "." + message.readUInt8();
                 data.getMspSystemData().setBoardApiVersion(Double.parseDouble(apiVersion));
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_FC_VARIANT:
                 data.getMspSystemData().setBoardFlightControllerIdentifier(MspFlightControllerEnum.findByCode(message.readString()));
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_FC_VERSION:
                 data.getMspSystemData().setBoardFlightControllerVersion(message.readUInt8() + "." + message.readUInt8() + "." + message.readUInt8());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_BOARD_INFO:
@@ -135,14 +149,23 @@ public final class MspMapper {
                 } else {
                     data.getMspSystemData().setBoardType(0);
                 }
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_BUILD_INFO:
                 data.getMspSystemData().setBoardBuildInfo(message.readString());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_NAME:
                 data.getMspSystemData().setBoardName(message.readString());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_STATUS_EX:
@@ -175,6 +198,9 @@ public final class MspMapper {
                     data.getMspSystemData().setStatusHaveGyro(true);
                 }
 
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
                 break;
 
             case MSP_SDCARD_SUMMARY:
@@ -183,6 +209,9 @@ public final class MspMapper {
                 data.getMspSystemData().setSdcardFsError(message.readUInt8());
                 data.getMspSystemData().setSdcardFreeSize(message.readUInt32());
                 data.getMspSystemData().setSdcardTotalSize(message.readUInt32());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_BATTERY_CONFIG:
@@ -192,6 +221,9 @@ public final class MspMapper {
                 data.getMspBatteryData().setCapacity(message.readUInt16());
                 data.getMspBatteryData().setVoltageMeterSource(message.readUInt8());
                 data.getMspBatteryData().setCurrentMeterSource(message.readUInt8());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_BATTERY_DATA);
+
                 break;
 
             case MSP_VOLTAGE_METER_CONFIG:
@@ -228,6 +260,8 @@ public final class MspMapper {
                     }
                 }
 
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_BATTERY_DATA);
+
                 break;
 
             case MSP_CURRENT_METER_CONFIG:
@@ -256,6 +290,8 @@ public final class MspMapper {
                         }
                     }
                 }
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_BATTERY_DATA);
 
                 break;
 
@@ -335,6 +371,8 @@ public final class MspMapper {
                     }
                 }
 
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_FEATURE_DATA);
+
                 break;
 
             case MSP_ANALOG:
@@ -342,6 +380,9 @@ public final class MspMapper {
                 data.getMspLiveData().setmAhDrawn(message.readUInt16());
                 data.getMspLiveData().setRssi(message.readUInt16());
                 data.getMspLiveData().setAmperage(message.readInt16() / 100.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
                 break;
 
             case MSP_RAW_IMU:
@@ -356,11 +397,16 @@ public final class MspMapper {
                 data.getMspLiveData().setMagnetometer0(message.readInt16() / 1090.0);
                 data.getMspLiveData().setMagnetometer1(message.readInt16() / 1090.0);
                 data.getMspLiveData().setMagnetometer2(message.readInt16() / 1090.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
                 break;
 
             default:
                 Log.d(TAG, "Parser for " + messageType.getCode() + " not found");
 
         }
+
+        return messageEvents;
     }
 }

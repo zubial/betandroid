@@ -12,6 +12,7 @@ import android.widget.Toast;
 import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.enums.MspConnectorStateEnum;
 import net.zubial.msprotocol.enums.MspDirectionEnum;
+import net.zubial.msprotocol.enums.MspMessageEventEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 import net.zubial.msprotocol.exceptions.MspBaseException;
 import net.zubial.msprotocol.helpers.MspProtocolUtils;
@@ -23,6 +24,7 @@ import net.zubial.msprotocol.io.connector.MspBluetoothManager;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MspServiceAbstract {
 
@@ -42,6 +44,7 @@ public class MspServiceAbstract {
     public static final String EVENT_DISCONNECTED = "net.zubial.msprotocol.event.DISCONNECTED";
     public static final String EVENT_UNAVAILABLE = "net.zubial.msprotocol.event.UNAVAILABLE";
     public static final String EVENT_MESSAGE_RECEIVED = "net.zubial.msprotocol.event.MESSAGE_RECEIVED";
+    public static final String EXTRA_EVENT = "net.zubial.msprotocol.extra.EVENT";
     public static final String EXTRA_DATA = "net.zubial.msprotocol.extra.DATA";
     public static final String EXTRA_MESSAGE = "net.zubial.msprotocol.extra.MESSAGE";
     public static final String EXTRA_CONNECTION_TYPE = "net.zubial.msprotocol.extra.CONNECTION_TYPE";
@@ -99,11 +102,15 @@ public class MspServiceAbstract {
                         localInBuffer = ByteBuffer.wrap(inMessage.getNextMessage());
 
                         if (inMessage.isLoad()) {
-                            MspMapper.parseMessage(mspData, inMessage);
+                            List<MspMessageEventEnum> messageEvents = MspMapper.parseMessage(mspData, inMessage);
 
                             Log.d(TAG, "MSP Response : " + inMessage.getMessageType().name() + " " + MspProtocolUtils.toHexString(inMessage.getPayload()));
 
-                            broadcastMessageEvent(EVENT_MESSAGE_RECEIVED, inMessage, mspData);
+                            if (messageEvents != null && !messageEvents.isEmpty()) {
+                                for (MspMessageEventEnum messageEvent : messageEvents) {
+                                    broadcastMessageEvent(EVENT_MESSAGE_RECEIVED, messageEvent, inMessage, mspData);
+                                }
+                            }
                         }
                     } catch (MspBaseException e) {
                         e.printStackTrace();
@@ -163,8 +170,9 @@ public class MspServiceAbstract {
         LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
     }
 
-    protected void broadcastMessageEvent(String event, MspMessage message, MspData data) {
+    protected void broadcastMessageEvent(String event, MspMessageEventEnum messageEvent, MspMessage message, MspData data) {
         Intent intent = new Intent(event);
+        intent.putExtra(EXTRA_EVENT, messageEvent);
         intent.putExtra(EXTRA_MESSAGE, message);
         intent.putExtra(EXTRA_DATA, data);
         LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);

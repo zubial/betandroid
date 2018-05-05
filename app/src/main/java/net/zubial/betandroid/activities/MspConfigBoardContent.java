@@ -13,7 +13,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +28,7 @@ import net.zubial.betandroid.helpers.UiFormatter;
 import net.zubial.betandroid.helpers.UiUtils;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
+import net.zubial.msprotocol.enums.MspMessageEventEnum;
 import net.zubial.msprotocol.io.MspMessage;
 
 public class MspConfigBoardContent extends Fragment {
@@ -40,13 +40,16 @@ public class MspConfigBoardContent extends Fragment {
     private BroadcastReceiver onMspMessageReceived = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, intent.getAction());
-
             if (MspService.EVENT_MESSAGE_RECEIVED.equals(intent.getAction())) {
-                MspMessage message = (MspMessage) intent.getSerializableExtra(MspService.EXTRA_MESSAGE);
-                mspData = (MspData) intent.getSerializableExtra(MspService.EXTRA_DATA);
-                showData(mspData);
 
+                MspMessageEventEnum mspEvent = (MspMessageEventEnum) intent.getSerializableExtra(MspService.EXTRA_EVENT);
+                if (MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA.isEqual(mspEvent)
+                        || MspMessageEventEnum.EVENT_MSP_BATTERY_DATA.isEqual(mspEvent)
+                        || MspMessageEventEnum.EVENT_MSP_FEATURE_DATA.isEqual(mspEvent)) {
+                    MspMessage message = (MspMessage) intent.getSerializableExtra(MspService.EXTRA_MESSAGE);
+                    mspData = (MspData) intent.getSerializableExtra(MspService.EXTRA_DATA);
+                    showData(mspData);
+                }
             }
         }
     };
@@ -94,7 +97,7 @@ public class MspConfigBoardContent extends Fragment {
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         MspService.getInstance().setBoardName(input.getText().toString());
-                        MspService.getInstance().loadSystemData();
+                        MspService.getInstance().loadHandshake();
 
                         Snackbar.make(view, "Set Board name", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
@@ -140,6 +143,7 @@ public class MspConfigBoardContent extends Fragment {
                 input.setDisplayedValues(values);
                 input.setWrapSelectorWheel(true);
                 input.setGravity(Gravity.LEFT | Gravity.TOP);
+                input.setValue(mspData.getMspBatteryData().getVbatMaxCellVoltage() - 30);
                 builder.setView(input);
 
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -194,6 +198,7 @@ public class MspConfigBoardContent extends Fragment {
                 input.setDisplayedValues(values);
                 input.setWrapSelectorWheel(true);
                 input.setGravity(Gravity.LEFT | Gravity.TOP);
+                input.setValue(mspData.getMspBatteryData().getVbatMinCellVoltage() - 30);
                 builder.setView(input);
 
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -248,6 +253,7 @@ public class MspConfigBoardContent extends Fragment {
                 input.setDisplayedValues(values);
                 input.setWrapSelectorWheel(true);
                 input.setGravity(Gravity.LEFT | Gravity.TOP);
+                input.setValue(mspData.getMspBatteryData().getVbatWarningCellVoltage() - 30);
                 builder.setView(input);
 
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
