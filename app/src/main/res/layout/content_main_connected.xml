@@ -58,30 +58,17 @@
 
                 <View style="@style/AppTheme.SpaceDivider"/>
 
-                <Switch
-                    android:id="@+id/simpleSwitch"
-                    style="@style/AppTheme.Switch"
-                    android:checked="true"
-                    android:text="Accelerometer"
-                    android:textOff="No"
-                    android:textOn="Yes" />
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <ProgressBar
-                    android:id="@+id/determinateBar"
-                    style="@android:style/Widget.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:progress="25"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_gravity="right">
+
+                        <Button
+                            android:id="@+id/cmdDisconnect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Disconnect" />
                         <Button
                             android:id="@+id/cmdAccCalibration"
                             android:layout_width="wrap_content"
@@ -90,97 +77,24 @@
                             />
                 </LinearLayout>
 
-
                 <View style="@style/AppTheme.SpaceDivider"/>
 
-                <TextView
-                    android:id="@+id/txtConfigurationBoard"
+                <View style="@style/AppTheme.LineDivider" />
+
+                <View style="@style/AppTheme.SpaceDivider" />
+
+                <Button
+                    android:id="@+id/cmdLive"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Board configuration"/>
+                    android:text="Live" />
 
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainReceiver"
+                <Button
+                    android:id="@+id/cmdConfiguration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Receiver"/>
+                    android:text="Configuration" />
 
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainFeatures"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Features"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainPID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="PID"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainMotors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Motors"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainTelemetry"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="Telemetry"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainOSD"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="OSD"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
-                <TextView
-                    android:id="@+id/txtMainLEDStrip"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="LED Strip"/>
-
-                <View style="@style/AppTheme.SpaceDivider"/>
-                <View style="@style/AppTheme.LineDivider"/>
-                <View style="@style/AppTheme.SpaceDivider"/>
-
+                <View style="@style/AppTheme.SpaceDivider" />
         </LinearLayout>
 </ScrollView>

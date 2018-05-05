@@ -14,40 +14,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import net.zubial.betandroid.activities.MspConfigBoardActivity;
-import net.zubial.betandroid.views.settings.SettingsActivity;
 import net.zubial.msprotocol.MspService;
-import net.zubial.msprotocol.data.MspData;
-import net.zubial.msprotocol.enums.MspMessageTypeEnum;
-import net.zubial.msprotocol.io.MspMessage;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+
     private BroadcastReceiver onMspConnected = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (MspService.EVENT_CONNECTED.equals(intent.getAction())) {
-                gotoConnected();
-            }
+            gotoConnected();
         }
     };
-    private BroadcastReceiver onMspMessageReceived = new BroadcastReceiver() {
+
+    private BroadcastReceiver onMspDisconnect = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (MspService.EVENT_MESSAGE_RECEIVED.equals(intent.getAction())) {
-                MspMessage message = (MspMessage) intent.getSerializableExtra(MspService.EXTRA_MESSAGE);
-
-                if (message != null
-                        && message.getMessageType().isEqual(MspMessageTypeEnum.MSP_ACC_CALIBRATION)) {
-                    Toast.makeText(getApplicationContext(), "Calibration done", Toast.LENGTH_SHORT).show();
-                }
-
-                showModel((MspData) intent.getSerializableExtra(MspService.EXTRA_DATA));
-            }
+            gotoHome();
         }
     };
 
@@ -56,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MspService mspService = MspService.getInstance(getApplicationContext());
+        MspService.getInstance(getApplicationContext());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -73,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        IntentFilter onMspConnectedFilter = new IntentFilter(MspService.EVENT_CONNECTED);
+        IntentFilter onMspConnectedFilter = new IntentFilter(MspService.EVENT_HANDSHAKE);
         LocalBroadcastManager.getInstance(this).registerReceiver(onMspConnected, onMspConnectedFilter);
 
-        IntentFilter onMspMessageReceivedFilter = new IntentFilter(MspService.EVENT_MESSAGE_RECEIVED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(onMspMessageReceived, onMspMessageReceivedFilter);
+        IntentFilter onMspDisconnectFilter = new IntentFilter(MspService.EVENT_DISCONNECTED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(onMspDisconnect, onMspDisconnectFilter);
     }
 
     @Override
@@ -108,53 +92,15 @@ public class MainActivity extends AppCompatActivity {
         ft.commitAllowingStateLoss();
     }
 
-    private void showModel(MspData mspData) {
-
-        TextView txtConnectedTitle = findViewById(R.id.txtConnectedTitle);
-        if (txtConnectedTitle != null) {
-            txtConnectedTitle.setText("Connected");
-        }
-
-        TextView txtBoardName = findViewById(R.id.txtBoardName);
-        if (txtBoardName != null) {
-            txtBoardName.setText(mspData.getMspSystemData().getBoardName());
-        }
-
-        TextView txtBoardIdentifier = findViewById(R.id.txtBoardIdentifier);
-        if (txtBoardIdentifier != null) {
-            String boardIdentifier = mspData.getMspSystemData().getBoardIdentifier();
-            if (mspData.getMspSystemData().getBoardFlightControllerIdentifier() != null) {
-                boardIdentifier += " - " + mspData.getMspSystemData().getBoardFlightControllerIdentifier().name();
-            }
-            boardIdentifier += " (" + mspData.getMspSystemData().getBoardApiVersion() + ")";
-
-            txtBoardIdentifier.setText(boardIdentifier);
-        }
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
         switch (item.getItemId()) {
-            case R.id.action_msp_configuration:
-                startActivity(new Intent(getApplicationContext(), MspConfigBoardActivity.class));
-
-                return true;
-
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-
-                return true;
-
             case R.id.action_help:
                 // Go Help
                 Intent goHelp = new Intent();

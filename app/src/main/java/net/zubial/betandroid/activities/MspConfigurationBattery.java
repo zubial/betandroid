@@ -12,57 +12,58 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import net.zubial.betandroid.R;
-import net.zubial.betandroid.helpers.MspFieldUtils;
+import net.zubial.betandroid.helpers.UiFormatter;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
-import net.zubial.msprotocol.enums.MspFeatureEnum;
-import net.zubial.msprotocol.io.MspMessage;
+import net.zubial.msprotocol.enums.MspMessageEventEnum;
 
-import java.util.Map;
-
-public class MspConfigBoardContent extends Fragment {
+public class MspConfigurationBattery extends Fragment {
 
     private static final String TAG = "MspConfigBoard";
 
     private MspData mspData;
+
+    // UI Composants
+    private TextView txtConfigurationBatteryMaxCell;
+    private TextView txtConfigurationBatteryMinCell;
+    private TextView txtConfigurationBatteryWarningCell;
+
+    // Msp Event
     private BroadcastReceiver onMspMessageReceived = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, intent.getAction());
-
             if (MspService.EVENT_MESSAGE_RECEIVED.equals(intent.getAction())) {
-                MspMessage message = (MspMessage) intent.getSerializableExtra(MspService.EXTRA_MESSAGE);
-                mspData = (MspData) intent.getSerializableExtra(MspService.EXTRA_DATA);
-                showData(mspData);
+                MspMessageEventEnum mspEvent = (MspMessageEventEnum) intent.getSerializableExtra(MspService.EXTRA_EVENT);
+                if (MspMessageEventEnum.EVENT_MSP_BATTERY_DATA.isEqual(mspEvent)) {
 
+                    mspData = (MspData) intent.getSerializableExtra(MspService.EXTRA_DATA);
+                    showData();
+                }
             }
         }
     };
 
-    public MspConfigBoardContent() {
+    public MspConfigurationBattery() {
+        // Default Ctr
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.content_msp_config_board, container, false);
-
+        return inflater.inflate(R.layout.content_msp_configuration_battery, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        FloatingActionButton fab = (FloatingActionButton) view.getRootView().findViewById(R.id.fab);
+        FloatingActionButton fab = view.getRootView().findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,46 +74,7 @@ public class MspConfigBoardContent extends Fragment {
             }
         });
 
-        TextView txtConfigurationBoardName = view.findViewById(R.id.txtConfigurationBoardName);
-        txtConfigurationBoardName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("BoardName");
-
-                final EditText input = new EditText(getContext());
-
-                input.setText(txtConfigurationBoardName.getText());
-                input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-                input.setSingleLine(true);
-                input.setLines(1);
-                input.setMaxLines(1);
-                input.setGravity(Gravity.LEFT | Gravity.TOP);
-                builder.setView(input);
-
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        MspService.getInstance().setBoardName(input.getText().toString());
-                        MspService.getInstance().loadSystemData();
-
-                        Snackbar.make(view, "Set Board name", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });
-
-                builder.setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        });
-
-        TextView txtConfigurationBatteryMaxCell = view.findViewById(R.id.txtConfigurationBatteryMaxCell);
+        txtConfigurationBatteryMaxCell = view.findViewById(R.id.txtConfigurationBatteryMaxCell);
         txtConfigurationBatteryMaxCell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,7 +100,8 @@ public class MspConfigBoardContent extends Fragment {
                 input.setMaxValue(values.length - 1);
                 input.setDisplayedValues(values);
                 input.setWrapSelectorWheel(true);
-                input.setGravity(Gravity.LEFT | Gravity.TOP);
+                input.setGravity(Gravity.START | Gravity.TOP);
+                input.setValue(mspData.getMspBatteryData().getVbatMaxCellVoltage() - 30);
                 builder.setView(input);
 
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -166,7 +129,7 @@ public class MspConfigBoardContent extends Fragment {
             }
         });
 
-        TextView txtConfigurationBatteryMinCell = view.findViewById(R.id.txtConfigurationBatteryMinCell);
+        txtConfigurationBatteryMinCell = view.findViewById(R.id.txtConfigurationBatteryMinCell);
         txtConfigurationBatteryMinCell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -192,7 +155,8 @@ public class MspConfigBoardContent extends Fragment {
                 input.setMaxValue(values.length - 1);
                 input.setDisplayedValues(values);
                 input.setWrapSelectorWheel(true);
-                input.setGravity(Gravity.LEFT | Gravity.TOP);
+                input.setGravity(Gravity.START | Gravity.TOP);
+                input.setValue(mspData.getMspBatteryData().getVbatMinCellVoltage() - 30);
                 builder.setView(input);
 
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -206,21 +170,20 @@ public class MspConfigBoardContent extends Fragment {
                         Snackbar.make(view, "Set Cell Voltage", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
-                });
-
-                builder.setNegativeButton("Cancel",
+                }).setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         });
+
                 AlertDialog alert = builder.create();
                 alert.show();
             }
         });
 
-        TextView txtConfigurationBatteryWarningCell = view.findViewById(R.id.txtConfigurationBatteryWarningCell);
+        txtConfigurationBatteryWarningCell = view.findViewById(R.id.txtConfigurationBatteryWarningCell);
         txtConfigurationBatteryWarningCell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -246,7 +209,8 @@ public class MspConfigBoardContent extends Fragment {
                 input.setMaxValue(values.length - 1);
                 input.setDisplayedValues(values);
                 input.setWrapSelectorWheel(true);
-                input.setGravity(Gravity.LEFT | Gravity.TOP);
+                input.setGravity(Gravity.START | Gravity.TOP);
+                input.setValue(mspData.getMspBatteryData().getVbatWarningCellVoltage() - 30);
                 builder.setView(input);
 
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -260,9 +224,7 @@ public class MspConfigBoardContent extends Fragment {
                         Snackbar.make(view, "Set Cell Voltage", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
-                });
-
-                builder.setNegativeButton("Cancel",
+                }).setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -281,97 +243,22 @@ public class MspConfigBoardContent extends Fragment {
     }
 
     private void loadData() {
-        MspService.getInstance().loadSystemData();
         MspService.getInstance().loadBatteryData();
     }
 
-    private void showData(MspData mspData) {
-        if (getView() != null) {
-            TextView txtConfigurationBoardIdentifier = getView().findViewById(R.id.txtConfigurationBoardIdentifier);
-            if (txtConfigurationBoardIdentifier != null) {
-                String boardIdentifier = mspData.getMspSystemData().getBoardIdentifier();
-                if (mspData.getMspSystemData().getBoardFlightControllerIdentifier() != null) {
-                    boardIdentifier += " - " + mspData.getMspSystemData().getBoardFlightControllerIdentifier().name();
-                }
-                boardIdentifier += " (" + mspData.getMspSystemData().getBoardApiVersion() + ")";
-
-                txtConfigurationBoardIdentifier.setText(boardIdentifier);
-            }
-
-
-            TextView txtConfigurationBoardName = getView().findViewById(R.id.txtConfigurationBoardName);
-            if (txtConfigurationBoardName != null) {
-                txtConfigurationBoardName.setText(mspData.getMspSystemData().getBoardName());
-            }
-
-            TextView txtConfigurationSensors = getView().findViewById(R.id.txtConfigurationSensors);
-            if (txtConfigurationSensors != null) {
-                String configurationSensors = "";
-                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveAccel())) {
-                    configurationSensors += " - Accelerometer \n";
-                }
-                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveBaro())) {
-                    configurationSensors += " - Barometer \n";
-                }
-                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveGps())) {
-                    configurationSensors += " - GPS \n";
-                }
-                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveGyro())) {
-                    configurationSensors += " - Gyrometer \n";
-                }
-                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveMag())) {
-                    configurationSensors += " - Magnetometer \n";
-                }
-                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getStatusHaveSonar())) {
-                    configurationSensors += " - Sonar \n";
-                }
-                txtConfigurationSensors.setText(configurationSensors);
-            }
-
-            TextView txtConfigurationSdcard = getView().findViewById(R.id.txtConfigurationSdcard);
-            if (txtConfigurationSdcard != null) {
-                String configurationSdcard = "";
-                if (MspFieldUtils.isTrue(mspData.getMspSystemData().getSdcardSupported())) {
-                    configurationSdcard += "SdCard supported";
-
-                    if (MspFieldUtils.isGtZero(mspData.getMspSystemData().getSdcardTotalSize())) {
-                        configurationSdcard += "\nFree " + MspFieldUtils.formatByteSize(mspData.getMspSystemData().getSdcardFreeSize()) + " / " + MspFieldUtils.formatByteSize(mspData.getMspSystemData().getSdcardTotalSize());
-                    }
-
-                } else {
-                    configurationSdcard += "SdCard not supported";
-                }
-                txtConfigurationSdcard.setText(configurationSdcard);
-            }
-
-            TextView txtConfigurationBatteryMaxCell = getView().findViewById(R.id.txtConfigurationBatteryMaxCell);
+    private void showData() {
+        if (mspData != null) {
             if (txtConfigurationBatteryMaxCell != null) {
-                txtConfigurationBatteryMaxCell.setText(MspFieldUtils.formatVoltage(mspData.getMspBatteryData().getVbatMaxCellVoltage()));
+                txtConfigurationBatteryMaxCell.setText(UiFormatter.formatVoltage(mspData.getMspBatteryData().getVbatMaxCellVoltage()));
             }
 
-            TextView txtConfigurationBatteryWarningCell = getView().findViewById(R.id.txtConfigurationBatteryWarningCell);
             if (txtConfigurationBatteryWarningCell != null) {
-                txtConfigurationBatteryWarningCell.setText(MspFieldUtils.formatVoltage(mspData.getMspBatteryData().getVbatWarningCellVoltage()));
+                txtConfigurationBatteryWarningCell.setText(UiFormatter.formatVoltage(mspData.getMspBatteryData().getVbatWarningCellVoltage()));
             }
 
-            TextView txtConfigurationBatteryMinCell = getView().findViewById(R.id.txtConfigurationBatteryMinCell);
             if (txtConfigurationBatteryMinCell != null) {
-                txtConfigurationBatteryMinCell.setText(MspFieldUtils.formatVoltage(mspData.getMspBatteryData().getVbatMinCellVoltage()));
-            }
-
-            TextView txtConfigurationFeatures = getView().findViewById(R.id.txtConfigurationFeatures);
-            if (txtConfigurationFeatures != null) {
-                String features = "";
-                if (mspData.getMspSystemData().getFeatures() != null
-                        && !mspData.getMspSystemData().getFeatures().isEmpty()) {
-                    for (Map.Entry<MspFeatureEnum, Boolean> entry : mspData.getMspSystemData().getFeatures().entrySet()) {
-                        features += "Feature : " + entry.getKey() + " Value : " + entry.getValue() + "\n";
-                    }
-                }
-                txtConfigurationFeatures.setText(features);
+                txtConfigurationBatteryMinCell.setText(UiFormatter.formatVoltage(mspData.getMspBatteryData().getVbatMinCellVoltage()));
             }
         }
     }
-
-
 }

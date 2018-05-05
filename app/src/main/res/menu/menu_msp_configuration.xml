@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="net.zubial.betandroid.activities.MspConfigurationActivity">
+    <item
+        android:id="@+id/action_configuration_system"
+        android:orderInCategory="100"
+        android:title="System"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_configuration_battery"
+        android:orderInCategory="100"
+        android:title="Battery"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_configuration_features"
+        android:orderInCategory="100"
+        android:title="Features"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_disconnect"
+        android:orderInCategory="100"
+        android:title="@string/action_disconnect"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:title="@string/action_help"
+        app:showAsAction="never" />
+</menu>

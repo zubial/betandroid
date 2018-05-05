@@ -4,7 +4,6 @@ import net.zubial.msprotocol.enums.MspDirectionEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 
 import java.io.Serializable;
-import java.nio.ByteBuffer;
 
 public class MspMessage implements Serializable {
 
@@ -75,9 +74,7 @@ public class MspMessage implements Serializable {
     }
 
     public int readInt32() {
-        ByteBuffer buffer = ByteBuffer.allocate(4).put(new byte[]{payload[readIndex++], payload[readIndex++], payload[readIndex++], payload[readIndex++]});
-        buffer.position(0);
-        return buffer.getInt();
+        return readInt16() + readInt16() * 65536;
     }
 
     public int readUInt32() {
@@ -85,9 +82,7 @@ public class MspMessage implements Serializable {
     }
 
     public int readInt16() {
-        ByteBuffer buffer = ByteBuffer.allocate(2).put(new byte[]{payload[readIndex++], payload[readIndex++]});
-        buffer.position(0);
-        return buffer.getInt();
+        return readInt8() + readInt8() * 256;
     }
 
     public int readUInt16() {

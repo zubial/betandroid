@@ -1,7 +1,5 @@
 package net.zubial.msprotocol.io;
 
-import android.util.Log;
-
 import net.zubial.msprotocol.enums.MspDirectionEnum;
 import net.zubial.msprotocol.enums.MspErrorCodeEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
@@ -89,7 +87,7 @@ public final class MspDecoder {
                         inMessage.setPayload(payload);
                         inMessage.isLoad(true);
 
-                        Log.d(TAG, "Receive : " + inMessage.getMessageType().name() + " - " + MspProtocolUtils.toHexString(payload));
+                        //Log.d(TAG, "Receive : " + inMessage.getMessageType().name() + " - " + MspProtocolUtils.toHexString(payload));
 
                         nextStep = STEP_END;
                     }

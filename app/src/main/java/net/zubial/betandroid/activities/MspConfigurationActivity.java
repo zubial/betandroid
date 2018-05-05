@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -19,9 +20,10 @@ import net.zubial.betandroid.MainActivity;
 import net.zubial.betandroid.R;
 import net.zubial.msprotocol.MspService;
 
-public class MspConfigBoardActivity extends AppCompatActivity {
+public class MspConfigurationActivity extends AppCompatActivity {
 
     private static final String TAG = "MspConfigBoard";
+
     private BroadcastReceiver onMspDisconnected = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -36,25 +38,27 @@ public class MspConfigBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_msp_config_board);
+        setContentView(R.layout.activity_msp_configuration);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         IntentFilter onMspDisconnectedFilter = new IntentFilter(MspService.EVENT_DISCONNECTED);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onMspDisconnected, onMspDisconnectedFilter);
 
-        gotoContent();
+        gotoConfigSystem();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_msp_config, menu);
+        getMenuInflater().inflate(R.menu.menu_msp_configuration, menu);
         return true;
     }
 
@@ -63,12 +67,32 @@ public class MspConfigBoardActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_config_board:
-                gotoConfigBoard();
+            case R.id.action_help:
+                // Go Help
+                Intent goHelp = new Intent();
+                goHelp.setAction(Intent.ACTION_VIEW);
+                goHelp.setData(Uri.parse("http://www.example.com"));
+                startActivity(goHelp);
+
                 return true;
 
-            case R.id.action_config_battery:
+            case R.id.action_disconnect:
+                // Disconnect
+                MspService.getInstance().disconnectBluetooth();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+                return true;
+
+            case R.id.action_configuration_system:
+                gotoConfigSystem();
+                return true;
+
+            case R.id.action_configuration_battery:
                 gotoConfigBattery();
+                return true;
+
+            case R.id.action_configuration_features:
+                gotoConfigFeatures();
                 return true;
 
             default:
@@ -76,17 +100,21 @@ public class MspConfigBoardActivity extends AppCompatActivity {
         }
     }
 
-    private void gotoContent() {
+    private void gotoConfigSystem() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content, new MspConfigBoardContent());
+        ft.replace(R.id.content, new MspConfigurationSystem());
         ft.commitAllowingStateLoss();
     }
 
-    private void gotoConfigBoard() {
-
+    private void gotoConfigBattery() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, new MspConfigurationBattery());
+        ft.commitAllowingStateLoss();
     }
 
-    private void gotoConfigBattery() {
-
+    private void gotoConfigFeatures() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, new MspConfigurationFeatures());
+        ft.commitAllowingStateLoss();
     }
 }

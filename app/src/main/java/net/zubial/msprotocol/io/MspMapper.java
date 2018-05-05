@@ -5,12 +5,17 @@ import android.util.Log;
 import net.zubial.msprotocol.data.MspBatteryCurrentData;
 import net.zubial.msprotocol.data.MspBatteryVoltageData;
 import net.zubial.msprotocol.data.MspData;
+import net.zubial.msprotocol.data.MspFeatureData;
 import net.zubial.msprotocol.enums.MspFeatureEnum;
 import net.zubial.msprotocol.enums.MspFlightControllerEnum;
+import net.zubial.msprotocol.enums.MspMessageEventEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 import net.zubial.msprotocol.enums.MspSdcardStateEnum;
 import net.zubial.msprotocol.exceptions.MspBaseException;
 import net.zubial.msprotocol.helpers.MspProtocolUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class MspMapper {
 
@@ -32,6 +37,7 @@ public final class MspMapper {
     private static final int MSP_CURRENT_METER_CONFIG = 40;
     private static final int MSP_VOLTAGE_METER_CONFIG = 56;
     private static final int MSP_MODE_RANGES = 34;
+    private static final int MSP_SET_FEATURE_CONFIG = 37;
     private static final int MSP_FEATURE_CONFIG = 36;
     private static final int MSP_BOARD_ALIGNMENT_CONFIG = 38;
     private static final int MSP_MIXER_CONFIG = 42;
@@ -94,28 +100,20 @@ public final class MspMapper {
     }
 
     public static Boolean gtVersion(MspData data, Double version) {
-        if (data != null && version != null) {
-            return (data.getMspSystemData().getBoardApiVersion().compareTo(version) > 0);
-        }
-        return false;
+        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) > 0);
     }
 
     public static Boolean ltVersion(MspData data, Double version) {
-        if (data != null && version != null) {
-            return (data.getMspSystemData().getBoardApiVersion().compareTo(version) < 0);
-        }
-        return false;
+        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) < 0);
     }
 
     public static Boolean eqVersion(MspData data, Double version) {
-        if (data != null && version != null) {
-            return (data.getMspSystemData().getBoardApiVersion().compareTo(version) == 0);
-        }
-        return false;
+        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) == 0);
     }
 
-    public static void parseMessage(MspData data, MspMessage message) throws MspBaseException {
+    public static List<MspMessageEventEnum> parseMessage(MspData data, MspMessage message) throws MspBaseException {
 
+        List<MspMessageEventEnum> messageEvents = new ArrayList<>();
         MspMessageTypeEnum messageType = message.getMessageType();
 
         switch (messageType.getCode()) {
@@ -123,14 +121,23 @@ public final class MspMapper {
                 data.getMspSystemData().setMspProtocolVersion(message.readUInt8());
                 String apiVersion = message.readUInt8() + "." + message.readUInt8();
                 data.getMspSystemData().setBoardApiVersion(Double.parseDouble(apiVersion));
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_FC_VARIANT:
                 data.getMspSystemData().setBoardFlightControllerIdentifier(MspFlightControllerEnum.findByCode(message.readString()));
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_FC_VERSION:
                 data.getMspSystemData().setBoardFlightControllerVersion(message.readUInt8() + "." + message.readUInt8() + "." + message.readUInt8());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_BOARD_INFO:
@@ -142,30 +149,40 @@ public final class MspMapper {
                 } else {
                     data.getMspSystemData().setBoardType(0);
                 }
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_BUILD_INFO:
                 data.getMspSystemData().setBoardBuildInfo(message.readString());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_NAME:
                 data.getMspSystemData().setBoardName(message.readString());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_STATUS_EX:
-                data.getMspSystemData().setStatusCycleTime(message.readUInt16());
-                data.getMspSystemData().setStatusI2cError(message.readUInt16());
+                data.getMspLiveData().setStatusCycleTime(message.readUInt16());
+                data.getMspLiveData().setStatusI2cError(message.readUInt16());
                 data.getMspSystemData().setStatusActiveSensors(message.readUInt16());
                 data.getMspSystemData().setStatusMode(message.readUInt32());
                 data.getMspSystemData().setStatusProfile(message.readUInt8());
-                data.getMspSystemData().setStatusCpuload(message.readUInt16());
+                data.getMspLiveData().setStatusCpuload(message.readUInt16());
                 if (gtVersion(data, 1.16)) {
                     data.getMspSystemData().setStatusNumProfiles(message.readUInt8());
                     data.getMspSystemData().setStatusRateProfile(message.readUInt8());
 
-                    if (gtVersion(data, 1.36)) {
-                        // armingDisableFlags
-                    }
+                    // TODO armingDisableFlags
+                    //if (gtVersion(data, 1.36)) {
+
+                    //}
                 }
 
                 // Check sensor
@@ -181,6 +198,9 @@ public final class MspMapper {
                     data.getMspSystemData().setStatusHaveGyro(true);
                 }
 
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
                 break;
 
             case MSP_SDCARD_SUMMARY:
@@ -189,6 +209,9 @@ public final class MspMapper {
                 data.getMspSystemData().setSdcardFsError(message.readUInt8());
                 data.getMspSystemData().setSdcardFreeSize(message.readUInt32());
                 data.getMspSystemData().setSdcardTotalSize(message.readUInt32());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA);
+
                 break;
 
             case MSP_BATTERY_CONFIG:
@@ -198,6 +221,9 @@ public final class MspMapper {
                 data.getMspBatteryData().setCapacity(message.readUInt16());
                 data.getMspBatteryData().setVoltageMeterSource(message.readUInt8());
                 data.getMspBatteryData().setCurrentMeterSource(message.readUInt8());
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_BATTERY_DATA);
+
                 break;
 
             case MSP_VOLTAGE_METER_CONFIG:
@@ -234,6 +260,8 @@ public final class MspMapper {
                     }
                 }
 
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_BATTERY_DATA);
+
                 break;
 
             case MSP_CURRENT_METER_CONFIG:
@@ -263,6 +291,8 @@ public final class MspMapper {
                     }
                 }
 
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_BATTERY_DATA);
+
                 break;
 
             case MSP_FEATURE_CONFIG:
@@ -270,74 +300,121 @@ public final class MspMapper {
                 Log.d(TAG, "Feature - " + featureConfig);
                 Log.d(TAG, "Version - " + data.getMspSystemData().getBoardApiVersion());
 
-                data.getMspSystemData().getFeatures().clear();
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_PPM, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_PPM.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_SERIAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_SERIAL.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_MOTOR_STOP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_MOTOR_STOP.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SERVO_TILT, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SERVO_TILT.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SOFTSERIAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SOFTSERIAL.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_GPS, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_GPS.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SONAR, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SONAR.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_TELEMETRY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_TELEMETRY.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_3D, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_3D.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_PARALLEL_PWM, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_PARALLEL_PWM.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_MSP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_MSP.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RSSI_ADC, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RSSI_ADC.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_LED_STRIP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_LED_STRIP.getCode()));
-                data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_DISPLAY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DISPLAY.getCode()));
+                data.setMspFeaturesMask(featureConfig);
+
+                data.getMspFeatures().clear();
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_PPM, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_PPM.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_SERIAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_SERIAL.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_MOTOR_STOP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_MOTOR_STOP.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SERVO_TILT, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SERVO_TILT.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SOFTSERIAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SOFTSERIAL.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_GPS, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_GPS.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SONAR, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SONAR.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_TELEMETRY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_TELEMETRY.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_3D, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_3D.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_PARALLEL_PWM, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_PARALLEL_PWM.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_MSP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_MSP.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RSSI_ADC, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RSSI_ADC.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_LED_STRIP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_LED_STRIP.getCode())));
+                data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_DISPLAY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DISPLAY.getCode())));
 
                 if (!gtVersion(data, 1.33)) {
-                    data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_BLACKBOX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_BLACKBOX.getCode()));
+                    data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_BLACKBOX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_BLACKBOX.getCode())));
                 }
 
                 if (gtVersion(data, 1.12)) {
-                    data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_CHANNEL_FORWARDING, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CHANNEL_FORWARDING.getCode()));
+                    data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_CHANNEL_FORWARDING, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CHANNEL_FORWARDING.getCode())));
                 }
 
                 if (gtVersion(data, 1.15) && !gtVersion(data, 1.36)) {
-                    data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_FAILSAFE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_FAILSAFE.getCode()));
+                    data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_FAILSAFE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_FAILSAFE.getCode())));
                 }
 
                 if (gtVersion(data, 1.16)) {
-                    data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_TRANSPONDER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_TRANSPONDER.getCode()));
+                    data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_TRANSPONDER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_TRANSPONDER.getCode())));
                 }
 
                 if (data.getMspSystemData().getBoardFlightControllerVersion() != null
                         && !data.getMspSystemData().getBoardFlightControllerVersion().isEmpty()) {
                     if (gtVersion(data, 1.16)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_AIRMODE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_AIRMODE.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_AIRMODE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_AIRMODE.getCode())));
 
                         if (ltVersion(data, 1.20)) {
-                            data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SUPEREXPO_RATES, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SUPEREXPO_RATES.getCode()));
+                            data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SUPEREXPO_RATES, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SUPEREXPO_RATES.getCode())));
                         } else if (!gtVersion(data, 1.33)) {
-                            data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_SDCARD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SDCARD.getCode()));
+                            data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SDCARD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SDCARD.getCode())));
                         }
                     }
 
                     if (gtVersion(data, 1.20)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_OSD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_OSD.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_OSD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_OSD.getCode())));
 
                         if (!gtVersion(data, 1.35)) {
-                            data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_VTX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VTX.getCode()));
+                            data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_VTX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VTX.getCode())));
                         }
                     }
 
                     if (gtVersion(data, 1.31)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_RX_SPI, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_SPI.getCode()));
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_ESC_SENSOR, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ESC_SENSOR.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_SPI, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_SPI.getCode())));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_ESC_SENSOR, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ESC_SENSOR.getCode())));
                     }
 
                     if (gtVersion(data, 1.36)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_ANTI_GRAVITY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ANTI_GRAVITY.getCode()));
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_DYNAMIC_FILTER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DYNAMIC_FILTER.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_ANTI_GRAVITY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ANTI_GRAVITY.getCode())));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_DYNAMIC_FILTER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DYNAMIC_FILTER.getCode())));
                     }
 
                     if (!gtVersion(data, 1.36)) {
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_VBAT, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VBAT.getCode()));
-                        data.getMspSystemData().getFeatures().put(MspFeatureEnum.FEATURE_CURRENT_METER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CURRENT_METER.getCode()));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_VBAT, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VBAT.getCode())));
+                        data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_CURRENT_METER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CURRENT_METER.getCode())));
                     }
                 }
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_FEATURE_DATA);
+
+                break;
+
+            case MSP_ANALOG:
+                data.getMspLiveData().setVoltage(message.readUInt8() / 10.0);
+                data.getMspLiveData().setmAhDrawn(message.readUInt16());
+                data.getMspLiveData().setRssi(message.readUInt16());
+                data.getMspLiveData().setAmperage(message.readInt16() / 100.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_RAW_IMU:
+                data.getMspLiveData().setAccelerometerX(message.readInt16() / 512.0);
+                data.getMspLiveData().setAccelerometerY(message.readInt16() / 512.0);
+                data.getMspLiveData().setAccelerometerZ(message.readInt16() / 512.0);
+
+                data.getMspLiveData().setGyroscopeX(message.readInt16() * (4 / 16.4));
+                data.getMspLiveData().setGyroscopeY(message.readInt16() * (4 / 16.4));
+                data.getMspLiveData().setGyroscopeZ(message.readInt16() * (4 / 16.4));
+
+                data.getMspLiveData().setMagnetometerX(message.readInt16() / 1090.0);
+                data.getMspLiveData().setMagnetometerY(message.readInt16() / 1090.0);
+                data.getMspLiveData().setMagnetometerZ(message.readInt16() / 1090.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_ATTITUDE:
+                data.getMspLiveData().setKinematicsX(message.readInt16() / 10.0);
+                data.getMspLiveData().setKinematicsY(message.readInt16() / 10.0);
+                data.getMspLiveData().setKinematicsZ(message.readInt16() / 1.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_ALTITUDE:
+                data.getMspLiveData().setAltitude(message.readInt32() / 100.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
 
                 break;
 
@@ -345,5 +422,7 @@ public final class MspMapper {
                 Log.d(TAG, "Parser for " + messageType.getCode() + " not found");
 
         }
+
+        return messageEvents;
     }
 }

@@ -29,14 +29,15 @@ public class MspService extends MspServiceAbstract {
 
     public void loadSystemData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
-        listCommand.add(MspMessageTypeEnum.MSP_API_VERSION);
-        listCommand.add(MspMessageTypeEnum.MSP_FC_VARIANT);
-        listCommand.add(MspMessageTypeEnum.MSP_FC_VERSION);
-        listCommand.add(MspMessageTypeEnum.MSP_BOARD_INFO);
-        listCommand.add(MspMessageTypeEnum.MSP_BUILD_INFO);
         listCommand.add(MspMessageTypeEnum.MSP_NAME);
         listCommand.add(MspMessageTypeEnum.MSP_STATUS_EX);
         listCommand.add(MspMessageTypeEnum.MSP_SDCARD_SUMMARY);
+
+        sendMultiCommand(listCommand);
+    }
+
+    public void loadFeaturesData() {
+        ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_FEATURE_CONFIG);
 
         sendMultiCommand(listCommand);
@@ -47,6 +48,16 @@ public class MspService extends MspServiceAbstract {
         listCommand.add(MspMessageTypeEnum.MSP_BATTERY_CONFIG);
         listCommand.add(MspMessageTypeEnum.MSP_VOLTAGE_METER_CONFIG);
         listCommand.add(MspMessageTypeEnum.MSP_CURRENT_METER_CONFIG);
+
+        sendMultiCommand(listCommand);
+    }
+
+    public void loadLiveData() {
+        ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
+        listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
+        listCommand.add(MspMessageTypeEnum.MSP_RAW_IMU);
+        listCommand.add(MspMessageTypeEnum.MSP_ATTITUDE);
+        listCommand.add(MspMessageTypeEnum.MSP_ALTITUDE);
 
         sendMultiCommand(listCommand);
     }
@@ -70,5 +81,12 @@ public class MspService extends MspServiceAbstract {
         buffer.writeInt8(batteryData.getCurrentMeterSource());
 
         sendMessage(MspMessageTypeEnum.MSP_SET_BATTERY_CONFIG, buffer.getMessage());
+    }
+
+    public void setFeatures(int featureMask) {
+        MspBuffer buffer = new MspBuffer(4);
+        buffer.writeInt32(featureMask);
+
+        sendMessage(MspMessageTypeEnum.MSP_SET_FEATURE_CONFIG, buffer.getMessage());
     }
 }
