@@ -68,6 +68,7 @@ public class MspService extends MspServiceAbstract {
         listCommand.add(MspMessageTypeEnum.MSP_BOXNAMES);
         listCommand.add(MspMessageTypeEnum.MSP_STATUS_EX);
         listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
+        listCommand.add(MspMessageTypeEnum.MSP_RAW_IMU);
 
         sendMultiCommand(listCommand);
     }

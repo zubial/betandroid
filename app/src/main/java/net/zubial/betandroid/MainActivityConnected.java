@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import net.zubial.betandroid.activities.MspConfigurationActivity;
+import net.zubial.betandroid.activities.MspLiveActivity;
 import net.zubial.msprotocol.MspService;
 
 public class MainActivityConnected extends Fragment {
@@ -54,6 +55,14 @@ public class MainActivityConnected extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(view.getContext(), MspConfigurationActivity.class));
+            }
+        });
+
+        Button cmdLive = view.findViewById(R.id.cmdLive);
+        cmdLive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), MspLiveActivity.class));
             }
         });
     }

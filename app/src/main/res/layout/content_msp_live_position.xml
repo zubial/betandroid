@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.MspLiveActivity"
+    tools:showIn="@layout/activity_msp_live">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Live status"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <View style="@style/AppTheme.LineDivider" />
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <ProgressBar
+            android:id="@+id/determinateBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="25" />
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtAccelerometer"
+            android:text="Accelerometer"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtAccelerometer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:text="" />
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtGyroscope"
+            android:text="Gyroscope"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtGyroscope"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:text="" />
+
+    </LinearLayout>
+</ScrollView>
