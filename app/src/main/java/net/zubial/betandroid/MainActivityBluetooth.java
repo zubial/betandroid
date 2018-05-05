@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import net.zubial.betandroid.components.MspBluetoothDeviceAdapter;
+import net.zubial.betandroid.components.BluetoothDeviceAdapter;
 import net.zubial.msprotocol.MspService;
 
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public class MainActivityBluetooth extends Fragment {
                 Log.d(TAG, bt.getName());
             }
 
-            MspBluetoothDeviceAdapter adapter = new MspBluetoothDeviceAdapter(getContext(), deviceList);
+            BluetoothDeviceAdapter adapter = new BluetoothDeviceAdapter(getContext(), deviceList);
 
             ListView listBluetoothDevice = view.findViewById(R.id.listBluetoothDevice);
             listBluetoothDevice.setAdapter(adapter);

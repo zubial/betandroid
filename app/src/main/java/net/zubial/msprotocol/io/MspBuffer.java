@@ -15,15 +15,19 @@ public final class MspBuffer {
     }
 
     public void writeInt32(int value) {
-        buffer.putInt(value);
+        buffer.put((byte) (0xFF & value));
+        buffer.put((byte) (0xFF & (value >> 8)));
+        buffer.put((byte) (0xFF & (value >> 16)));
+        buffer.put((byte) (0xFF & (value >> 24)));
     }
 
     public void writeInt16(int value) {
-        buffer.putShort((short) value);
+        buffer.put((byte) (0xFF & value));
+        buffer.put((byte) (0xFF & (value >> 8)));
     }
 
     public void writeInt8(int value) {
-        buffer.put((byte) value);
+        buffer.put((byte) (0xFF & value));
     }
 
     public int getSize() {

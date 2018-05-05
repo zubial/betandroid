@@ -12,9 +12,9 @@ import net.zubial.betandroid.R;
 
 import java.util.List;
 
-public class MspBluetoothDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
+public class BluetoothDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
 
-    public MspBluetoothDeviceAdapter(Context context, List<BluetoothDevice> bluetoothDevices) {
+    public BluetoothDeviceAdapter(Context context, List<BluetoothDevice> bluetoothDevices) {
         super(context, 0, bluetoothDevices);
     }
 

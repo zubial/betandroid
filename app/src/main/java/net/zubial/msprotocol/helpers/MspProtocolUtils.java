@@ -22,6 +22,14 @@ public final class MspProtocolUtils {
         return ((mask >> index) % 2 != 0);
     }
 
+    public static int bitSetEnable(int mask, int index) {
+        return mask | 1 << index;
+    }
+
+    public static int bitSetDisable(int mask, int index) {
+        return mask & ~(1 << index);
+    }
+
     public static byte[] concat(byte[] firstArray, byte[] secondArray) {
         int newLenght = 0;
         if (firstArray != null) {

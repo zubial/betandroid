@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.zubial.betandroid.activities.MspConfigBoardActivity;
 import net.zubial.betandroid.views.settings.SettingsActivity;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
@@ -145,11 +144,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (item.getItemId()) {
-            case R.id.action_msp_configuration:
-                startActivity(new Intent(getApplicationContext(), MspConfigBoardActivity.class));
-
-                return true;
-
             case R.id.action_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 

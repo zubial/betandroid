@@ -31,10 +31,6 @@ public class MspSystemData implements Serializable {
     private String boardName;
 
     // MSP_STATUS_EX
-    private Integer statusCycleTime;
-    private Integer statusI2cError;
-    private Integer statusCpuload;
-
     private Integer statusActiveSensors;
     private Boolean statusHaveAccel;
     private Boolean statusHaveGyro;
@@ -129,30 +125,6 @@ public class MspSystemData implements Serializable {
 
     public void setBoardName(String boardName) {
         this.boardName = boardName;
-    }
-
-    public Integer getStatusCycleTime() {
-        return statusCycleTime;
-    }
-
-    public void setStatusCycleTime(Integer statusCycleTime) {
-        this.statusCycleTime = statusCycleTime;
-    }
-
-    public Integer getStatusI2cError() {
-        return statusI2cError;
-    }
-
-    public void setStatusI2cError(Integer statusI2cError) {
-        this.statusI2cError = statusI2cError;
-    }
-
-    public Integer getStatusCpuload() {
-        return statusCpuload;
-    }
-
-    public void setStatusCpuload(Integer statusCpuload) {
-        this.statusCpuload = statusCpuload;
     }
 
     public Integer getStatusActiveSensors() {

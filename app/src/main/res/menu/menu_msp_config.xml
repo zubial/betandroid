@@ -47,4 +47,19 @@
         android:orderInCategory="100"
         android:title="LED Strip"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_disconnect"
+        android:orderInCategory="100"
+        android:title="@string/action_disconnect"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:title="@string/action_help"
+        app:showAsAction="never" />
 </menu>

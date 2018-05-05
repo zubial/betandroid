@@ -63,6 +63,15 @@ public class MspService extends MspServiceAbstract {
         sendMultiCommand(listCommand);
     }
 
+    public void loadLiveData() {
+        ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
+        listCommand.add(MspMessageTypeEnum.MSP_BOXNAMES);
+        listCommand.add(MspMessageTypeEnum.MSP_STATUS_EX);
+        listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
+
+        sendMultiCommand(listCommand);
+    }
+
 
     public void executeAccCalibration() {
         sendCommand(MspMessageTypeEnum.MSP_ACC_CALIBRATION);
@@ -82,5 +91,12 @@ public class MspService extends MspServiceAbstract {
         buffer.writeInt8(batteryData.getCurrentMeterSource());
 
         sendMessage(MspMessageTypeEnum.MSP_SET_BATTERY_CONFIG, buffer.getMessage());
+    }
+
+    public void setFeatures(int featureMask) {
+        MspBuffer buffer = new MspBuffer(4);
+        buffer.writeInt32(featureMask);
+
+        sendMessage(MspMessageTypeEnum.MSP_SET_FEATURE_CONFIG, buffer.getMessage());
     }
 }

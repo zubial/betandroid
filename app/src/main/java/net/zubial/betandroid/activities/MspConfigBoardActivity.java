@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +18,7 @@ import android.view.View;
 
 import net.zubial.betandroid.MainActivity;
 import net.zubial.betandroid.R;
+import net.zubial.betandroid.views.settings.SettingsActivity;
 import net.zubial.msprotocol.MspService;
 
 public class MspConfigBoardActivity extends AppCompatActivity {
@@ -49,7 +51,7 @@ public class MspConfigBoardActivity extends AppCompatActivity {
         IntentFilter onMspDisconnectedFilter = new IntentFilter(MspService.EVENT_DISCONNECTED);
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onMspDisconnected, onMspDisconnectedFilter);
 
-        gotoContent();
+        gotoConfigBoard();
     }
 
     @Override
@@ -63,6 +65,27 @@ public class MspConfigBoardActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
+            case R.id.action_settings:
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+
+                return true;
+
+            case R.id.action_help:
+                // Go Help
+                Intent goHelp = new Intent();
+                goHelp.setAction(Intent.ACTION_VIEW);
+                goHelp.setData(Uri.parse("http://www.example.com"));
+                startActivity(goHelp);
+
+                return true;
+
+            case R.id.action_disconnect:
+                // Disconnect
+                MspService.getInstance().disconnectBluetooth();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+                return true;
+
             case R.id.action_config_board:
                 gotoConfigBoard();
                 return true;
@@ -76,14 +99,10 @@ public class MspConfigBoardActivity extends AppCompatActivity {
         }
     }
 
-    private void gotoContent() {
+    private void gotoConfigBoard() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content, new MspConfigBoardContent());
         ft.commitAllowingStateLoss();
-    }
-
-    private void gotoConfigBoard() {
-
     }
 
     private void gotoConfigBattery() {

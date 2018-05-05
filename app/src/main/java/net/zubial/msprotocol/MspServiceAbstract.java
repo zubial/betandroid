@@ -30,11 +30,13 @@ public class MspServiceAbstract {
     public static final String ACTION_CONNECT_BLUETOOTH = "net.zubial.msprotocol.action.CONNECT_BLUETOOTH";
     public static final String ACTION_DISCONNECT_BLUETOOTH = "net.zubial.msprotocol.action.DISCONNECT_BLUETOOTH";
     public static final String EXTRA_BLUETOOTH_ADDRESS = "net.zubial.msprotocol.extra.BLUETOOTH_ADDRESS";
+
     // Senders
     public static final String ACTION_SEND_COMMAND = "net.zubial.msprotocol.action.SEND_COMMAND";
     public static final String ACTION_SEND_MESSAGE = "net.zubial.msprotocol.action.SEND_MESSAGE";
     public static final String EXTRA_COMMAND = "net.zubial.msprotocol.extra.COMMAND";
     public static final String EXTRA_MULTI_COMMAND = "net.zubial.msprotocol.extra.MULTI_COMMAND";
+
     // Events
     public static final String EVENT_CONNECTED = "net.zubial.msprotocol.event.CONNECTED";
     public static final String EVENT_DISCONNECTED = "net.zubial.msprotocol.event.DISCONNECTED";
@@ -44,12 +46,14 @@ public class MspServiceAbstract {
     public static final String EXTRA_MESSAGE = "net.zubial.msprotocol.extra.MESSAGE";
     public static final String EXTRA_CONNECTION_TYPE = "net.zubial.msprotocol.extra.CONNECTION_TYPE";
     protected static final String TAG = "MspService";
+
     // Local variables
     protected MspBluetoothManager bluetoothManager;
     protected ByteBuffer localInBuffer;
     protected MspData mspData;
 
     protected Context applicationContext;
+
     @SuppressLint("HandlerLeak")
     protected final Handler bluetoothHandler = new Handler() {
         @Override
@@ -97,7 +101,7 @@ public class MspServiceAbstract {
                         if (inMessage.isLoad()) {
                             MspMapper.parseMessage(mspData, inMessage);
 
-                            Log.d(TAG, "MSP response : " + MspProtocolUtils.toHexString(inMessage.getPayload()));
+                            Log.d(TAG, "MSP Response : " + inMessage.getMessageType().name() + " " + MspProtocolUtils.toHexString(inMessage.getPayload()));
 
                             broadcastMessageEvent(EVENT_MESSAGE_RECEIVED, inMessage, mspData);
                         }
@@ -116,9 +120,9 @@ public class MspServiceAbstract {
     // Sender handles
     protected void sendCommand(MspMessageTypeEnum command) {
         try {
-            byte[] message = MspEncoder.encode(MspDirectionEnum.MSP_OUTBOUND, MspMessageTypeEnum.findByValue(command.getValue()), null);
+            byte[] message = MspEncoder.encode(MspDirectionEnum.MSP_OUTBOUND, command, null);
 
-            Log.d(TAG, "MSP request : " + MspProtocolUtils.toHexString(message));
+            Log.d(TAG, "MSP Request : " + command.name());
 
             if (isConnected()) {
                 bluetoothManager.write(message);
@@ -142,7 +146,7 @@ public class MspServiceAbstract {
         try {
             byte[] message = MspEncoder.encode(MspDirectionEnum.MSP_OUTBOUND, messageType, data);
 
-            Log.d(TAG, "MSP request : " + MspProtocolUtils.toHexString(message));
+            Log.d(TAG, "MSP Request : " + messageType.name() + " " + MspProtocolUtils.toHexString(data));
 
             if (isConnected()) {
                 bluetoothManager.write(message);

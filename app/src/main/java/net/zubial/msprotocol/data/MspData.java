@@ -10,8 +10,10 @@ public class MspData implements Serializable {
 
     private MspSystemData mspSystemData = new MspSystemData();
     private MspBatteryData mspBatteryData = new MspBatteryData();
+    private MspLiveData mspLiveData = new MspLiveData();
 
     // MSP_FEATURE_CONFIG
+    private int mspFeaturesMask;
     private List<MspFeatureData> mspFeatures;
 
     public MspData() {
@@ -45,5 +47,17 @@ public class MspData implements Serializable {
         }
 
         return mspFeaturesFilter;
+    }
+
+    public int getMspFeaturesMask() {
+        return mspFeaturesMask;
+    }
+
+    public void setMspFeaturesMask(int mspFeaturesMask) {
+        this.mspFeaturesMask = mspFeaturesMask;
+    }
+
+    public MspLiveData getMspLiveData() {
+        return mspLiveData;
     }
 }

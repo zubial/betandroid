@@ -2,18 +2,10 @@ package net.zubial.betandroid.helpers;
 
 import java.text.DecimalFormat;
 
-public final class MspFieldUtils {
+public final class UiFormatter {
 
-    private MspFieldUtils() {
+    private UiFormatter() {
         // Private const
-    }
-
-    public static Boolean isTrue(Boolean value) {
-        return (value != null && value);
-    }
-
-    public static Boolean isGtZero(Integer value) {
-        return (value != null && value > 0);
     }
 
     public static String formatVoltage(Integer voltage) {
@@ -27,6 +19,11 @@ public final class MspFieldUtils {
         }
 
         return result;
+    }
+
+    public static String formatBatteryCells(Integer voltage) {
+        double nbCells = Math.floor(voltage / 4.3) + 1;
+        return nbCells + "S";
     }
 
     public static String formatByteSize(long size) {

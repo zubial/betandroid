@@ -33,6 +33,7 @@ public final class MspMapper {
     private static final int MSP_CURRENT_METER_CONFIG = 40;
     private static final int MSP_VOLTAGE_METER_CONFIG = 56;
     private static final int MSP_MODE_RANGES = 34;
+    private static final int MSP_SET_FEATURE_CONFIG = 37;
     private static final int MSP_FEATURE_CONFIG = 36;
     private static final int MSP_BOARD_ALIGNMENT_CONFIG = 38;
     private static final int MSP_MIXER_CONFIG = 42;
@@ -95,24 +96,15 @@ public final class MspMapper {
     }
 
     public static Boolean gtVersion(MspData data, Double version) {
-        if (data != null && version != null) {
-            return (data.getMspSystemData().getBoardApiVersion().compareTo(version) > 0);
-        }
-        return false;
+        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) > 0);
     }
 
     public static Boolean ltVersion(MspData data, Double version) {
-        if (data != null && version != null) {
-            return (data.getMspSystemData().getBoardApiVersion().compareTo(version) < 0);
-        }
-        return false;
+        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) < 0);
     }
 
     public static Boolean eqVersion(MspData data, Double version) {
-        if (data != null && version != null) {
-            return (data.getMspSystemData().getBoardApiVersion().compareTo(version) == 0);
-        }
-        return false;
+        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) == 0);
     }
 
     public static void parseMessage(MspData data, MspMessage message) throws MspBaseException {
@@ -154,19 +146,20 @@ public final class MspMapper {
                 break;
 
             case MSP_STATUS_EX:
-                data.getMspSystemData().setStatusCycleTime(message.readUInt16());
-                data.getMspSystemData().setStatusI2cError(message.readUInt16());
+                data.getMspLiveData().setStatusCycleTime(message.readUInt16());
+                data.getMspLiveData().setStatusI2cError(message.readUInt16());
                 data.getMspSystemData().setStatusActiveSensors(message.readUInt16());
                 data.getMspSystemData().setStatusMode(message.readUInt32());
                 data.getMspSystemData().setStatusProfile(message.readUInt8());
-                data.getMspSystemData().setStatusCpuload(message.readUInt16());
+                data.getMspLiveData().setStatusCpuload(message.readUInt16());
                 if (gtVersion(data, 1.16)) {
                     data.getMspSystemData().setStatusNumProfiles(message.readUInt8());
                     data.getMspSystemData().setStatusRateProfile(message.readUInt8());
 
-                    if (gtVersion(data, 1.36)) {
-                        // armingDisableFlags
-                    }
+                    // TODO armingDisableFlags
+                    //if (gtVersion(data, 1.36)) {
+
+                    //}
                 }
 
                 // Check sensor
@@ -271,6 +264,8 @@ public final class MspMapper {
                 Log.d(TAG, "Feature - " + featureConfig);
                 Log.d(TAG, "Version - " + data.getMspSystemData().getBoardApiVersion());
 
+                data.setMspFeaturesMask(featureConfig);
+
                 data.getMspFeatures().clear();
                 data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_PPM, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_PPM.getCode())));
                 data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_INFLIGHT_ACC_CAL.getCode())));
@@ -340,6 +335,27 @@ public final class MspMapper {
                     }
                 }
 
+                break;
+
+            case MSP_ANALOG:
+                data.getMspLiveData().setVoltage(message.readUInt8() / 10.0);
+                data.getMspLiveData().setmAhDrawn(message.readUInt16());
+                data.getMspLiveData().setRssi(message.readUInt16());
+                data.getMspLiveData().setAmperage(message.readInt16() / 100.0);
+                break;
+
+            case MSP_RAW_IMU:
+                data.getMspLiveData().setAccelerometer0(message.readInt16() / 512.0);
+                data.getMspLiveData().setAccelerometer1(message.readInt16() / 512.0);
+                data.getMspLiveData().setAccelerometer2(message.readInt16() / 512.0);
+
+                data.getMspLiveData().setGyroscope0(message.readInt16() * (4 / 16.4));
+                data.getMspLiveData().setGyroscope1(message.readInt16() * (4 / 16.4));
+                data.getMspLiveData().setGyroscope2(message.readInt16() * (4 / 16.4));
+
+                data.getMspLiveData().setMagnetometer0(message.readInt16() / 1090.0);
+                data.getMspLiveData().setMagnetometer1(message.readInt16() / 1090.0);
+                data.getMspLiveData().setMagnetometer2(message.readInt16() / 1090.0);
                 break;
 
             default:

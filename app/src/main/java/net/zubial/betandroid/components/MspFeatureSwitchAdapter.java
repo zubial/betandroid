@@ -10,14 +10,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Switch;
 
 import net.zubial.betandroid.R;
+import net.zubial.msprotocol.MspService;
+import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.data.MspFeatureData;
+import net.zubial.msprotocol.helpers.MspProtocolUtils;
 
 import java.util.List;
 
 public class MspFeatureSwitchAdapter extends ArrayAdapter<MspFeatureData> {
 
-    public MspFeatureSwitchAdapter(Context context, List<MspFeatureData> features) {
+    private MspData mspData;
+
+    public MspFeatureSwitchAdapter(Context context, List<MspFeatureData> features, MspData mspData) {
         super(context, 0, features);
+        this.mspData = mspData;
     }
 
     @Override
@@ -41,6 +47,26 @@ public class MspFeatureSwitchAdapter extends ArrayAdapter<MspFeatureData> {
         if (feature != null && feature.getFeature() != null) {
             viewHolder.switchFeature.setText(feature.getFeature().getLabel());
             viewHolder.switchFeature.setChecked(feature.isEnable());
+            viewHolder.switchFeature.setOnClickListener(new Switch.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Switch switchFeature = (Switch) v.findViewById(R.id.switchFeature);
+
+                    if (switchFeature != null && feature.isEnable() != switchFeature.isChecked()) {
+                        int featureMask = mspData.getMspFeaturesMask();
+
+                        if (switchFeature.isChecked()) {
+                            featureMask = MspProtocolUtils.bitSetEnable(featureMask, feature.getFeature().getCode());
+                        } else {
+                            featureMask = MspProtocolUtils.bitSetDisable(featureMask, feature.getFeature().getCode());
+                        }
+
+                        MspService.getInstance().setFeatures(featureMask);
+
+                        MspService.getInstance().loadFeaturesData();
+                    }
+                }
+            });
         }
         return convertView;
     }
