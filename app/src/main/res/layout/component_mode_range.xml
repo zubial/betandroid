@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp">
+
+    <View
+        style="@style/AppTheme.LineDivider"
+        android:layout_width="30dp"
+        android:layout_alignBottom="@id/seekBarRange"
+        android:layout_centerHorizontal="true"
+        android:rotation="-90" />
 
     <TextView
         android:id="@+id/modeName"
@@ -17,12 +25,22 @@
         android:layout_alignParentRight="true" />
 
     <TextView
-        android:id="@+id/modeRange"
+        android:id="@+id/modeChannel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/modeName"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
+
+    <org.florescu.android.rangeseekbar.RangeSeekBar
+        android:id="@+id/seekBarRange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/modeChannel"
+        android:textColor="@android:color/black"
+        app:absoluteMaxValue="2100"
+        app:absoluteMinValue="900"
+        app:showLabels="true" />
 
 </RelativeLayout>
 

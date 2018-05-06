@@ -26,4 +26,11 @@ public final class UiUtils {
         Double nbCells = Math.floor(voltage / maxCellVoltage) + 1;
         return nbCells.intValue();
     }
+
+    public static Double quarterRound(Double value) {
+        if (value != null) {
+            return new Double(Math.round(value * 4f) / 4f);
+        }
+        return 0.0;
+    }
 }
