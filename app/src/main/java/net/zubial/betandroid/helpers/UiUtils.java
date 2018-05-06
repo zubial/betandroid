@@ -13,4 +13,12 @@ public final class UiUtils {
     public static Boolean isGtZero(Integer value) {
         return (value != null && value > 0);
     }
+
+    public static Integer getPercent(Integer gtValue, Integer ltValue) {
+        Double result = ltValue.doubleValue() / gtValue.doubleValue();
+        result = result * 100.0;
+        result = Math.floor(result);
+
+        return result.intValue();
+    }
 }
