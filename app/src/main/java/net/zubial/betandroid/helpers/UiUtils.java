@@ -21,4 +21,9 @@ public final class UiUtils {
 
         return result.intValue();
     }
+
+    public static Integer getBatteryCells(Double voltage, Double maxCellVoltage) {
+        Double nbCells = Math.floor(voltage / maxCellVoltage) + 1;
+        return nbCells.intValue();
+    }
 }

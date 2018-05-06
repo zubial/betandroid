@@ -45,6 +45,7 @@ public class MspService extends MspServiceAbstract {
 
     public void loadBatteryData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
+        listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
         listCommand.add(MspMessageTypeEnum.MSP_BATTERY_CONFIG);
         listCommand.add(MspMessageTypeEnum.MSP_VOLTAGE_METER_CONFIG);
         listCommand.add(MspMessageTypeEnum.MSP_CURRENT_METER_CONFIG);

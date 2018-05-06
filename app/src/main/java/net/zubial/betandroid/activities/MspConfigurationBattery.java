@@ -17,10 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.zubial.betandroid.R;
 import net.zubial.betandroid.helpers.UiFormatter;
+import net.zubial.betandroid.helpers.UiUtils;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.enums.MspMessageEventEnum;
@@ -32,6 +34,10 @@ public class MspConfigurationBattery extends Fragment {
     private MspData mspData;
 
     // UI Composants
+    private TextView txtLiveBatteryType;
+    private TextView txtLiveBatteryVoltage;
+    private ProgressBar barLiveBatteryUsage;
+
     private TextView txtConfigurationBatteryMaxCell;
     private TextView txtConfigurationBatteryMinCell;
     private TextView txtConfigurationBatteryWarningCell;
@@ -73,6 +79,10 @@ public class MspConfigurationBattery extends Fragment {
                         .setAction("Action", null).show();
             }
         });
+
+        txtLiveBatteryType = view.findViewById(R.id.txtLiveBatteryType);
+        txtLiveBatteryVoltage = view.findViewById(R.id.txtLiveBatteryVoltage);
+        barLiveBatteryUsage = view.findViewById(R.id.barLiveBatteryUsage);
 
         txtConfigurationBatteryMaxCell = view.findViewById(R.id.txtConfigurationBatteryMaxCell);
         txtConfigurationBatteryMaxCell.setOnClickListener(new View.OnClickListener() {
@@ -248,6 +258,41 @@ public class MspConfigurationBattery extends Fragment {
 
     private void showData() {
         if (mspData != null) {
+
+            if (txtLiveBatteryType != null
+                    && txtLiveBatteryVoltage != null
+                    && barLiveBatteryUsage != null) {
+                if (mspData.getMspLiveData().getVoltage() != null
+                        && mspData.getMspBatteryData().getVbatMaxCellVoltage() != null
+                        && mspData.getMspLiveData().getVoltage() > 1) {
+
+                    Integer batteryCells = UiUtils.getBatteryCells(mspData.getMspLiveData().getVoltage(), (mspData.getMspBatteryData().getVbatMaxCellVoltage() / 10.0));
+                    String batteryType = batteryCells + "S Battery (max. " + UiFormatter.formatDecimal(batteryCells * (mspData.getMspBatteryData().getVbatMaxCellVoltage() / 10.0)) + "v)";
+
+                    Integer batteryMax = batteryCells * mspData.getMspBatteryData().getVbatMaxCellVoltage();
+                    Integer batteryMin = batteryCells * mspData.getMspBatteryData().getVbatMinCellVoltage();
+
+                    Double batteryProgress = (mspData.getMspLiveData().getVoltage() * 10.0);
+                    batteryProgress = batteryProgress - batteryMin;
+
+                    Integer batteryPercent = UiUtils.getPercent(batteryMax - batteryMin, batteryProgress.intValue());
+
+                    barLiveBatteryUsage.setProgress(batteryPercent);
+                    barLiveBatteryUsage.setMax(100);
+
+                    txtLiveBatteryType.setText(batteryType);
+
+                    String batteryVoltage = mspData.getMspLiveData().getVoltage() + "v";
+                    batteryVoltage += " (" + UiFormatter.formatDecimal(mspData.getMspLiveData().getVoltage() / batteryCells) + "v per cell)";
+                    txtLiveBatteryVoltage.setText(batteryVoltage);
+
+                } else {
+                    txtLiveBatteryType.setText("Battery not connected.");
+                    txtLiveBatteryVoltage.setText("");
+                    barLiveBatteryUsage.setProgress(0);
+                }
+            }
+
             if (txtConfigurationBatteryMaxCell != null) {
                 txtConfigurationBatteryMaxCell.setText(UiFormatter.formatVoltage(mspData.getMspBatteryData().getVbatMaxCellVoltage()));
             }
