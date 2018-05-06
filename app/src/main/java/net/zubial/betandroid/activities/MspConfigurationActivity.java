@@ -95,6 +95,10 @@ public class MspConfigurationActivity extends AppCompatActivity {
                 gotoConfigFeatures();
                 return true;
 
+            case R.id.action_configuration_modes:
+                gotoConfigModes();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -115,6 +119,12 @@ public class MspConfigurationActivity extends AppCompatActivity {
     private void gotoConfigFeatures() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content, new MspConfigurationFeatures());
+        ft.commitAllowingStateLoss();
+    }
+
+    private void gotoConfigModes() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, new MspConfigurationModes());
         ft.commitAllowingStateLoss();
     }
 }

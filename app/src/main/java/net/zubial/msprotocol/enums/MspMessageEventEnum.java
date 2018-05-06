@@ -7,6 +7,7 @@ public enum MspMessageEventEnum {
     EVENT_MSP_FEATURE_DATA(3),
     EVENT_MSP_LIVE_DATA(4),
     EVENT_MSP_BATTERY_DATA(4),
+    EVENT_MSP_MODES_DATA(5),
 
     MSP_UNKNOW(0);
 

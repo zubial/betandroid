@@ -6,6 +6,7 @@ import net.zubial.msprotocol.data.MspBatteryCurrentData;
 import net.zubial.msprotocol.data.MspBatteryVoltageData;
 import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.data.MspFeatureData;
+import net.zubial.msprotocol.data.MspModeData;
 import net.zubial.msprotocol.enums.MspFeatureEnum;
 import net.zubial.msprotocol.enums.MspFlightControllerEnum;
 import net.zubial.msprotocol.enums.MspMessageEventEnum;
@@ -16,6 +17,7 @@ import net.zubial.msprotocol.helpers.MspProtocolUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public final class MspMapper {
 
@@ -415,6 +417,61 @@ public final class MspMapper {
                 data.getMspLiveData().setAltitude(message.readInt32() / 100.0);
 
                 messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_MODE_RANGES:
+                data.getMspModesData().getMspModes().clear();
+
+                Integer modeRangeCount = message.getSize() / 4;
+                for (int i = 0; i < modeRangeCount; i++) {
+                    MspModeData modeData = new MspModeData();
+                    modeData.setIndex(message.readUInt8());
+                    modeData.setAuxChannel(message.readUInt8());
+                    modeData.setRangeStart(900 + (message.readUInt8() * 25));
+                    modeData.setRangeEnd(900 + (message.readUInt8() * 25));
+                    modeData.setEnable(!modeData.getRangeEnd().equals(900));
+
+                    if (!data.getMspModesData().getMspModeIds().isEmpty()
+                            && !data.getMspModesData().getMspModeNames().isEmpty()
+                            && modeData.getEnable()) {
+
+                        for (Map.Entry<Integer, Integer> entry : data.getMspModesData().getMspModeIds().entrySet()) {
+                            if (entry.getValue().equals(modeData.getIndex())) {
+                                modeData.setId(entry.getKey());
+                                break;
+                            }
+                        }
+                        modeData.setModeName(data.getMspModesData().getMspModeNames().get(modeData.getId()));
+
+                        data.getMspModesData().getMspModes().add(modeData);
+                    }
+                }
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_MODES_DATA);
+
+                break;
+
+            case MSP_BOXIDS:
+                data.getMspModesData().getMspModeIds().clear();
+
+                for (int i = 0; i < message.getSize(); i++) {
+                    data.getMspModesData().getMspModeIds().put(i, message.readUInt8());
+                }
+
+                break;
+
+            case MSP_BOXNAMES:
+                data.getMspModesData().getMspModeNames().clear();
+
+                String modes = message.readString();
+                String[] modeSplit = modes.split(";");
+
+                for (int i = 0; i < modeSplit.length; i++) {
+                    data.getMspModesData().getMspModeNames().put(i, modeSplit[i]);
+                }
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_MODES_DATA);
 
                 break;
 

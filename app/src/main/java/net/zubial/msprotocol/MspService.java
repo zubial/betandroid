@@ -53,6 +53,16 @@ public class MspService extends MspServiceAbstract {
         sendMultiCommand(listCommand);
     }
 
+    public void loadModesData() {
+        ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
+        listCommand.add(MspMessageTypeEnum.MSP_BOXIDS);
+        listCommand.add(MspMessageTypeEnum.MSP_BOXNAMES);
+        listCommand.add(MspMessageTypeEnum.MSP_MODE_RANGES);
+
+
+        sendMultiCommand(listCommand);
+    }
+
     public void loadLiveData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
