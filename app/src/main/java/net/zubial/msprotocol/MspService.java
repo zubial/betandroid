@@ -28,6 +28,8 @@ public class MspService extends MspServiceAbstract {
         return mspService;
     }
 
+
+    // Load methods
     public void loadSystemData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_NAME);
@@ -64,6 +66,7 @@ public class MspService extends MspServiceAbstract {
         sendMultiCommand(listCommand);
     }
 
+    // Live methods
     public void startLiveData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
@@ -75,11 +78,13 @@ public class MspService extends MspServiceAbstract {
         startLive(listCommand);
     }
 
-
+    // Commands
     public void executeAccCalibration() {
         sendCommand(MspMessageTypeEnum.MSP_ACC_CALIBRATION);
     }
 
+
+    // Setters
     public void setBoardName(String boardName) {
         sendMessage(MspMessageTypeEnum.MSP_SET_NAME, boardName.getBytes());
     }

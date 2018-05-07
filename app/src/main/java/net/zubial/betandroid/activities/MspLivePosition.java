@@ -33,6 +33,13 @@ public class MspLivePosition extends Fragment {
     private TextView txtGyroscope;
     private TextView txtKinematics;
 
+    private TextView txtRc01;
+    private TextView txtRc02;
+    private TextView txtRc03;
+    private TextView txtRc04;
+    private TextView txtRc05;
+    private TextView txtRc06;
+
     public MspLivePosition() {
         // Default Ctr
     }
@@ -76,6 +83,13 @@ public class MspLivePosition extends Fragment {
         txtGyroscope = view.findViewById(R.id.txtGyroscope);
         txtKinematics = view.findViewById(R.id.txtKinematics);
 
+        txtRc01 = view.findViewById(R.id.txtRc01);
+        txtRc02 = view.findViewById(R.id.txtRc02);
+        txtRc03 = view.findViewById(R.id.txtRc03);
+        txtRc04 = view.findViewById(R.id.txtRc04);
+        txtRc05 = view.findViewById(R.id.txtRc05);
+        txtRc06 = view.findViewById(R.id.txtRc06);
+
         IntentFilter onMspMessageReceivedFilter = new IntentFilter(MspService.EVENT_MESSAGE_RECEIVED);
         LocalBroadcastManager.getInstance(view.getContext()).registerReceiver(onMspMessageReceived, onMspMessageReceivedFilter);
 
@@ -116,6 +130,25 @@ public class MspLivePosition extends Fragment {
                 kinematics += " \n Y : " + mspData.getMspLiveData().getKinematicsY();
                 kinematics += " \n Z : " + mspData.getMspLiveData().getKinematicsZ();
                 txtKinematics.setText(kinematics);
+            }
+
+            if (txtRc01 != null) {
+                txtRc01.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(0).getMask());
+            }
+            if (txtRc02 != null) {
+                txtRc02.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(1).getMask());
+            }
+            if (txtRc03 != null) {
+                txtRc03.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(2).getMask());
+            }
+            if (txtRc04 != null) {
+                txtRc04.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(3).getMask());
+            }
+            if (txtRc05 != null) {
+                txtRc05.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(4).getMask());
+            }
+            if (txtRc06 != null) {
+                txtRc06.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(5).getMask());
             }
         }
     }
