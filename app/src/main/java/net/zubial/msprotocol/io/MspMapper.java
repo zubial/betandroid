@@ -6,6 +6,7 @@ import net.zubial.msprotocol.data.MspBatteryCurrentData;
 import net.zubial.msprotocol.data.MspBatteryVoltageData;
 import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.data.MspFeatureData;
+import net.zubial.msprotocol.data.MspLiveRcData;
 import net.zubial.msprotocol.data.MspModeData;
 import net.zubial.msprotocol.enums.MspFeatureEnum;
 import net.zubial.msprotocol.enums.MspFlightControllerEnum;
@@ -422,49 +423,6 @@ public final class MspMapper {
 
                 break;
 
-            case MSP_ANALOG:
-                data.getMspLiveData().setVoltage(message.readUInt8() / 10.0);
-                data.getMspLiveData().setmAhDrawn(message.readUInt16());
-                data.getMspLiveData().setRssi(message.readUInt16());
-                data.getMspLiveData().setAmperage(message.readInt16() / 100.0);
-
-                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
-
-                break;
-
-            case MSP_RAW_IMU:
-                data.getMspLiveData().setAccelerometerX(message.readInt16() / 512.0);
-                data.getMspLiveData().setAccelerometerY(message.readInt16() / 512.0);
-                data.getMspLiveData().setAccelerometerZ(message.readInt16() / 512.0);
-
-                data.getMspLiveData().setGyroscopeX(message.readInt16() * (4 / 16.4));
-                data.getMspLiveData().setGyroscopeY(message.readInt16() * (4 / 16.4));
-                data.getMspLiveData().setGyroscopeZ(message.readInt16() * (4 / 16.4));
-
-                data.getMspLiveData().setMagnetometerX(message.readInt16() / 1090.0);
-                data.getMspLiveData().setMagnetometerY(message.readInt16() / 1090.0);
-                data.getMspLiveData().setMagnetometerZ(message.readInt16() / 1090.0);
-
-                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
-
-                break;
-
-            case MSP_ATTITUDE:
-                data.getMspLiveData().setKinematicsX(message.readInt16() / 10.0);
-                data.getMspLiveData().setKinematicsY(message.readInt16() / 10.0);
-                data.getMspLiveData().setKinematicsZ(message.readInt16() / 1.0);
-
-                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
-
-                break;
-
-            case MSP_ALTITUDE:
-                data.getMspLiveData().setAltitude(message.readInt32() / 100.0);
-
-                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
-
-                break;
-
             case MSP_MODE_RANGES:
                 data.getMspModesData().getMspModes().clear();
 
@@ -517,6 +475,62 @@ public final class MspMapper {
                 }
 
                 messageEvents.add(MspMessageEventEnum.EVENT_MSP_MODES_DATA);
+
+                break;
+
+            case MSP_ANALOG:
+                data.getMspLiveData().setVoltage(message.readUInt8() / 10.0);
+                data.getMspLiveData().setmAhDrawn(message.readUInt16());
+                data.getMspLiveData().setRssi(message.readUInt16());
+                data.getMspLiveData().setAmperage(message.readInt16() / 100.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_RAW_IMU:
+                data.getMspLiveData().setAccelerometerX(message.readInt16() / 512.0);
+                data.getMspLiveData().setAccelerometerY(message.readInt16() / 512.0);
+                data.getMspLiveData().setAccelerometerZ(message.readInt16() / 512.0);
+
+                data.getMspLiveData().setGyroscopeX(message.readInt16() * (4 / 16.4));
+                data.getMspLiveData().setGyroscopeY(message.readInt16() * (4 / 16.4));
+                data.getMspLiveData().setGyroscopeZ(message.readInt16() * (4 / 16.4));
+
+                data.getMspLiveData().setMagnetometerX(message.readInt16() / 1090.0);
+                data.getMspLiveData().setMagnetometerY(message.readInt16() / 1090.0);
+                data.getMspLiveData().setMagnetometerZ(message.readInt16() / 1090.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_ATTITUDE:
+                data.getMspLiveData().setKinematicsX(message.readInt16() / 10.0);
+                data.getMspLiveData().setKinematicsY(message.readInt16() / 10.0);
+                data.getMspLiveData().setKinematicsZ(message.readInt16() / 1.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_ALTITUDE:
+                data.getMspLiveData().setAltitude(message.readInt32() / 100.0);
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
+
+                break;
+
+            case MSP_RC:
+
+                int active_channels = message.getSize() / 2;
+                for (int i = 0; i < active_channels; i++) {
+                    MspLiveRcData rcData = new MspLiveRcData();
+                    rcData.setId(i);
+                    rcData.setMask(message.readUInt16());
+                }
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);
 
                 break;
 

@@ -70,6 +70,7 @@ public class MspService extends MspServiceAbstract {
         listCommand.add(MspMessageTypeEnum.MSP_RAW_IMU);
         listCommand.add(MspMessageTypeEnum.MSP_ATTITUDE);
         listCommand.add(MspMessageTypeEnum.MSP_ALTITUDE);
+        listCommand.add(MspMessageTypeEnum.MSP_RC);
 
         startLive(listCommand);
     }
