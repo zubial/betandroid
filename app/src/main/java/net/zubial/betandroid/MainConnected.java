@@ -24,9 +24,9 @@ import net.zubial.msprotocol.enums.MspMessageEventEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 import net.zubial.msprotocol.io.MspMessage;
 
-public class MainActivityConnected extends Fragment {
+public class MainConnected extends Fragment {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "Main";
 
     private MspData mspData;
 
@@ -55,7 +55,7 @@ public class MainActivityConnected extends Fragment {
         }
     };
 
-    public MainActivityConnected() {
+    public MainConnected() {
         // Default Ctr
     }
 

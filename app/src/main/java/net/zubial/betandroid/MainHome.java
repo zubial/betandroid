@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MainActivityHome extends Fragment {
+public class MainHome extends Fragment {
 
-    public MainActivityHome() {
+    private static final String TAG = "Main";
+
+    public MainHome() {
         // Default Ctr
     }
 

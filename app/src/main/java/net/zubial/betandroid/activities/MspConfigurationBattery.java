@@ -29,7 +29,7 @@ import net.zubial.msprotocol.enums.MspMessageEventEnum;
 
 public class MspConfigurationBattery extends Fragment {
 
-    private static final String TAG = "MspConfigBoard";
+    private static final String TAG = "MspConfiguration";
 
     private MspData mspData;
 

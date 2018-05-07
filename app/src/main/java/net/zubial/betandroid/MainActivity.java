@@ -19,7 +19,7 @@ import net.zubial.msprotocol.MspService;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "Main";
 
     private BroadcastReceiver onMspConnected = new BroadcastReceiver() {
         @Override
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main, new MainActivityHome());
+        ft.replace(R.id.content_main, new MainHome());
         ft.commitAllowingStateLoss();
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -76,19 +76,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void gotoHome() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main, new MainActivityHome());
+        ft.replace(R.id.content_main, new MainHome());
         ft.commitAllowingStateLoss();
     }
 
     private void gotoBluetooth() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main, new MainActivityBluetooth());
+        ft.replace(R.id.content_main, new MainBluetooth());
         ft.commitAllowingStateLoss();
     }
 
     private void gotoConnected() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main, new MainActivityConnected());
+        ft.replace(R.id.content_main, new MainConnected());
         ft.commitAllowingStateLoss();
     }
 

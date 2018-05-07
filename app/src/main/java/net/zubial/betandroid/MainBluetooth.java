@@ -24,15 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class MainActivityBluetooth extends Fragment {
+public class MainBluetooth extends Fragment {
 
-    private static String TAG = "MainActivityBluetooth";
+    private static String TAG = "Main";
 
     // UI Components
     private TextView txtBluetoothTitle;
     private ListView listBluetoothDevice;
 
-    public MainActivityBluetooth() {
+    public MainBluetooth() {
         // Default Ctr
     }
 
@@ -55,7 +55,7 @@ public class MainActivityBluetooth extends Fragment {
 
             if (getFragmentManager() != null) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.content_main, new MainActivityHome());
+                ft.replace(R.id.content_main, new MainHome());
                 ft.commitAllowingStateLoss();
             }
             return;

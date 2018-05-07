@@ -22,7 +22,7 @@ import net.zubial.msprotocol.MspService;
 
 public class MspConfigurationActivity extends AppCompatActivity {
 
-    private static final String TAG = "MspConfigBoard";
+    private static final String TAG = "MspConfiguration";
 
     private BroadcastReceiver onMspDisconnected = new BroadcastReceiver() {
         @Override
