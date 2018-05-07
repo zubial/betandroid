@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.UUID;
 
 public class MspBluetoothManager {
@@ -23,7 +24,9 @@ public class MspBluetoothManager {
     private final Handler serviceHandler;
     private MspConnectorStateEnum currentState;
     private Boolean isConnected;
+
     private ConnectedThread mConnectedThread;
+    private LiveThread mLiveThread;
 
     private BluetoothAdapter bluetoothAdapter = null;
     private BluetoothDevice bluetoothDevice = null;
@@ -127,11 +130,17 @@ public class MspBluetoothManager {
             mConnectedThread = new ConnectedThread(bluetoothSocket);
             mConnectedThread.start();
 
+            mLiveThread = new LiveThread(bluetoothSocket);
+            mLiveThread.start();
         }
         return isConnected;
     }
 
     public void disconnect() {
+        if (mLiveThread != null) {
+            mLiveThread.interrupt();
+        }
+
         if (mConnectedThread != null) {
             mConnectedThread.interrupt();
         }
@@ -177,7 +186,34 @@ public class MspBluetoothManager {
         }
     }
 
-    // New thread for keep calm mainThread
+    public void startLive(List<byte[]> messages) {
+        if (isConnected) {
+            handleState(MspConnectorStateEnum.STATE_LIVE_STARTED);
+
+            mLiveThread.startLive(messages);
+        }
+    }
+
+    public void pauseLive() {
+        if (isConnected) {
+            handleState(MspConnectorStateEnum.STATE_LIVE_PAUSED);
+
+            mLiveThread.pauseLive();
+        }
+    }
+
+    public void resumeLive() {
+        if (isConnected) {
+            handleState(MspConnectorStateEnum.STATE_LIVE_STARTED);
+
+            mLiveThread.resumeLive();
+        }
+    }
+
+    /*
+     * ConnectedThread to send / receive messages
+     * New thread for keep calm mainThread
+     * */
     private class ConnectedThread extends Thread {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
@@ -239,6 +275,64 @@ public class MspBluetoothManager {
 
         public void write(String input) {
             write(input.getBytes());
+        }
+    }
+
+
+    /*
+     * LiveThread to send periodic live commands
+     * New thread for keep calm mainThread
+     * */
+    private class LiveThread extends Thread {
+        private final OutputStream mmOutStream;
+
+        List<byte[]> msgLoadList;
+        private Boolean isRuning;
+
+        public LiveThread(BluetoothSocket socket) {
+            OutputStream tmpOut = null;
+
+            try {
+                // Create I/O streams
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) {
+                Log.d(TAG, "I/O exception", e);
+            }
+
+            mmOutStream = tmpOut;
+        }
+
+        public void run() {
+            while (isRuning) {
+                try {
+                    if (msgLoadList != null
+                            && !msgLoadList.isEmpty()) {
+                        for (byte[] msg : msgLoadList) {
+                            mmOutStream.write(msg);
+                        }
+                    }
+                    Thread.sleep(1000);
+                } catch (IOException e) {
+                    Log.d(TAG, "Write exception", e);
+                    disconnect();
+                } catch (InterruptedException e) {
+                    Log.d(TAG, "Interrupted exception", e);
+                }
+            }
+        }
+
+        // Methods
+        public void startLive(List<byte[]> messages) {
+            msgLoadList = messages;
+            isRuning = true;
+        }
+
+        public void pauseLive() {
+            isRuning = false;
+        }
+
+        public void resumeLive() {
+            isRuning = true;
         }
     }
 }

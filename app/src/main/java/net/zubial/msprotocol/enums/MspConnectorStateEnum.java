@@ -10,7 +10,9 @@ public enum MspConnectorStateEnum {
     STATE_DISCONNECTED(5, "Disconnected"),
     STATE_UNAVAILABLE(6, "Connection unavailable"),
     STATE_RECEIVING(7, "Receiving data"),
-    STATE_WRITING(8, "Writing data");
+    STATE_WRITING(8, "Writing data"),
+    STATE_LIVE_STARTED(9, "Start live data"),
+    STATE_LIVE_PAUSED(10, "Pause live data");
 
 
     private final Integer code;

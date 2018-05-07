@@ -71,7 +71,7 @@ public class MspConfigurationActivity extends AppCompatActivity {
                 // Go Help
                 Intent goHelp = new Intent();
                 goHelp.setAction(Intent.ACTION_VIEW);
-                goHelp.setData(Uri.parse("http://www.example.com"));
+                goHelp.setData(Uri.parse("https://github.com/zubial/betandroid/wiki"));
                 startActivity(goHelp);
 
                 return true;

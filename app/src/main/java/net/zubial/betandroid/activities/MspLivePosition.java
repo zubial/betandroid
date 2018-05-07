@@ -25,9 +25,10 @@ public class MspLivePosition extends Fragment {
     private static final String TAG = "MspLive";
 
     private MspData mspData;
-    private Boolean isRuning;
 
     // UI Composants
+    private FloatingActionButton fab;
+
     private TextView txtAccelerometer;
     private TextView txtGyroscope;
     private TextView txtKinematics;
@@ -60,9 +61,7 @@ public class MspLivePosition extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        isRuning = true;
-
-        FloatingActionButton fab = view.getRootView().findViewById(R.id.fab);
+        fab = view.getRootView().findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,11 +86,11 @@ public class MspLivePosition extends Fragment {
     public void onDetach() {
         super.onDetach();
 
-        isRuning = false;
+        MspService.getInstance().pauseLive();
     }
 
     private void loadData() {
-        MspService.getInstance().loadLiveData();
+        MspService.getInstance().startLiveData();
     }
 
     private void showData() {
@@ -117,10 +116,6 @@ public class MspLivePosition extends Fragment {
                 kinematics += " \n Y : " + mspData.getMspLiveData().getKinematicsY();
                 kinematics += " \n Z : " + mspData.getMspLiveData().getKinematicsZ();
                 txtKinematics.setText(kinematics);
-            }
-
-            if (isRuning) {
-                MspService.getInstance().loadLiveData();
             }
         }
     }

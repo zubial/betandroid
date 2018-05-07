@@ -28,12 +28,12 @@ import java.util.List;
 
 public class MspServiceAbstract {
 
-    // Connectors
+    // Connectors actions
     public static final String ACTION_CONNECT_BLUETOOTH = "net.zubial.msprotocol.action.CONNECT_BLUETOOTH";
     public static final String ACTION_DISCONNECT_BLUETOOTH = "net.zubial.msprotocol.action.DISCONNECT_BLUETOOTH";
     public static final String EXTRA_BLUETOOTH_ADDRESS = "net.zubial.msprotocol.extra.BLUETOOTH_ADDRESS";
 
-    // Senders
+    // Senders actions
     public static final String ACTION_SEND_COMMAND = "net.zubial.msprotocol.action.SEND_COMMAND";
     public static final String ACTION_SEND_MESSAGE = "net.zubial.msprotocol.action.SEND_MESSAGE";
     public static final String EXTRA_COMMAND = "net.zubial.msprotocol.extra.COMMAND";
@@ -49,6 +49,7 @@ public class MspServiceAbstract {
     public static final String EXTRA_DATA = "net.zubial.msprotocol.extra.DATA";
     public static final String EXTRA_MESSAGE = "net.zubial.msprotocol.extra.MESSAGE";
     public static final String EXTRA_CONNECTION_TYPE = "net.zubial.msprotocol.extra.CONNECTION_TYPE";
+
     protected static final String TAG = "MspService";
 
     // Local variables
@@ -57,7 +58,7 @@ public class MspServiceAbstract {
     protected MspData mspData;
 
     protected Context applicationContext;
-
+    // Bluetooth handler
     @SuppressLint("HandlerLeak")
     protected final Handler bluetoothHandler = new Handler() {
         @Override
@@ -143,8 +144,27 @@ public class MspServiceAbstract {
         this.applicationContext = applicationContext;
     }
 
-    // Sender handles
-    protected void sendCommand(MspMessageTypeEnum command) {
+    // Connector commands
+    public void connectBluetooth(String address) {
+        bluetoothManager = new MspBluetoothManager(bluetoothHandler);
+        bluetoothManager.connect(address);
+
+        mspData = new MspData();
+    }
+
+    public void disconnectBluetooth() {
+        bluetoothManager.disconnect();
+        mspData = new MspData();
+        localInBuffer = null;
+    }
+
+    public Boolean isConnected() {
+        return (bluetoothManager != null
+                && bluetoothManager.isConnected());
+    }
+
+    // Send commands
+    public void sendCommand(MspMessageTypeEnum command) {
         try {
             byte[] message = MspEncoder.encode(MspDirectionEnum.MSP_OUTBOUND, command, null);
 
@@ -182,6 +202,40 @@ public class MspServiceAbstract {
         }
     }
 
+    // Live commands
+    public void startLive(ArrayList<MspMessageTypeEnum> multiCommand) {
+        try {
+            if (multiCommand != null
+                    && !multiCommand.isEmpty()) {
+
+                List<byte[]> messages = new ArrayList<>();
+
+                for (MspMessageTypeEnum command : multiCommand) {
+                    messages.add(MspEncoder.encode(MspDirectionEnum.MSP_OUTBOUND, command, null));
+                    Log.d(TAG, "MSP Request : " + command.name());
+                }
+
+                if (isConnected()) {
+                    bluetoothManager.startLive(messages);
+                }
+            }
+        } catch (MspBaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pauseLive() {
+        if (isConnected()) {
+            bluetoothManager.pauseLive();
+        }
+    }
+
+    public void resumeLive() {
+        if (isConnected()) {
+            bluetoothManager.resumeLive();
+        }
+    }
+
     // Broadcast events
     protected void broadcastConnectionEvent(String event, String connectionType) {
         Intent intent = new Intent(event);
@@ -195,24 +249,5 @@ public class MspServiceAbstract {
         intent.putExtra(EXTRA_MESSAGE, message);
         intent.putExtra(EXTRA_DATA, data);
         LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
-    }
-
-    // Connector handles
-    public void connectBluetooth(String address) {
-        bluetoothManager = new MspBluetoothManager(bluetoothHandler);
-        bluetoothManager.connect(address);
-
-        mspData = new MspData();
-    }
-
-    public void disconnectBluetooth() {
-        bluetoothManager.disconnect();
-        mspData = new MspData();
-        localInBuffer = null;
-    }
-
-    public Boolean isConnected() {
-        return (bluetoothManager != null
-                && bluetoothManager.isConnected());
     }
 }

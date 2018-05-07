@@ -63,14 +63,14 @@ public class MspService extends MspServiceAbstract {
         sendMultiCommand(listCommand);
     }
 
-    public void loadLiveData() {
+    public void startLiveData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
         listCommand.add(MspMessageTypeEnum.MSP_RAW_IMU);
         listCommand.add(MspMessageTypeEnum.MSP_ATTITUDE);
         listCommand.add(MspMessageTypeEnum.MSP_ALTITUDE);
 
-        sendMultiCommand(listCommand);
+        startLive(listCommand);
     }
 
 
