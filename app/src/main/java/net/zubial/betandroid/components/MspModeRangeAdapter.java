@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import net.zubial.betandroid.R;
 import net.zubial.betandroid.helpers.UiUtils;
+import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.data.MspModeData;
 
@@ -78,6 +79,9 @@ public class MspModeRangeAdapter extends ArrayAdapter<MspModeData> {
 
                     Snackbar.make(bar.getRootView(), "Update mode : " + value.getModeName(), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+
+                    MspService.getInstance().setModeRange(value);
+                    MspService.getInstance().loadModesData();
                 }
             });
 
@@ -87,15 +91,17 @@ public class MspModeRangeAdapter extends ArrayAdapter<MspModeData> {
                 public void onClick(View v) {
                     Switch switchMode = v.findViewById(R.id.switchFeature);
 
-                    if (switchMode != null && value.getEnable() != switchMode.isChecked()) {
+                    if (switchMode != null && !switchMode.isChecked()) {
 
                         value.setRangeStart(900);
                         value.setRangeEnd(900);
                         value.setEnable(false);
 
-                        Snackbar.make(v, "Disable mode : " + value.getModeName(), Snackbar.LENGTH_LONG)
+                        Snackbar.make(v, "Remove mode : " + value.getModeName(), Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
 
+                        MspService.getInstance().setModeRange(value);
+                        MspService.getInstance().loadModesData();
                     }
                 }
             });

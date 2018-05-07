@@ -3,6 +3,7 @@ package net.zubial.msprotocol;
 import android.content.Context;
 
 import net.zubial.msprotocol.data.MspBatteryData;
+import net.zubial.msprotocol.data.MspModeData;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 import net.zubial.msprotocol.io.MspBuffer;
 
@@ -99,5 +100,15 @@ public class MspService extends MspServiceAbstract {
         buffer.writeInt32(featureMask);
 
         sendMessage(MspMessageTypeEnum.MSP_SET_FEATURE_CONFIG, buffer.getMessage());
+    }
+
+    public void setModeRange(MspModeData modeData) {
+        MspBuffer buffer = new MspBuffer(4);
+        buffer.writeInt8(modeData.getId());
+        buffer.writeInt8(modeData.getAuxChannel());
+        buffer.writeInt8((modeData.getRangeStart() - 900) / 25);
+        buffer.writeInt8((modeData.getRangeEnd() - 900) / 25);
+
+        sendMessage(MspMessageTypeEnum.MSP_SET_MODE_RANGE, buffer.getMessage());
     }
 }
