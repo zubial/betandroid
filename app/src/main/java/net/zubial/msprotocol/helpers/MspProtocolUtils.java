@@ -1,5 +1,6 @@
 package net.zubial.msprotocol.helpers;
 
+import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.enums.MspDirectionEnum;
 
 import java.nio.ByteBuffer;
@@ -16,6 +17,18 @@ public final class MspProtocolUtils {
         result[1] = "M".getBytes()[0];
         result[2] = direction.getValue();
         return result;
+    }
+
+    public static Boolean gtVersion(MspData data, Double version) {
+        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) > 0);
+    }
+
+    public static Boolean ltVersion(MspData data, Double version) {
+        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) < 0);
+    }
+
+    public static Boolean eqVersion(MspData data, Double version) {
+        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) == 0);
     }
 
     public static Boolean bitCheck(int mask, int index) {

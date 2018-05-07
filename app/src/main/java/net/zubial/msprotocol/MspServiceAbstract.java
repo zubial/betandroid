@@ -119,7 +119,7 @@ public class MspServiceAbstract {
                         localInBuffer = ByteBuffer.wrap(inMessage.getNextMessage());
 
                         if (inMessage.isLoad()) {
-                            List<MspMessageEventEnum> messageEvents = MspMapper.parseMessage(mspData, inMessage);
+                            List<MspMessageEventEnum> messageEvents = MspMapper.parseDataMessage(mspData, inMessage);
 
                             Log.d(TAG, "MSP Response : " + inMessage.getMessageType().name() + " " + MspProtocolUtils.toHexString(inMessage.getPayload()));
 

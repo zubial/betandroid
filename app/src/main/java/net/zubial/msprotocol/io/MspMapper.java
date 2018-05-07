@@ -39,7 +39,6 @@ public final class MspMapper {
     private static final int MSP_CURRENT_METER_CONFIG = 40;
     private static final int MSP_VOLTAGE_METER_CONFIG = 56;
     private static final int MSP_MODE_RANGES = 34;
-    private static final int MSP_SET_FEATURE_CONFIG = 37;
     private static final int MSP_FEATURE_CONFIG = 36;
     private static final int MSP_BOARD_ALIGNMENT_CONFIG = 38;
     private static final int MSP_MIXER_CONFIG = 42;
@@ -97,23 +96,69 @@ public final class MspMapper {
     private static final int MSP_CURRENT_METERS = 129;
     private static final int MSP_BATTERY_STATE = 130;
 
+    // Out Message
+    private static final int MSP_SET_NAME = 11;
+    private static final int MSP_EEPROM_WRITE = 250;
+    private static final int MSP_REBOOT = 68;
+    private static final int MSP_RESET_CONF = 208;
+    private static final int MSP_ACC_CALIBRATION = 205;
+    private static final int MSP_MAG_CALIBRATION = 206;
+    private static final int MSP_COPY_PROFILE = 183;
+    private static final int MSP_DATAFLASH_ERASE = 72;
+    private static final int MSP_SET_BATTERY_CONFIG = 33;
+    private static final int MSP_SET_CURRENT_METER_CONFIG = 41;
+    private static final int MSP_SET_VOLTAGE_METER_CONFIG = 57;
+    private static final int MSP_SET_MODE_RANGE = 35;
+    private static final int MSP_SET_FEATURE_CONFIG = 37;
+    private static final int MSP_SET_BOARD_ALIGNMENT_CONFIG = 39;
+    private static final int MSP_SET_MIXER_CONFIG = 43;
+    private static final int MSP_SET_RX_CONFIG = 45;
+    private static final int MSP_SET_RSSI_CONFIG = 51;
+    private static final int MSP_SET_ADJUSTMENT_RANGE = 53;
+    private static final int MSP_SET_RX_MAP = 65;
+    private static final int MSP_SET_TX_INFO = 186;
+    private static final int MSP_SET_RC_DEADBAND = 218;
+    private static final int MSP_SET_LED_COLORS = 47;
+    private static final int MSP_SET_LED_STRIP_CONFIG = 49;
+    private static final int MSP_SET_LED_STRIP_MODECOLOR = 221;
+    private static final int MSP_SET_PID_CONTROLLER = 60;
+    private static final int MSP_SET_FILTER_CONFIG = 93;
+    private static final int MSP_SET_PID_ADVANCED = 95;
+    private static final int MSP_SET_PID = 202;
+    private static final int MSP_SET_NAV_CONFIG = 215;
+    private static final int MSP_SELECT_SETTING = 210;
+    private static final int MSP_SET_RC_TUNING = 204;
+    private static final int MSP_SET_RESET_CURR_PID = 219;
+    private static final int MSP_SET_ARMING_CONFIG = 62;
+    private static final int MSP_SET_ARMING_DISABLED = 99;
+    private static final int MSP_SET_FAILSAFE_CONFIG = 76;
+    private static final int MSP_SET_RXFAIL_CONFIG = 78;
+    private static final int MSP_SET_BLACKBOX_CONFIG = 81;
+    private static final int MSP_SET_TRANSPONDER_CONFIG = 83;
+    private static final int MSP_SET_ADVANCED_CONFIG = 91;
+    private static final int MSP_SET_BEEPER_CONFIG = 185;
+    private static final int MSP_SET_OSD_CONFIG = 85;
+    private static final int MSP_SET_VTX_CONFIG = 89;
+    private static final int MSP_SET_OSD_VIDEO_CONFIG = 181;
+    private static final int MSP_SET_SENSOR_CONFIG = 97;
+    private static final int MSP_SET_GPS_CONFIG = 223;
+    private static final int MSP_SET_COMPASS_CONFIG = 224;
+    private static final int MSP_SET_SENSOR_ALIGNMENT = 220;
+    private static final int MSP_SET_MOTOR = 214;
+    private static final int MSP_SET_MOTOR_3D_CONFIG = 217;
+    private static final int MSP_SET_MOTOR_CONFIG = 222;
+    private static final int MSP_OSD_CHAR_WRITE = 87;
+    private static final int MSP_SET_SERVO_CONFIGURATION = 212;
+    private static final int MSP_SET_RAW_RC = 200;
+    private static final int MSP_SET_RAW_GPS = 201;
+    private static final int MSP_SET_WP = 209;
+    private static final int MSP_SET_HEADING = 211;
+
     private MspMapper() {
 
     }
 
-    public static Boolean gtVersion(MspData data, Double version) {
-        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) > 0);
-    }
-
-    public static Boolean ltVersion(MspData data, Double version) {
-        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) < 0);
-    }
-
-    public static Boolean eqVersion(MspData data, Double version) {
-        return (data != null && version != null) && (data.getMspSystemData().getBoardApiVersion().compareTo(version) == 0);
-    }
-
-    public static List<MspMessageEventEnum> parseMessage(MspData data, MspMessage message) throws MspBaseException {
+    public static List<MspMessageEventEnum> parseDataMessage(MspData data, MspMessage message) throws MspBaseException {
 
         List<MspMessageEventEnum> messageEvents = new ArrayList<>();
         MspMessageTypeEnum messageType = message.getMessageType();
@@ -146,7 +191,7 @@ public final class MspMapper {
                 data.getMspSystemData().setBoardIdentifier(message.readString(4));
                 data.getMspSystemData().setBoardVersion(message.readUInt16());
 
-                if (gtVersion(data, 1.35)) {
+                if (MspProtocolUtils.gtVersion(data, 1.35)) {
                     data.getMspSystemData().setBoardType(message.readUInt8());
                 } else {
                     data.getMspSystemData().setBoardType(0);
@@ -177,7 +222,7 @@ public final class MspMapper {
                 data.getMspSystemData().setStatusMode(message.readUInt32());
                 data.getMspSystemData().setStatusProfile(message.readUInt8());
                 data.getMspLiveData().setStatusCpuload(message.readUInt16());
-                if (gtVersion(data, 1.16)) {
+                if (MspProtocolUtils.gtVersion(data, 1.16)) {
                     data.getMspSystemData().setStatusNumProfiles(message.readUInt8());
                     data.getMspSystemData().setStatusRateProfile(message.readUInt8());
 
@@ -194,7 +239,7 @@ public final class MspMapper {
                 data.getMspSystemData().setStatusHaveMag(MspProtocolUtils.bitCheck(data.getMspSystemData().getStatusActiveSensors(), 2));
                 data.getMspSystemData().setStatusHaveGps(MspProtocolUtils.bitCheck(data.getMspSystemData().getStatusActiveSensors(), 3));
                 data.getMspSystemData().setStatusHaveSonar(MspProtocolUtils.bitCheck(data.getMspSystemData().getStatusActiveSensors(), 4));
-                if (gtVersion(data, 1.36)) {
+                if (MspProtocolUtils.gtVersion(data, 1.36)) {
                     data.getMspSystemData().setStatusHaveGyro(MspProtocolUtils.bitCheck(data.getMspSystemData().getStatusActiveSensors(), 5));
                 } else {
                     data.getMspSystemData().setStatusHaveGyro(true);
@@ -231,7 +276,7 @@ public final class MspMapper {
             case MSP_VOLTAGE_METER_CONFIG:
                 data.getMspBatteryData().getVoltageData().clear();
 
-                if (ltVersion(data, 1.36)) {
+                if (MspProtocolUtils.ltVersion(data, 1.36)) {
                     MspBatteryVoltageData voltageData = new MspBatteryVoltageData();
                     voltageData.setId(0);
                     voltageData.setScale(message.readUInt8());
@@ -239,7 +284,7 @@ public final class MspMapper {
                     data.getMspBatteryData().setVbatMaxCellVoltage(message.readUInt8());
                     data.getMspBatteryData().setVbatWarningCellVoltage(message.readUInt8());
 
-                    if (gtVersion(data, 1.23)) {
+                    if (MspProtocolUtils.gtVersion(data, 1.23)) {
                         data.getMspBatteryData().setVoltageMeterSource(message.readUInt8());
                     }
 
@@ -269,7 +314,7 @@ public final class MspMapper {
             case MSP_CURRENT_METER_CONFIG:
                 data.getMspBatteryData().getCurrentData().clear();
 
-                if (ltVersion(data, 1.36)) {
+                if (MspProtocolUtils.ltVersion(data, 1.36)) {
                     MspBatteryCurrentData currentData = new MspBatteryCurrentData();
                     currentData.setScale(message.readUInt16());
                     currentData.setOffset(message.readUInt16());
@@ -321,53 +366,53 @@ public final class MspMapper {
                 data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_LED_STRIP, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_LED_STRIP.getCode())));
                 data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_DISPLAY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DISPLAY.getCode())));
 
-                if (!gtVersion(data, 1.33)) {
+                if (!MspProtocolUtils.gtVersion(data, 1.33)) {
                     data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_BLACKBOX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_BLACKBOX.getCode())));
                 }
 
-                if (gtVersion(data, 1.12)) {
+                if (MspProtocolUtils.gtVersion(data, 1.12)) {
                     data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_CHANNEL_FORWARDING, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CHANNEL_FORWARDING.getCode())));
                 }
 
-                if (gtVersion(data, 1.15) && !gtVersion(data, 1.36)) {
+                if (MspProtocolUtils.gtVersion(data, 1.15) && !MspProtocolUtils.gtVersion(data, 1.36)) {
                     data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_FAILSAFE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_FAILSAFE.getCode())));
                 }
 
-                if (gtVersion(data, 1.16)) {
+                if (MspProtocolUtils.gtVersion(data, 1.16)) {
                     data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_TRANSPONDER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_TRANSPONDER.getCode())));
                 }
 
                 if (data.getMspSystemData().getBoardFlightControllerVersion() != null
                         && !data.getMspSystemData().getBoardFlightControllerVersion().isEmpty()) {
-                    if (gtVersion(data, 1.16)) {
+                    if (MspProtocolUtils.gtVersion(data, 1.16)) {
                         data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_AIRMODE, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_AIRMODE.getCode())));
 
-                        if (ltVersion(data, 1.20)) {
+                        if (MspProtocolUtils.ltVersion(data, 1.20)) {
                             data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SUPEREXPO_RATES, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SUPEREXPO_RATES.getCode())));
-                        } else if (!gtVersion(data, 1.33)) {
+                        } else if (!MspProtocolUtils.gtVersion(data, 1.33)) {
                             data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_SDCARD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_SDCARD.getCode())));
                         }
                     }
 
-                    if (gtVersion(data, 1.20)) {
+                    if (MspProtocolUtils.gtVersion(data, 1.20)) {
                         data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_OSD, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_OSD.getCode())));
 
-                        if (!gtVersion(data, 1.35)) {
+                        if (!MspProtocolUtils.gtVersion(data, 1.35)) {
                             data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_VTX, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VTX.getCode())));
                         }
                     }
 
-                    if (gtVersion(data, 1.31)) {
+                    if (MspProtocolUtils.gtVersion(data, 1.31)) {
                         data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_RX_SPI, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_RX_SPI.getCode())));
                         data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_ESC_SENSOR, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ESC_SENSOR.getCode())));
                     }
 
-                    if (gtVersion(data, 1.36)) {
+                    if (MspProtocolUtils.gtVersion(data, 1.36)) {
                         data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_ANTI_GRAVITY, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_ANTI_GRAVITY.getCode())));
                         data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_DYNAMIC_FILTER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_DYNAMIC_FILTER.getCode())));
                     }
 
-                    if (!gtVersion(data, 1.36)) {
+                    if (!MspProtocolUtils.gtVersion(data, 1.36)) {
                         data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_VBAT, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_VBAT.getCode())));
                         data.getMspFeatures().add(new MspFeatureData(MspFeatureEnum.FEATURE_CURRENT_METER, MspProtocolUtils.bitCheck(featureConfig, MspFeatureEnum.FEATURE_CURRENT_METER.getCode())));
                     }
@@ -472,6 +517,85 @@ public final class MspMapper {
                 }
 
                 messageEvents.add(MspMessageEventEnum.EVENT_MSP_MODES_DATA);
+
+                break;
+
+            default:
+                return parseConfirmMessage(data, message);
+        }
+
+        return messageEvents;
+    }
+
+    private static List<MspMessageEventEnum> parseConfirmMessage(MspData data, MspMessage message) throws MspBaseException {
+
+        List<MspMessageEventEnum> messageEvents = new ArrayList<>();
+        MspMessageTypeEnum messageType = message.getMessageType();
+
+        switch (messageType.getCode()) {
+            case MSP_ACC_CALIBRATION:
+            case MSP_COPY_PROFILE:
+            case MSP_DATAFLASH_ERASE:
+            case MSP_EEPROM_WRITE:
+            case MSP_MAG_CALIBRATION:
+            case MSP_OSD_CHAR_WRITE:
+            case MSP_REBOOT:
+            case MSP_RESET_CONF:
+            case MSP_SELECT_SETTING:
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_DONE);
+
+                break;
+
+            case MSP_SET_ADJUSTMENT_RANGE:
+            case MSP_SET_ADVANCED_CONFIG:
+            case MSP_SET_ARMING_CONFIG:
+            case MSP_SET_ARMING_DISABLED:
+            case MSP_SET_BATTERY_CONFIG:
+            case MSP_SET_BEEPER_CONFIG:
+            case MSP_SET_BLACKBOX_CONFIG:
+            case MSP_SET_BOARD_ALIGNMENT_CONFIG:
+            case MSP_SET_COMPASS_CONFIG:
+            case MSP_SET_CURRENT_METER_CONFIG:
+            case MSP_SET_FAILSAFE_CONFIG:
+            case MSP_SET_FEATURE_CONFIG:
+            case MSP_SET_FILTER_CONFIG:
+            case MSP_SET_GPS_CONFIG:
+            case MSP_SET_HEADING:
+            case MSP_SET_LED_COLORS:
+            case MSP_SET_LED_STRIP_CONFIG:
+            case MSP_SET_LED_STRIP_MODECOLOR:
+            case MSP_SET_MIXER_CONFIG:
+            case MSP_SET_MODE_RANGE:
+            case MSP_SET_MOTOR:
+            case MSP_SET_MOTOR_3D_CONFIG:
+            case MSP_SET_MOTOR_CONFIG:
+            case MSP_SET_NAME:
+            case MSP_SET_NAV_CONFIG:
+            case MSP_SET_OSD_CONFIG:
+            case MSP_SET_OSD_VIDEO_CONFIG:
+            case MSP_SET_PID:
+            case MSP_SET_PID_ADVANCED:
+            case MSP_SET_PID_CONTROLLER:
+            case MSP_SET_RAW_GPS:
+            case MSP_SET_RAW_RC:
+            case MSP_SET_RC_DEADBAND:
+            case MSP_SET_RC_TUNING:
+            case MSP_SET_RESET_CURR_PID:
+            case MSP_SET_RSSI_CONFIG:
+            case MSP_SET_RX_CONFIG:
+            case MSP_SET_RX_MAP:
+            case MSP_SET_RXFAIL_CONFIG:
+            case MSP_SET_SENSOR_ALIGNMENT:
+            case MSP_SET_SENSOR_CONFIG:
+            case MSP_SET_SERVO_CONFIGURATION:
+            case MSP_SET_TRANSPONDER_CONFIG:
+            case MSP_SET_TX_INFO:
+            case MSP_SET_VOLTAGE_METER_CONFIG:
+            case MSP_SET_VTX_CONFIG:
+            case MSP_SET_WP:
+
+                messageEvents.add(MspMessageEventEnum.EVENT_MSP_UPDATED);
 
                 break;
 
