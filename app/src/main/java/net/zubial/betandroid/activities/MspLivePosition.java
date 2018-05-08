@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -73,9 +72,13 @@ public class MspLivePosition extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadData();
-                Snackbar.make(view, "Restart", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (MspService.getInstance().isRuning()) {
+                    MspService.getInstance().pauseLive();
+                    fab.setImageResource(R.drawable.ic_live_play);
+                } else {
+                    MspService.getInstance().resumeLive();
+                    fab.setImageResource(R.drawable.ic_live_pause);
+                }
             }
         });
 
@@ -132,23 +135,25 @@ public class MspLivePosition extends Fragment {
                 txtKinematics.setText(kinematics);
             }
 
-            if (txtRc01 != null) {
-                txtRc01.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(0).getMask());
-            }
-            if (txtRc02 != null) {
-                txtRc02.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(1).getMask());
-            }
-            if (txtRc03 != null) {
-                txtRc03.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(2).getMask());
-            }
-            if (txtRc04 != null) {
-                txtRc04.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(3).getMask());
-            }
-            if (txtRc05 != null) {
-                txtRc05.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(4).getMask());
-            }
-            if (txtRc06 != null) {
-                txtRc06.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(5).getMask());
+            if (!mspData.getMspLiveData().getMspLiveRc().isEmpty()) {
+                if (txtRc01 != null) {
+                    txtRc01.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(0).getMask());
+                }
+                if (txtRc02 != null) {
+                    txtRc02.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(1).getMask());
+                }
+                if (txtRc03 != null) {
+                    txtRc03.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(2).getMask());
+                }
+                if (txtRc04 != null) {
+                    txtRc04.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(3).getMask());
+                }
+                if (txtRc05 != null) {
+                    txtRc05.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(4).getMask());
+                }
+                if (txtRc06 != null) {
+                    txtRc06.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(5).getMask());
+                }
             }
         }
     }

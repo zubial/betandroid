@@ -186,6 +186,10 @@ public class MspBluetoothManager {
         }
     }
 
+    public Boolean isRuning() {
+        return mLiveThread.isRuning();
+    }
+
     public void startLive(List<byte[]> messages) {
         if (isConnected) {
             handleState(MspConnectorStateEnum.STATE_LIVE_STARTED);
@@ -286,7 +290,7 @@ public class MspBluetoothManager {
     private class LiveThread extends Thread {
         private final OutputStream mmOutStream;
 
-        List<byte[]> msgLoadList;
+        private List<byte[]> msgLoadList;
         private Boolean isRuning;
 
         public LiveThread(BluetoothSocket socket) {
@@ -300,25 +304,32 @@ public class MspBluetoothManager {
             }
 
             mmOutStream = tmpOut;
+            isRuning = false;
         }
 
         public void run() {
-            while (isRuning) {
-                try {
-                    if (msgLoadList != null
-                            && !msgLoadList.isEmpty()) {
-                        for (byte[] msg : msgLoadList) {
-                            mmOutStream.write(msg);
+            while (true) {
+                if (isRuning) {
+                    try {
+                        if (msgLoadList != null
+                                && !msgLoadList.isEmpty()) {
+                            for (byte[] msg : msgLoadList) {
+                                mmOutStream.write(msg);
+                            }
                         }
+                        Thread.sleep(100);
+                    } catch (IOException e) {
+                        Log.d(TAG, "Write exception", e);
+                        disconnect();
+                    } catch (InterruptedException e) {
+                        Log.d(TAG, "Interrupted exception", e);
                     }
-                    Thread.sleep(1000);
-                } catch (IOException e) {
-                    Log.d(TAG, "Write exception", e);
-                    disconnect();
-                } catch (InterruptedException e) {
-                    Log.d(TAG, "Interrupted exception", e);
                 }
             }
+        }
+
+        public Boolean isRuning() {
+            return isRuning;
         }
 
         // Methods

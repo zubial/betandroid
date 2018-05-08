@@ -522,12 +522,14 @@ public final class MspMapper {
                 break;
 
             case MSP_RC:
+                data.getMspLiveData().getMspLiveRc().clear();
 
                 int active_channels = message.getSize() / 2;
                 for (int i = 0; i < active_channels; i++) {
                     MspLiveRcData rcData = new MspLiveRcData();
                     rcData.setId(i);
                     rcData.setMask(message.readUInt16());
+                    data.getMspLiveData().getMspLiveRc().add(rcData);
                 }
 
                 messageEvents.add(MspMessageEventEnum.EVENT_MSP_LIVE_DATA);

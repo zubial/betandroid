@@ -224,6 +224,10 @@ public class MspServiceAbstract {
         }
     }
 
+    public Boolean isRuning() {
+        return bluetoothManager.isRuning();
+    }
+
     public void pauseLive() {
         if (isConnected()) {
             bluetoothManager.pauseLive();

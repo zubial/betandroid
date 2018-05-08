@@ -14,15 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.zubial.betandroid.activities.MspConfigurationActivity;
 import net.zubial.betandroid.activities.MspLiveActivity;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
 import net.zubial.msprotocol.enums.MspMessageEventEnum;
-import net.zubial.msprotocol.enums.MspMessageTypeEnum;
-import net.zubial.msprotocol.io.MspMessage;
 
 public class MainConnected extends Fragment {
 
@@ -39,13 +36,6 @@ public class MainConnected extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (MspService.EVENT_MESSAGE_RECEIVED.equals(intent.getAction())) {
-
-                MspMessage mspMessage = (MspMessage) intent.getSerializableExtra(MspService.EXTRA_MESSAGE);
-                if (mspMessage != null
-                        && mspMessage.getMessageType().isEqual(MspMessageTypeEnum.MSP_ACC_CALIBRATION)) {
-                    Toast.makeText(getContext(), "Calibration done", Toast.LENGTH_SHORT).show();
-                }
-
                 MspMessageEventEnum mspEvent = (MspMessageEventEnum) intent.getSerializableExtra(MspService.EXTRA_EVENT);
                 if (MspMessageEventEnum.EVENT_MSP_SYSTEM_DATA.isEqual(mspEvent)) {
                     mspData = (MspData) intent.getSerializableExtra(MspService.EXTRA_DATA);

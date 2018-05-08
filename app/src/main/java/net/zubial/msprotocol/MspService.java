@@ -110,7 +110,7 @@ public class MspService extends MspServiceAbstract {
 
     public void setModeRange(MspModeData modeData) {
         MspBuffer buffer = new MspBuffer(4);
-        buffer.writeInt8(modeData.getId());
+        buffer.writeInt8(modeData.getIndex());
         buffer.writeInt8(modeData.getAuxChannel());
         buffer.writeInt8((modeData.getRangeStart() - 900) / 25);
         buffer.writeInt8((modeData.getRangeEnd() - 900) / 25);
