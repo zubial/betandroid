@@ -1,14 +1,18 @@
 package net.zubial.betandroid.components;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -60,6 +64,56 @@ public class MspModeRangeAdapter extends ArrayAdapter<MspModeData> {
                 viewHolder.modeName.setText(value.getModeName() + "");
                 viewHolder.modeChannel.setText("Aux " + (value.getAuxChannel() + 1));
             }
+
+            viewHolder.modeChannel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Channel");
+
+                    final NumberPicker input = new NumberPicker(getContext());
+                    final String[] values = {"Aux1",
+                            "Aux2",
+                            "Aux3",
+                            "Aux4",
+                            "Aux5",
+                            "Aux6",
+                            "Aux7",
+                            "Aux8",
+                            "Aux9"};
+                    input.setMinValue(0);
+                    input.setMaxValue(values.length - 1);
+                    input.setDisplayedValues(values);
+                    input.setWrapSelectorWheel(true);
+                    input.setGravity(Gravity.START | Gravity.TOP);
+                    input.setValue(value.getAuxChannel());
+                    builder.setView(input);
+
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                            value.setAuxChannel(input.getValue());
+
+                            MspService.getInstance().setModeRange(value);
+                            MspService.getInstance().loadModesData();
+
+                            Snackbar.make(view, "Update Mode " + value.getModeName(), Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    });
+
+                    builder.setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            });
+
 
             viewHolder.seekBarRange.setRangeValues(900, 2100);
             viewHolder.seekBarRange.setSelectedMinValue(value.getRangeStart());
