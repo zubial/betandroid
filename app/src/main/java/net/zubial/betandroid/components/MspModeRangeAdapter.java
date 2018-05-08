@@ -89,7 +89,7 @@ public class MspModeRangeAdapter extends ArrayAdapter<MspModeData> {
             viewHolder.switchMode.setOnClickListener(new Switch.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Switch switchMode = v.findViewById(R.id.switchFeature);
+                    Switch switchMode = v.findViewById(R.id.switchMode);
 
                     if (switchMode != null && !switchMode.isChecked()) {
 

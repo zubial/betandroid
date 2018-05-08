@@ -429,6 +429,7 @@ public final class MspMapper {
                 Integer modeRangeCount = message.getSize() / 4;
                 for (int i = 0; i < modeRangeCount; i++) {
                     MspModeData modeData = new MspModeData();
+                    modeData.setId(i);
                     modeData.setIndex(message.readUInt8());
                     modeData.setAuxChannel(message.readUInt8());
                     modeData.setRangeStart(900 + (message.readUInt8() * 25));
@@ -441,11 +442,10 @@ public final class MspMapper {
 
                         for (Map.Entry<Integer, Integer> entry : data.getMspModesData().getMspModeIds().entrySet()) {
                             if (entry.getValue().equals(modeData.getIndex())) {
-                                modeData.setId(entry.getKey());
+                                modeData.setModeName(data.getMspModesData().getMspModeNames().get(entry.getKey()));
                                 break;
                             }
                         }
-                        modeData.setModeName(data.getMspModesData().getMspModeNames().get(modeData.getId()));
 
                         data.getMspModesData().getMspModes().add(modeData);
                     }
