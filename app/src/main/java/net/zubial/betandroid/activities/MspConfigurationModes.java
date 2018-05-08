@@ -1,7 +1,9 @@
 package net.zubial.betandroid.activities;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -10,16 +12,22 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.NumberPicker;
 
 import net.zubial.betandroid.R;
 import net.zubial.betandroid.components.MspModeRangeAdapter;
 import net.zubial.betandroid.components.NoScrollListView;
 import net.zubial.msprotocol.MspService;
 import net.zubial.msprotocol.data.MspData;
+import net.zubial.msprotocol.data.MspModeData;
 import net.zubial.msprotocol.enums.MspMessageEventEnum;
+
+import java.util.Map;
 
 public class MspConfigurationModes extends Fragment {
 
@@ -29,6 +37,7 @@ public class MspConfigurationModes extends Fragment {
 
     // UI Composants
     private NoScrollListView listModesRange;
+    private Button cmdAdd;
 
     // Msp Event
     private BroadcastReceiver onMspMessageReceived = new BroadcastReceiver() {
@@ -69,6 +78,67 @@ public class MspConfigurationModes extends Fragment {
         });
 
         listModesRange = view.findViewById(R.id.listModesRange);
+
+        cmdAdd = view.findViewById(R.id.cmdAdd);
+        cmdAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Add Mode range");
+
+                final NumberPicker input = new NumberPicker(getContext());
+
+                final String[] values = new String[mspData.getMspModesData().getMspModeNames().size()];
+                for (int j = 0; j < mspData.getMspModesData().getMspModeNames().size(); j++) {
+                    values[j] = mspData.getMspModesData().getMspModeNames().get(j);
+                }
+
+                input.setMinValue(0);
+                input.setMaxValue(values.length - 1);
+                input.setDisplayedValues(values);
+                input.setWrapSelectorWheel(true);
+                input.setGravity(Gravity.START | Gravity.TOP);
+                builder.setView(input);
+
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        String value = values[input.getValue()];
+
+                        for (Map.Entry<Integer, String> item : mspData.getMspModesData().getMspModeNames().entrySet()) {
+                            if (value.equals(item.getValue())) {
+                                MspModeData newMode = new MspModeData();
+                                newMode.setId(mspData.getMspModesData().getMspModeNames().size());
+                                newMode.setIndex(mspData.getMspModesData().getMspModeIds().get(item.getKey()));
+                                newMode.setAuxChannel(0);
+                                newMode.setRangeStart(1200);
+                                newMode.setRangeEnd(1800);
+                                newMode.setEnable(true);
+
+                                MspService.getInstance().setModeRange(newMode);
+                                MspService.getInstance().loadModesData();
+
+                                Snackbar.make(view, "Add Mode range", Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+
+                                break;
+                            }
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
+
 
         IntentFilter onMspMessageReceivedFilter = new IntentFilter(MspService.EVENT_MESSAGE_RECEIVED);
         LocalBroadcastManager.getInstance(view.getContext()).registerReceiver(onMspMessageReceived, onMspMessageReceivedFilter);

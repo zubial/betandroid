@@ -24,13 +24,23 @@
             android:textStyle="bold" />
 
         <View style="@style/AppTheme.LineDivider" />
-
         <View style="@style/AppTheme.SpaceDivider" />
 
         <net.zubial.betandroid.components.NoScrollListView
             android:id="@+id/listModesRange"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <View style="@style/AppTheme.LineDivider" />
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <Button
+            android:id="@+id/cmdAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Add" />
 
     </LinearLayout>
 </ScrollView>
