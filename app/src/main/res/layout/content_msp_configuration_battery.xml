@@ -18,6 +18,48 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Current battery"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <View style="@style/AppTheme.LineDivider" />
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <TextView
+            android:id="@+id/txtLiveBatteryType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp" />
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtLiveBatteryVoltage"
+            android:text="Battery voltage"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txtLiveBatteryVoltage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+
+        <ProgressBar
+            android:id="@+id/barLiveBatteryUsage"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp" />
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Battery configuration"
             android:textSize="18sp"
             android:textStyle="bold" />

@@ -83,5 +83,92 @@
             android:selectAllOnFocus="true"
             android:text="" />
 
+
+        <View style="@style/AppTheme.SpaceDivider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtRc01"
+            android:text="Rc01"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtRc01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:text="" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtRc02"
+            android:text="Rc02"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtRc02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:text="" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtRc03"
+            android:text="Rc03"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtRc03"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:text="" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtRc04"
+            android:text="Rc04"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtRc04"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:text="" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtRc05"
+            android:text="Rc05"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtRc05"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:text="" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/txtRc06"
+            android:text="Rc06"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtRc06"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:text="" />
+
     </LinearLayout>
 </ScrollView>

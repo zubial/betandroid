@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.zubial.betandroid.R;
@@ -29,7 +30,7 @@ import net.zubial.msprotocol.enums.MspMessageEventEnum;
 
 public class MspConfigurationSystem extends Fragment {
 
-    private static final String TAG = "MspConfigBoard";
+    private static final String TAG = "MspConfiguration";
 
     private MspData mspData;
 
@@ -38,6 +39,7 @@ public class MspConfigurationSystem extends Fragment {
     private TextView txtConfigurationBoardIdentifier;
     private TextView txtConfigurationSensors;
     private TextView txtConfigurationSdcard;
+    private ProgressBar barSdcardUsage;
 
     // Msp Event
     private BroadcastReceiver onMspMessageReceived = new BroadcastReceiver() {
@@ -81,6 +83,7 @@ public class MspConfigurationSystem extends Fragment {
         txtConfigurationBoardIdentifier = view.findViewById(R.id.txtConfigurationBoardIdentifier);
         txtConfigurationSensors = view.findViewById(R.id.txtConfigurationSensors);
         txtConfigurationSdcard = view.findViewById(R.id.txtConfigurationSdcard);
+        barSdcardUsage = view.findViewById(R.id.barSdcardUsage);
 
         txtConfigurationBoardName = view.findViewById(R.id.txtConfigurationBoardName);
         txtConfigurationBoardName.setOnClickListener(new View.OnClickListener() {
@@ -175,14 +178,21 @@ public class MspConfigurationSystem extends Fragment {
             if (txtConfigurationSdcard != null) {
                 String configurationSdcard = "";
                 if (UiUtils.isTrue(mspData.getMspSystemData().getSdcardSupported())) {
-                    configurationSdcard += "SdCard supported";
 
                     if (UiUtils.isGtZero(mspData.getMspSystemData().getSdcardTotalSize())) {
                         configurationSdcard += "\nFree " + UiFormatter.formatByteSize(mspData.getMspSystemData().getSdcardFreeSize()) + " / " + UiFormatter.formatByteSize(mspData.getMspSystemData().getSdcardTotalSize());
+
+                        Integer sdcardUsagePercent = UiUtils.getPercent(mspData.getMspSystemData().getSdcardTotalSize(), mspData.getMspSystemData().getSdcardTotalSize() - mspData.getMspSystemData().getSdcardFreeSize());
+                        barSdcardUsage.setMax(100);
+                        barSdcardUsage.setProgress(sdcardUsagePercent);
+                        barSdcardUsage.setVisibility(View.VISIBLE);
+                    } else {
+                        configurationSdcard += "SdCard supported";
                     }
 
                 } else {
                     configurationSdcard += "SdCard not supported";
+                    barSdcardUsage.setVisibility(View.INVISIBLE);
                 }
                 txtConfigurationSdcard.setText(configurationSdcard);
             }

@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -25,12 +24,20 @@ public class MspLivePosition extends Fragment {
     private static final String TAG = "MspLive";
 
     private MspData mspData;
-    private Boolean isRuning;
 
     // UI Composants
+    private FloatingActionButton fab;
+
     private TextView txtAccelerometer;
     private TextView txtGyroscope;
     private TextView txtKinematics;
+
+    private TextView txtRc01;
+    private TextView txtRc02;
+    private TextView txtRc03;
+    private TextView txtRc04;
+    private TextView txtRc05;
+    private TextView txtRc06;
 
     public MspLivePosition() {
         // Default Ctr
@@ -60,22 +67,31 @@ public class MspLivePosition extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        isRuning = true;
-
-        FloatingActionButton fab = view.getRootView().findViewById(R.id.fab);
+        fab = view.getRootView().findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadData();
-                Snackbar.make(view, "Restart", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (MspService.getInstance().isRuning()) {
+                    MspService.getInstance().pauseLive();
+                    fab.setImageResource(R.drawable.ic_live_play);
+                } else {
+                    MspService.getInstance().resumeLive();
+                    fab.setImageResource(R.drawable.ic_live_pause);
+                }
             }
         });
 
         txtAccelerometer = view.findViewById(R.id.txtAccelerometer);
         txtGyroscope = view.findViewById(R.id.txtGyroscope);
         txtKinematics = view.findViewById(R.id.txtKinematics);
+
+        txtRc01 = view.findViewById(R.id.txtRc01);
+        txtRc02 = view.findViewById(R.id.txtRc02);
+        txtRc03 = view.findViewById(R.id.txtRc03);
+        txtRc04 = view.findViewById(R.id.txtRc04);
+        txtRc05 = view.findViewById(R.id.txtRc05);
+        txtRc06 = view.findViewById(R.id.txtRc06);
 
         IntentFilter onMspMessageReceivedFilter = new IntentFilter(MspService.EVENT_MESSAGE_RECEIVED);
         LocalBroadcastManager.getInstance(view.getContext()).registerReceiver(onMspMessageReceived, onMspMessageReceivedFilter);
@@ -87,11 +103,11 @@ public class MspLivePosition extends Fragment {
     public void onDetach() {
         super.onDetach();
 
-        isRuning = false;
+        MspService.getInstance().pauseLive();
     }
 
     private void loadData() {
-        MspService.getInstance().loadLiveData();
+        MspService.getInstance().startLiveData();
     }
 
     private void showData() {
@@ -119,8 +135,25 @@ public class MspLivePosition extends Fragment {
                 txtKinematics.setText(kinematics);
             }
 
-            if (isRuning) {
-                MspService.getInstance().loadLiveData();
+            if (!mspData.getMspLiveData().getMspLiveRc().isEmpty()) {
+                if (txtRc01 != null) {
+                    txtRc01.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(0).getMask());
+                }
+                if (txtRc02 != null) {
+                    txtRc02.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(1).getMask());
+                }
+                if (txtRc03 != null) {
+                    txtRc03.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(2).getMask());
+                }
+                if (txtRc04 != null) {
+                    txtRc04.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(3).getMask());
+                }
+                if (txtRc05 != null) {
+                    txtRc05.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(4).getMask());
+                }
+                if (txtRc06 != null) {
+                    txtRc06.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(5).getMask());
+                }
             }
         }
     }

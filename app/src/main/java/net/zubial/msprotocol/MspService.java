@@ -3,6 +3,7 @@ package net.zubial.msprotocol;
 import android.content.Context;
 
 import net.zubial.msprotocol.data.MspBatteryData;
+import net.zubial.msprotocol.data.MspModeData;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
 import net.zubial.msprotocol.io.MspBuffer;
 
@@ -27,6 +28,8 @@ public class MspService extends MspServiceAbstract {
         return mspService;
     }
 
+
+    // Load methods
     public void loadSystemData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_NAME);
@@ -45,6 +48,7 @@ public class MspService extends MspServiceAbstract {
 
     public void loadBatteryData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
+        listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
         listCommand.add(MspMessageTypeEnum.MSP_BATTERY_CONFIG);
         listCommand.add(MspMessageTypeEnum.MSP_VOLTAGE_METER_CONFIG);
         listCommand.add(MspMessageTypeEnum.MSP_CURRENT_METER_CONFIG);
@@ -52,21 +56,35 @@ public class MspService extends MspServiceAbstract {
         sendMultiCommand(listCommand);
     }
 
-    public void loadLiveData() {
+    public void loadModesData() {
+        ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
+        listCommand.add(MspMessageTypeEnum.MSP_BOXIDS);
+        listCommand.add(MspMessageTypeEnum.MSP_BOXNAMES);
+        listCommand.add(MspMessageTypeEnum.MSP_MODE_RANGES);
+
+
+        sendMultiCommand(listCommand);
+    }
+
+    // Live methods
+    public void startLiveData() {
         ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
         listCommand.add(MspMessageTypeEnum.MSP_ANALOG);
         listCommand.add(MspMessageTypeEnum.MSP_RAW_IMU);
         listCommand.add(MspMessageTypeEnum.MSP_ATTITUDE);
         listCommand.add(MspMessageTypeEnum.MSP_ALTITUDE);
+        listCommand.add(MspMessageTypeEnum.MSP_RC);
 
-        sendMultiCommand(listCommand);
+        startLive(listCommand);
     }
 
-
+    // Commands
     public void executeAccCalibration() {
         sendCommand(MspMessageTypeEnum.MSP_ACC_CALIBRATION);
     }
 
+
+    // Setters
     public void setBoardName(String boardName) {
         sendMessage(MspMessageTypeEnum.MSP_SET_NAME, boardName.getBytes());
     }
@@ -88,5 +106,16 @@ public class MspService extends MspServiceAbstract {
         buffer.writeInt32(featureMask);
 
         sendMessage(MspMessageTypeEnum.MSP_SET_FEATURE_CONFIG, buffer.getMessage());
+    }
+
+    public void setModeRange(MspModeData modeData) {
+        MspBuffer buffer = new MspBuffer(5);
+        buffer.writeInt8(modeData.getId());
+        buffer.writeInt8(modeData.getIndex());
+        buffer.writeInt8(modeData.getAuxChannel());
+        buffer.writeInt8((modeData.getRangeStart() - 900) / 25);
+        buffer.writeInt8((modeData.getRangeEnd() - 900) / 25);
+
+        sendMessage(MspMessageTypeEnum.MSP_SET_MODE_RANGE, buffer.getMessage());
     }
 }

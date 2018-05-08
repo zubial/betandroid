@@ -69,13 +69,22 @@
             android:layout_height="wrap_content"
             android:labelFor="@id/txtConfigurationSdcard"
             android:text="SdCard"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <View style="@style/AppTheme.LineDivider" />
 
         <TextView
             android:id="@+id/txtConfigurationSdcard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp" />
+
+        <ProgressBar
+            android:id="@+id/barSdcardUsage"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp" />
 
     </LinearLayout>
 </ScrollView>

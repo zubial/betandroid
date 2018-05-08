@@ -12,9 +12,10 @@ public class MspData implements Serializable {
     private MspBatteryData mspBatteryData = new MspBatteryData();
     private MspLiveData mspLiveData = new MspLiveData();
 
-    // MSP_FEATURE_CONFIG
     private int mspFeaturesMask;
     private List<MspFeatureData> mspFeatures;
+
+    private MspModesData mspModesData = new MspModesData();
 
     public MspData() {
         // Default Constructor
@@ -59,5 +60,13 @@ public class MspData implements Serializable {
 
     public MspLiveData getMspLiveData() {
         return mspLiveData;
+    }
+
+    public MspModesData getMspModesData() {
+        return mspModesData;
+    }
+
+    public void setMspModesData(MspModesData mspModesData) {
+        this.mspModesData = mspModesData;
     }
 }

@@ -1,6 +1,8 @@
 package net.zubial.msprotocol.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MspLiveData implements Serializable {
 
@@ -39,6 +41,9 @@ public class MspLiveData implements Serializable {
 
     // MSP_ALTITUDE
     private Double altitude;
+
+    // MSP_RC
+    private List<MspLiveRcData> mspLiveRc;
 
     public MspLiveData() {
         // Default Constructor
@@ -218,5 +223,12 @@ public class MspLiveData implements Serializable {
 
     public void setAltitude(Double altitude) {
         this.altitude = altitude;
+    }
+
+    public List<MspLiveRcData> getMspLiveRc() {
+        if (mspLiveRc == null) {
+            mspLiveRc = new ArrayList<>();
+        }
+        return mspLiveRc;
     }
 }

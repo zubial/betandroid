@@ -22,7 +22,7 @@ import net.zubial.msprotocol.MspService;
 
 public class MspConfigurationActivity extends AppCompatActivity {
 
-    private static final String TAG = "MspConfigBoard";
+    private static final String TAG = "MspConfiguration";
 
     private BroadcastReceiver onMspDisconnected = new BroadcastReceiver() {
         @Override
@@ -71,7 +71,7 @@ public class MspConfigurationActivity extends AppCompatActivity {
                 // Go Help
                 Intent goHelp = new Intent();
                 goHelp.setAction(Intent.ACTION_VIEW);
-                goHelp.setData(Uri.parse("http://www.example.com"));
+                goHelp.setData(Uri.parse("https://github.com/zubial/betandroid/wiki"));
                 startActivity(goHelp);
 
                 return true;
@@ -95,6 +95,10 @@ public class MspConfigurationActivity extends AppCompatActivity {
                 gotoConfigFeatures();
                 return true;
 
+            case R.id.action_configuration_modes:
+                gotoConfigModes();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -115,6 +119,12 @@ public class MspConfigurationActivity extends AppCompatActivity {
     private void gotoConfigFeatures() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content, new MspConfigurationFeatures());
+        ft.commitAllowingStateLoss();
+    }
+
+    private void gotoConfigModes() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, new MspConfigurationModes());
         ft.commitAllowingStateLoss();
     }
 }

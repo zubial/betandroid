@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- RangeSeekBar inclusion -->
+    <declare-styleable name="RangeSeekBar">
+        <attr name="absoluteMinValue" format="integer|float" />
+        <attr name="absoluteMaxValue" format="integer|float" />
+        <attr name="singleThumb" format="boolean" />
+        <attr name="showLabels" format="boolean" />
+        <attr name="alwaysActive" format="boolean" />
+        <attr name="valuesAboveThumbs" format="boolean" />
+        <attr name="internalPadding" format="dimension" />
+        <attr name="barHeight" format="dimension" />
+        <attr name="defaultColor" format="color" />
+        <attr name="activeColor" format="color" />
+        <attr name="textAboveThumbsColor" format="color" />
+        <attr name="thumbNormal" format="reference" />
+        <attr name="thumbPressed" format="reference" />
+        <attr name="thumbDisabled" format="reference" />
+        <attr name="thumbShadow" format="boolean" />
+        <attr name="thumbShadowColor" format="color" />
+        <attr name="thumbShadowXOffset" format="dimension" />
+        <attr name="thumbShadowYOffset" format="dimension" />
+        <attr name="thumbShadowBlur" format="dimension" />
+        <attr name="activateOnDefaultValues" format="boolean" />
+    </declare-styleable>
+    <eat-comment />
+    <string name="demo_max_label" />
+    <string name="demo_min_label" />
+</resources>
