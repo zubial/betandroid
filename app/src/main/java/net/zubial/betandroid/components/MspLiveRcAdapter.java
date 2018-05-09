@@ -40,7 +40,7 @@ public class MspLiveRcAdapter extends ArrayAdapter<MspLiveRcData> {
             viewHolder = new RcViewHolder();
             viewHolder.rcChannel = convertView.findViewById(R.id.rcChannel);
             viewHolder.rcBar = convertView.findViewById(R.id.rcBar);
-
+            viewHolder.rcValue = convertView.findViewById(R.id.rcValue);
             convertView.setTag(viewHolder);
         }
 
@@ -48,8 +48,9 @@ public class MspLiveRcAdapter extends ArrayAdapter<MspLiveRcData> {
 
         if (value != null
                 && value.getId() != null) {
-            viewHolder.rcChannel.setText("Channel " + value.getId() + 1);
+            viewHolder.rcChannel.setText(value.getChannel().getLabel());
             viewHolder.rcBar.setProgress(value.getValue() - 800);
+            viewHolder.rcValue.setText(value.getValue() + "");
         }
 
         return convertView;
@@ -58,5 +59,6 @@ public class MspLiveRcAdapter extends ArrayAdapter<MspLiveRcData> {
     private class RcViewHolder {
         public TextView rcChannel;
         public ProgressBar rcBar;
+        public TextView rcValue;
     }
 }

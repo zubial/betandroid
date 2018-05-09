@@ -12,6 +12,7 @@ import net.zubial.msprotocol.enums.MspFeatureEnum;
 import net.zubial.msprotocol.enums.MspFlightControllerEnum;
 import net.zubial.msprotocol.enums.MspMessageEventEnum;
 import net.zubial.msprotocol.enums.MspMessageTypeEnum;
+import net.zubial.msprotocol.enums.MspRcChannelEnum;
 import net.zubial.msprotocol.enums.MspSdcardStateEnum;
 import net.zubial.msprotocol.exceptions.MspBaseException;
 import net.zubial.msprotocol.helpers.MspProtocolUtils;
@@ -528,6 +529,7 @@ public final class MspMapper {
                 for (int i = 0; i < active_channels; i++) {
                     MspLiveRcData rcData = new MspLiveRcData();
                     rcData.setId(i);
+                    rcData.setChannel(MspRcChannelEnum.findByCode(i));
                     rcData.setValue(message.readUInt16());
                     data.getMspLiveData().getMspLiveRc().add(rcData);
                 }

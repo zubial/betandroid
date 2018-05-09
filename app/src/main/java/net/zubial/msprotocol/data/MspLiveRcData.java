@@ -1,5 +1,7 @@
 package net.zubial.msprotocol.data;
 
+import net.zubial.msprotocol.enums.MspRcChannelEnum;
+
 import java.io.Serializable;
 
 public class MspLiveRcData implements Serializable {
@@ -8,6 +10,7 @@ public class MspLiveRcData implements Serializable {
 
     // MSP_RC
     private Integer id;
+    private MspRcChannelEnum channel;
     private Integer value;
 
 
@@ -21,6 +24,14 @@ public class MspLiveRcData implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public MspRcChannelEnum getChannel() {
+        return channel;
+    }
+
+    public void setChannel(MspRcChannelEnum channel) {
+        this.channel = channel;
     }
 
     public Integer getValue() {

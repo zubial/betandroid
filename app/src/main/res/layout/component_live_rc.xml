@@ -20,6 +20,12 @@
         android:max="1900"
         android:progress="800" />
 
+    <TextView
+        android:id="@+id/rcValue"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewEnd"
+        android:textSize="16sp" />
 </LinearLayout>
 
 
