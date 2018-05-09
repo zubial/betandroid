@@ -528,7 +528,7 @@ public final class MspMapper {
                 for (int i = 0; i < active_channels; i++) {
                     MspLiveRcData rcData = new MspLiveRcData();
                     rcData.setId(i);
-                    rcData.setMask(message.readUInt16());
+                    rcData.setValue(message.readUInt16());
                     data.getMspLiveData().getMspLiveRc().add(rcData);
                 }
 

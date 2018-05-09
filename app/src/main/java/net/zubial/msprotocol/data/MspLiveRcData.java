@@ -8,7 +8,7 @@ public class MspLiveRcData implements Serializable {
 
     // MSP_RC
     private Integer id;
-    private Integer mask;
+    private Integer value;
 
 
     public MspLiveRcData() {
@@ -23,11 +23,11 @@ public class MspLiveRcData implements Serializable {
         this.id = id;
     }
 
-    public Integer getMask() {
-        return mask;
+    public Integer getValue() {
+        return value;
     }
 
-    public void setMask(Integer mask) {
-        this.mask = mask;
+    public void setValue(Integer value) {
+        this.value = value;
     }
 }

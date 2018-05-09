@@ -137,22 +137,22 @@ public class MspLivePosition extends Fragment {
 
             if (!mspData.getMspLiveData().getMspLiveRc().isEmpty()) {
                 if (txtRc01 != null) {
-                    txtRc01.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(0).getMask());
+                    txtRc01.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(0).getValue());
                 }
                 if (txtRc02 != null) {
-                    txtRc02.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(1).getMask());
+                    txtRc02.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(1).getValue());
                 }
                 if (txtRc03 != null) {
-                    txtRc03.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(2).getMask());
+                    txtRc03.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(2).getValue());
                 }
                 if (txtRc04 != null) {
-                    txtRc04.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(3).getMask());
+                    txtRc04.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(3).getValue());
                 }
                 if (txtRc05 != null) {
-                    txtRc05.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(4).getMask());
+                    txtRc05.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(4).getValue());
                 }
                 if (txtRc06 != null) {
-                    txtRc06.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(5).getMask());
+                    txtRc06.setText("Value : " + mspData.getMspLiveData().getMspLiveRc().get(5).getValue());
                 }
             }
         }

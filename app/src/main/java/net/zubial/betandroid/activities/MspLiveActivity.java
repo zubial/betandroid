@@ -58,7 +58,7 @@ public class MspLiveActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_msp_live, menu);
         return true;
     }
 
@@ -83,6 +83,14 @@ public class MspLiveActivity extends AppCompatActivity {
 
                 return true;
 
+            case R.id.action_live_position:
+                gotoLivePosition();
+                return true;
+
+            case R.id.action_live_rc:
+                gotoLiveRc();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -91,6 +99,12 @@ public class MspLiveActivity extends AppCompatActivity {
     private void gotoLivePosition() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content, new MspLivePosition());
+        ft.commitAllowingStateLoss();
+    }
+
+    private void gotoLiveRc() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content, new MspLiveRc());
         ft.commitAllowingStateLoss();
     }
 }
