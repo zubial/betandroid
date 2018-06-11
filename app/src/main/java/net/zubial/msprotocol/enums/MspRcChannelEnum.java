@@ -12,7 +12,12 @@ public enum MspRcChannelEnum {
     CHANNEL_AUX4(7, "Aux 4"),
     CHANNEL_AUX5(8, "Aux 5"),
     CHANNEL_AUX6(9, "Aux 6"),
-    CHANNEL_AUX7(10, "Aux 7");
+    CHANNEL_AUX7(10, "Aux 7"),
+    CHANNEL_AUX8(11, "Aux 8"),
+    CHANNEL_AUX9(12, "Aux 9"),
+    CHANNEL_AUX10(13, "Aux 10"),
+    CHANNEL_AUX11(14, "Aux 11"),
+    CHANNEL_AUX12(15, "Aux 12");
 
 
     private final Integer code;

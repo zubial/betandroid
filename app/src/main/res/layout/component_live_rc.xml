@@ -2,30 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="10dp">
 
     <TextView
         android:id="@+id/rcChannel"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/rcValue"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
 
     <ProgressBar
         android:id="@+id/rcBar"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="8sp"
+        android:layout_gravity="center_vertical"
         android:max="1900"
         android:progress="800" />
 
-    <TextView
-        android:id="@+id/rcValue"
-        android:layout_width="20dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewEnd"
-        android:textSize="16sp" />
 </LinearLayout>
 
 

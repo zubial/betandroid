@@ -47,7 +47,8 @@ public class MspLiveRcAdapter extends ArrayAdapter<MspLiveRcData> {
         MspLiveRcData value = getItem(position);
 
         if (value != null
-                && value.getId() != null) {
+                && value.getId() != null
+                && value.getChannel() != null) {
             viewHolder.rcChannel.setText(value.getChannel().getLabel());
             viewHolder.rcBar.setProgress(value.getValue() - 800);
             viewHolder.rcValue.setText(value.getValue() + "");
