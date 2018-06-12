@@ -63,9 +63,16 @@ public class MainConnectUSB extends Fragment {
         Map<String, UsbDevice> devices = mUsbManager.getDeviceList();
         if (devices != null
                 && devices.size() > 0) {
-            Log.i(TAG, "Found " + devices.size() + " devices");
+            Log.d(TAG, "Found " + devices.size() + " devices");
 
             txtUsbTitle.setText("Select a device");
+
+            for (Map.Entry<String, UsbDevice> entry : devices.entrySet()) {
+                Log.d(TAG, entry.getKey() + "/ getDeviceName : " + entry.getValue().getDeviceName());
+                Log.d(TAG, entry.getKey() + "/ getDeviceId : " + entry.getValue().getDeviceId());
+                Log.d(TAG, entry.getKey() + "/ getProductId : " + entry.getValue().getProductId());
+                Log.d(TAG, entry.getKey() + "/ getDeviceProtocol : " + entry.getValue().getDeviceProtocol());
+            }
 
             Snackbar.make(view, "Found " + devices.size() + " device(s)", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();

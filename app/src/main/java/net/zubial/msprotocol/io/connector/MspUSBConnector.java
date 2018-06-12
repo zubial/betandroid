@@ -9,16 +9,6 @@ import java.util.List;
 public class MspUSBConnector implements IMspConnector {
 
     @Override
-    public MspConnectorStateEnum getCurrentState() {
-        return null;
-    }
-
-    @Override
-    public Boolean isConnected() {
-        return null;
-    }
-
-    @Override
     public boolean connect(@NonNull String deviceAddress) {
         return false;
     }
@@ -34,11 +24,6 @@ public class MspUSBConnector implements IMspConnector {
     }
 
     @Override
-    public Boolean isRuning() {
-        return null;
-    }
-
-    @Override
     public void startLive(List<byte[]> messages) {
 
     }
@@ -51,5 +36,20 @@ public class MspUSBConnector implements IMspConnector {
     @Override
     public void resumeLive() {
 
+    }
+
+    @Override
+    public Boolean isConnected() {
+        return null;
+    }
+
+    @Override
+    public Boolean isRuning() {
+        return null;
+    }
+
+    @Override
+    public MspConnectorStateEnum getCurrentState() {
+        return null;
     }
 }

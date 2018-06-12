@@ -8,21 +8,21 @@ import java.util.List;
 
 public interface IMspConnector {
 
-    MspConnectorStateEnum getCurrentState();
-
-    Boolean isConnected();
-
     boolean connect(@NonNull String deviceAddress);
 
     void disconnect();
 
     void write(byte[] data);
 
-    Boolean isRuning();
-
     void startLive(List<byte[]> messages);
 
     void pauseLive();
 
     void resumeLive();
+
+    Boolean isConnected();
+
+    Boolean isRuning();
+
+    MspConnectorStateEnum getCurrentState();
 }
