@@ -10,23 +10,25 @@
         android:layout_height="40dp"
         android:background="?attr/colorButtonNormal"
         android:padding="6dp"
-        android:src="@android:drawable/stat_sys_data_bluetooth" />
+        android:src="@drawable/ic_usb" />
 
-    <TextView android:id="@+id/deviceName"
+    <TextView
+        android:id="@+id/deviceName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:layout_alignTop="@+id/bt_icon"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/bt_icon"
-        android:layout_alignTop="@+id/bt_icon"
+        android:textColor="@android:color/black"
         android:textStyle="bold" />
 
-    <TextView android:id="@+id/deviceAddress"
+    <TextView
+        android:id="@+id/deviceId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
         android:layout_alignLeft="@+id/deviceName"
-        android:layout_below="@+id/deviceName" />
+        android:layout_below="@+id/deviceName"
+        android:textColor="@android:color/black" />
 
 </RelativeLayout>
 

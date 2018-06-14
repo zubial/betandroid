@@ -68,7 +68,7 @@ public class MainConnectBluetooth extends Fragment {
         }
 
         Button cmdBluetoothConfig = view.findViewById(R.id.cmdBluetoothConfig);
-        cmdBluetoothConfig.setEnabled(mBluetoothAdapter != null);
+        cmdBluetoothConfig.setEnabled(bluetoothSupported);
         cmdBluetoothConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
