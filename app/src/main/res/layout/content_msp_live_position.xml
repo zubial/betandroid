@@ -24,16 +24,6 @@
             android:textStyle="bold" />
 
         <View style="@style/AppTheme.LineDivider" />
-
-        <View style="@style/AppTheme.SpaceDivider" />
-
-        <ProgressBar
-            android:id="@+id/determinateBar"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:progress="25" />
-
         <View style="@style/AppTheme.SpaceDivider" />
 
         <TextView
@@ -169,6 +159,16 @@
             android:layout_height="wrap_content"
             android:selectAllOnFocus="true"
             android:text="" />
+
+        <ProgressBar
+            android:id="@+id/determinateBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8sp"
+            android:max="1900"
+            android:progress="800" />
+
+        <View style="@style/AppTheme.SpaceDivider" />
 
     </LinearLayout>
 </ScrollView>

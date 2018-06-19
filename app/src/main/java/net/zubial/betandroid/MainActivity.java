@@ -49,13 +49,22 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(R.id.content_main, new MainHome());
         ft.commitAllowingStateLoss();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabBluetooth = findViewById(R.id.fabBluetooth);
+        fabBluetooth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoBluetooth();
             }
         });
+
+        FloatingActionButton fabUSB = findViewById(R.id.fabUSB);
+        fabUSB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoUSB();
+            }
+        });
+
 
         IntentFilter onMspConnectedFilter = new IntentFilter(MspService.EVENT_HANDSHAKE);
         LocalBroadcastManager.getInstance(this).registerReceiver(onMspConnected, onMspConnectedFilter);
@@ -82,7 +91,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void gotoBluetooth() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main, new MainBluetooth());
+        ft.replace(R.id.content_main, new MainConnectBluetooth());
+        ft.commitAllowingStateLoss();
+    }
+
+    private void gotoUSB() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main, new MainConnectUSB());
         ft.commitAllowingStateLoss();
     }
 

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import net.zubial.msprotocol.data.MspData;
+import net.zubial.msprotocol.enums.MspConnectionTypeEnum;
 import net.zubial.msprotocol.enums.MspConnectorStateEnum;
 import net.zubial.msprotocol.enums.MspDirectionEnum;
 import net.zubial.msprotocol.enums.MspMessageEventEnum;
@@ -20,7 +21,8 @@ import net.zubial.msprotocol.io.MspDecoder;
 import net.zubial.msprotocol.io.MspEncoder;
 import net.zubial.msprotocol.io.MspMapper;
 import net.zubial.msprotocol.io.MspMessage;
-import net.zubial.msprotocol.io.connector.MspBluetoothManager;
+import net.zubial.msprotocol.io.connector.IMspConnector;
+import net.zubial.msprotocol.io.connector.MspBluetoothConnector;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -53,23 +55,24 @@ public class MspServiceAbstract {
     protected static final String TAG = "MspService";
 
     // Local variables
-    protected MspBluetoothManager bluetoothManager;
+    protected IMspConnector mspConnector;
     protected ByteBuffer localInBuffer;
     protected MspData mspData;
+    protected MspConnectionTypeEnum connectionType;
 
     protected Context applicationContext;
     // Bluetooth handler
     @SuppressLint("HandlerLeak")
-    protected final Handler bluetoothHandler = new Handler() {
+    protected final Handler connectorHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
 
             if (msg.what == MspConnectorStateEnum.STATE_CONNECTING.getCode()) {
-                Toast.makeText(applicationContext, "Bluetooth connecting", Toast.LENGTH_SHORT).show();
+                Toast.makeText(applicationContext, "Connecting", Toast.LENGTH_SHORT).show();
 
             } else if (msg.what == MspConnectorStateEnum.STATE_CONNECTED.getCode()) {
-                broadcastConnectionEvent(EVENT_CONNECTED, "Bluetooth");
-                Toast.makeText(applicationContext, "Bluetooth connected", Toast.LENGTH_SHORT).show();
+                broadcastConnectionEvent(EVENT_CONNECTED, connectionType.name());
+                Toast.makeText(applicationContext, "Connected", Toast.LENGTH_SHORT).show();
 
                 // Handshake
                 ArrayList<MspMessageTypeEnum> listCommand = new ArrayList<>();
@@ -83,16 +86,16 @@ public class MspServiceAbstract {
                 sendMultiCommand(listCommand);
 
             } else if (msg.what == MspConnectorStateEnum.STATE_HANDSHAKE.getCode()) {
-                broadcastConnectionEvent(EVENT_HANDSHAKE, "Bluetooth");
+                broadcastConnectionEvent(EVENT_HANDSHAKE, connectionType.name());
                 Toast.makeText(applicationContext, "Handshake done", Toast.LENGTH_SHORT).show();
 
             } else if (msg.what == MspConnectorStateEnum.STATE_DISCONNECTED.getCode()) {
-                broadcastConnectionEvent(EVENT_DISCONNECTED, "Bluetooth");
-                Toast.makeText(applicationContext, "Bluetooth disconnected", Toast.LENGTH_SHORT).show();
+                broadcastConnectionEvent(EVENT_DISCONNECTED, connectionType.name());
+                Toast.makeText(applicationContext, "Disconnected", Toast.LENGTH_SHORT).show();
 
             } else if (msg.what == MspConnectorStateEnum.STATE_UNAVAILABLE.getCode()) {
-                broadcastConnectionEvent(EVENT_UNAVAILABLE, "Bluetooth");
-                Toast.makeText(applicationContext, "Bluetooth unavailable", Toast.LENGTH_SHORT).show();
+                broadcastConnectionEvent(EVENT_UNAVAILABLE, connectionType.name());
+                Toast.makeText(applicationContext, "Unavailable", Toast.LENGTH_SHORT).show();
 
             } else if (msg.what == MspConnectorStateEnum.STATE_RECEIVING.getCode()) {
                 ByteBuffer readBuffer = (ByteBuffer) msg.obj;
@@ -146,21 +149,27 @@ public class MspServiceAbstract {
 
     // Connector commands
     public void connectBluetooth(String address) {
-        bluetoothManager = new MspBluetoothManager(bluetoothHandler);
-        bluetoothManager.connect(address);
+        connectionType = MspConnectionTypeEnum.BLUETOOTH;
+
+        mspConnector = new MspBluetoothConnector(connectorHandler);
+        mspConnector.connect(address);
 
         mspData = new MspData();
     }
 
     public void disconnectBluetooth() {
-        bluetoothManager.disconnect();
+        mspConnector.disconnect();
         mspData = new MspData();
         localInBuffer = null;
     }
 
+    public MspConnectionTypeEnum getConnectionType() {
+        return connectionType;
+    }
+
     public Boolean isConnected() {
-        return (bluetoothManager != null
-                && bluetoothManager.isConnected());
+        return (mspConnector != null
+                && mspConnector.isConnected());
     }
 
     // Send commands
@@ -171,7 +180,7 @@ public class MspServiceAbstract {
             Log.d(TAG, "MSP Request : " + command.name());
 
             if (isConnected()) {
-                bluetoothManager.write(message);
+                mspConnector.write(message);
             }
 
         } catch (MspBaseException e) {
@@ -195,7 +204,7 @@ public class MspServiceAbstract {
             Log.d(TAG, "MSP Request : " + messageType.name() + " " + MspProtocolUtils.toHexString(data));
 
             if (isConnected()) {
-                bluetoothManager.write(message);
+                mspConnector.write(message);
             }
         } catch (MspBaseException e) {
             e.printStackTrace();
@@ -216,7 +225,7 @@ public class MspServiceAbstract {
                 }
 
                 if (isConnected()) {
-                    bluetoothManager.startLive(messages);
+                    mspConnector.startLive(messages);
                 }
             }
         } catch (MspBaseException e) {
@@ -225,18 +234,18 @@ public class MspServiceAbstract {
     }
 
     public Boolean isRuning() {
-        return bluetoothManager.isRuning();
+        return mspConnector.isRuning();
     }
 
     public void pauseLive() {
         if (isConnected()) {
-            bluetoothManager.pauseLive();
+            mspConnector.pauseLive();
         }
     }
 
     public void resumeLive() {
         if (isConnected()) {
-            bluetoothManager.resumeLive();
+            mspConnector.resumeLive();
         }
     }
 

@@ -17,9 +17,9 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.UUID;
 
-public class MspBluetoothManager {
+public class MspBluetoothConnector implements IMspConnector {
 
-    private static final String TAG = "MspBluetoothManager";
+    private static final String TAG = "MspBluetoothConnector";
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final Handler serviceHandler;
     private MspConnectorStateEnum currentState;
@@ -35,7 +35,7 @@ public class MspBluetoothManager {
     private OutputStream outStream = null;
     private InputStream inStream = null;
 
-    public MspBluetoothManager(@NonNull Handler handler) {
+    public MspBluetoothConnector(@NonNull Handler handler) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         currentState = MspConnectorStateEnum.STATE_NONE;
         isConnected = false;
@@ -52,15 +52,18 @@ public class MspBluetoothManager {
         return false;
     }
 
+    @Override
     public MspConnectorStateEnum getCurrentState() {
         return currentState;
     }
 
+    @Override
     public Boolean isConnected() {
         return isConnected;
     }
 
-    public BluetoothDevice getBluetoothDevice() {
+
+    private BluetoothDevice getBluetoothDevice() {
         return bluetoothDevice;
     }
 
@@ -75,6 +78,7 @@ public class MspBluetoothManager {
         currentState = state;
     }
 
+    @Override
     public boolean connect(@NonNull String deviceAddress) {
         if (!checkBluetoothAdapter(bluetoothAdapter)) {
             isConnected = false;
@@ -136,6 +140,7 @@ public class MspBluetoothManager {
         return isConnected;
     }
 
+    @Override
     public void disconnect() {
         if (mLiveThread != null) {
             mLiveThread.interrupt();
@@ -176,6 +181,7 @@ public class MspBluetoothManager {
         handleState(MspConnectorStateEnum.STATE_NONE);
     }
 
+    @Override
     public void write(byte[] data) {
         if (isConnected) {
             handleState(MspConnectorStateEnum.STATE_WRITING);
@@ -186,10 +192,12 @@ public class MspBluetoothManager {
         }
     }
 
+    @Override
     public Boolean isRuning() {
         return mLiveThread.isRuning();
     }
 
+    @Override
     public void startLive(List<byte[]> messages) {
         if (isConnected) {
             handleState(MspConnectorStateEnum.STATE_LIVE_STARTED);
@@ -198,6 +206,7 @@ public class MspBluetoothManager {
         }
     }
 
+    @Override
     public void pauseLive() {
         if (isConnected) {
             handleState(MspConnectorStateEnum.STATE_LIVE_PAUSED);
@@ -206,6 +215,7 @@ public class MspBluetoothManager {
         }
     }
 
+    @Override
     public void resumeLive() {
         if (isConnected) {
             handleState(MspConnectorStateEnum.STATE_LIVE_STARTED);

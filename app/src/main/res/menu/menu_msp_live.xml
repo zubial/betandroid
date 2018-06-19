@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="net.zubial.betandroid.activities.MspConfigurationActivity">
+    <item
+        android:id="@+id/action_live_position"
+        android:orderInCategory="100"
+        android:title="Position"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_live_rc"
+        android:orderInCategory="100"
+        android:title="RC Channels"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_disconnect"
+        android:orderInCategory="100"
+        android:title="@string/action_disconnect"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="100"
+        android:title="@string/action_help"
+        app:showAsAction="never" />
+</menu>

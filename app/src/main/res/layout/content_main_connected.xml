@@ -64,23 +64,46 @@
                     android:orientation="horizontal"
                     android:layout_gravity="right">
 
-                        <Button
-                            android:id="@+id/cmdDisconnect"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Disconnect" />
-                        <Button
-                            android:id="@+id/cmdAccCalibration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Calibration"
-                            />
+                    <Button
+                        android:id="@+id/cmdAccCalibration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calibration" />
                 </LinearLayout>
 
+            <View style="@style/AppTheme.SpaceDivider" />
+
+            <View style="@style/AppTheme.LineDivider" />
+
+            <View style="@style/AppTheme.SpaceDivider" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cmdDisconnect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Disconnect" />
+
+                <Button
+                    android:id="@+id/cmdReboot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reboot" />
+
+                <Button
+                    android:id="@+id/cmdSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save &amp; Reboot" />
+            </LinearLayout>
+
                 <View style="@style/AppTheme.SpaceDivider"/>
-
                 <View style="@style/AppTheme.LineDivider" />
-
                 <View style="@style/AppTheme.SpaceDivider" />
 
                 <Button
